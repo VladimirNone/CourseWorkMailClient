@@ -1,0 +1,33 @@
+﻿<Page x:Class="CourseWorkMailClient.WriteLetterPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:CourseWorkMailClient"
+      mc:Ignorable="d" 
+      WindowTitle="Почтовый клент" 
+        Background="White"
+        Foreground="Black"
+        MinWidth="1200"
+        MinHeight="650"
+        Width="1200"
+        Height="650"
+        ShowsNavigationUI="False" 
+        WindowWidth="1220"
+        WindowHeight="685"
+        FontSize="14">
+    <Grid>
+        <local:NavigateMenu Margin="10,10,990,0"/>
+        <TextBlock Margin="215,15,930,615"><Run Text="Кому:"/></TextBlock>
+        <TextBlock Margin="215,50,930,576"><Run Text="Тема:"/></TextBlock>
+        <TextBlock Margin="215,534,847,84"><Run Text="Прикрепленное:"/></TextBlock>
+        <TextBox Margin="275,15,10,607" x:Name="tbReceivers"/>
+        <TextBox Margin="275,48,10,574" x:Name="tbSubject"/>
+        <TextBox Margin="215,81,10,121" x:Name="tbContent" VerticalScrollBarVisibility="Auto"/>
+        <ListBox Margin="358,534,462,10" x:Name="lbAttachments"/>
+        <Button Margin="215,608,847,10" Content="Добавить" Click="ButtonAddAttachment_Click"/>
+        <Button Margin="215,571,847,47" Content="Удалить" Click="ButtonRemoveAttachment_Click"/>
+        <Button Margin="1052,608,10,10" Content="Отправить" Click="ButtonSend_Click"/>
+        <Button Margin="1052,571,10,47" Content="Назад" Click="ButtonBack_Click"/>
+    </Grid>
+</Page>

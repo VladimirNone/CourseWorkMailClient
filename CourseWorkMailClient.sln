@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31729.503
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseWorkMailClient", "CourseWorkMailClient\CourseWorkMailClient.csproj", "{8539C092-9CB6-4F99-A1F0-6F12AEDE3B09}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8539C092-9CB6-4F99-A1F0-6F12AEDE3B09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8539C092-9CB6-4F99-A1F0-6F12AEDE3B09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8539C092-9CB6-4F99-A1F0-6F12AEDE3B09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8539C092-9CB6-4F99-A1F0-6F12AEDE3B09}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C8C3EC9C-0515-42B1-9A42-D6D0F66E4768}
+	EndGlobalSection
+EndGlobal
