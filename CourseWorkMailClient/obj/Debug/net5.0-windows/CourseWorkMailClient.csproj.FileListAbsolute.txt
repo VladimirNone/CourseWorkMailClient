@@ -27,3 +27,5 @@ D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\D
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\WriteLetterPage.baml
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\ReadLetterPage.g.cs
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\ReadLetterPage.baml
+D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\AuthPage.g.cs
+D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\AuthPage.baml

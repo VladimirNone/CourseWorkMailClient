@@ -21,19 +21,22 @@ namespace CourseWorkMailClient
     /// </summary>
     public partial class WriteLetterPage : Page
     {
-        public WriteLetterPage()
+        private Page prevPage;
+
+        public WriteLetterPage(Page previousPage)
         {
+            prevPage = previousPage;
             InitializeComponent();
         }
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new MainPage());
+            NavigationService.Navigate(prevPage);
         }
 
         private void ButtonSend_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new MainPage());
+            NavigationService.Navigate(prevPage);
         }
 
         private void ButtonAddAttachment_Click(object sender, RoutedEventArgs e)

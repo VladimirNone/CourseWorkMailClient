@@ -27,7 +27,7 @@ namespace CourseWorkMailClient
 
         private void bWriteMes_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new WriteLetterPage());
+            NavigationService.Navigate(new WriteLetterPage(this));
         }
     }
 }

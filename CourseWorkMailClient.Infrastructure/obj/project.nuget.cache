@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "dgSpecHash": "it2Ze0MN0y0bDN9QYSlJ79StGLc7OAeFpwPAp0GLLRhv4d1L7x1zMN4jVsDAb0EQvQeqh1biQrwndhNIpqz8sQ==",
+  "success": true,
+  "projectFilePath": "D:\\University\\Курсач 4.1.1\\CourseWorkMailClient\\CourseWorkMailClient.Infrastructure\\CourseWorkMailClient.Infrastructure.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\jilts_yz5r2u9\\.nuget\\packages\\automapper\\10.1.1\\automapper.10.1.1.nupkg.sha512",
+    "C:\\Users\\jilts_yz5r2u9\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
+    "C:\\Users\\jilts_yz5r2u9\\.nuget\\packages\\microsoft.netcore.platforms\\2.0.0\\microsoft.netcore.platforms.2.0.0.nupkg.sha512",
+    "C:\\Users\\jilts_yz5r2u9\\.nuget\\packages\\s22.imap.core\\3.6.1\\s22.imap.core.3.6.1.nupkg.sha512",
+    "C:\\Users\\jilts_yz5r2u9\\.nuget\\packages\\system.reflection.emit\\4.7.0\\system.reflection.emit.4.7.0.nupkg.sha512",
+    "C:\\Users\\jilts_yz5r2u9\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\4.5.0\\system.runtime.compilerservices.unsafe.4.5.0.nupkg.sha512",
+    "C:\\Users\\jilts_yz5r2u9\\.nuget\\packages\\system.text.encoding.codepages\\4.5.0\\system.text.encoding.codepages.4.5.0.nupkg.sha512"
+  ],
+  "logs": []
+}

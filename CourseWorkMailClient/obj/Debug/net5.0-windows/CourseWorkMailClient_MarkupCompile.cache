@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET5_0;NETCOREAPP
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\App.xaml
-443316814
+5-459427052
 
-6257632904
+7-1633535856
 193-1891726104
-MainPage.xaml;NavigateMenu.xaml;ReadLetterPage.xaml;WriteLetterPage.xaml;
+AuthPage.xaml;MainPage.xaml;NavigateMenu.xaml;ReadLetterPage.xaml;WriteLetterPage.xaml;
 
 False
 
