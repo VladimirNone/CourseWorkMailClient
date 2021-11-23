@@ -21,23 +21,40 @@
         <Button 
             Margin="1052,10,10,608"
             Content="Выйти"/>
-        <ListBox 
-                Margin="215,47,10,49"
-                x:Name="lbMesList"/>
+        <ListBox Margin="215,47,10,49" x:Name="lbMesList" ContextMenuOpening="ContextMenu_ContextMenuOpening">
+            <ListBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem x:Name="miMoveToOtherFolder" Header="Переместить"></MenuItem>
+                    <MenuItem x:Name="miDelete" Header="Удалить"></MenuItem>
+                </ContextMenu>
+            </ListBox.ContextMenu>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="HorizontalAlignment" Value="Stretch" />
+                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                    <EventSetter Event="MouseDoubleClick" Handler="bReadMes_Click"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                        <Grid HorizontalAlignment="Stretch">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding Path=From}" Margin="5"/>
+                            <TextBlock Text="{Binding Path=Subject}" Margin="5" Grid.Column="1"/>
+                            <TextBlock Text="{Binding Path=Date}" Margin="5" Grid.Column="2" HorizontalAlignment="Right" />
+                        </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
         <Button
                 Margin="1052,608,10,10" 
                 Content="Написать"
                 x:Name="bWriteMes"
                 Click="bWriteMes_Click"/>
-        <Button 
-                Margin="909,608,153,10" 
-                Content="Прочитать"
-                x:Name="bReadMes"
-                IsEnabled="False"/>
-        <Button 
-                Margin="215,608,847,10" 
-                Content="Обновить"
-                x:Name="bUpdateMesList"
-                IsEnabled="False"/>
     </Grid>
 </Page>

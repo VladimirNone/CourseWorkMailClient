@@ -1,8 +1,23 @@
 {
   "version": 2,
-  "dgSpecHash": "rg5DY/6URYmPRsH91QEQrS25fUVpcZO/Id2YR67qobirxLtWneeSIHSoWPFt+BZZ3gzplqTH5ABd/DQTT5kf0Q==",
+  "dgSpecHash": "12Rx8ZoPDzRovOAaHqF2Ho/Tq3sk3CBbEifOC0ZKK5hXkFB6X1xEpeRTcmCzWkAEXp1Ukg2ydJJGNXeAnH6NXA==",
   "success": true,
   "projectFilePath": "D:\\University\\Курсач 4.1.1\\CourseWorkMailClient\\CourseWorkMailClient\\CourseWorkMailClient.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\jilts_yz5r2u9\\.nuget\\packages\\automapper\\10.1.1\\automapper.10.1.1.nupkg.sha512",
+    "C:\\Users\\jilts_yz5r2u9\\.nuget\\packages\\mailkit\\3.0.0-preview1\\mailkit.3.0.0-preview1.nupkg.sha512",
+    "C:\\Users\\jilts_yz5r2u9\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
+    "C:\\Users\\jilts_yz5r2u9\\.nuget\\packages\\microsoft.netcore.platforms\\2.0.0\\microsoft.netcore.platforms.2.0.0.nupkg.sha512",
+    "C:\\Users\\jilts_yz5r2u9\\.nuget\\packages\\mimekit\\3.0.0-preview1\\mimekit.3.0.0-preview1.nupkg.sha512",
+    "C:\\Users\\jilts_yz5r2u9\\.nuget\\packages\\portable.bouncycastle\\1.8.10\\portable.bouncycastle.1.8.10.nupkg.sha512",
+    "C:\\Users\\jilts_yz5r2u9\\.nuget\\packages\\s22.imap.core\\3.6.1\\s22.imap.core.3.6.1.nupkg.sha512",
+    "C:\\Users\\jilts_yz5r2u9\\.nuget\\packages\\system.buffers\\4.5.1\\system.buffers.4.5.1.nupkg.sha512",
+    "C:\\Users\\jilts_yz5r2u9\\.nuget\\packages\\system.reflection.emit\\4.7.0\\system.reflection.emit.4.7.0.nupkg.sha512",
+    "C:\\Users\\jilts_yz5r2u9\\.nuget\\packages\\system.reflection.typeextensions\\4.4.0\\system.reflection.typeextensions.4.4.0.nupkg.sha512",
+    "C:\\Users\\jilts_yz5r2u9\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\4.5.0\\system.runtime.compilerservices.unsafe.4.5.0.nupkg.sha512",
+    "C:\\Users\\jilts_yz5r2u9\\.nuget\\packages\\system.security.cryptography.cng\\4.7.0\\system.security.cryptography.cng.4.7.0.nupkg.sha512",
+    "C:\\Users\\jilts_yz5r2u9\\.nuget\\packages\\system.security.cryptography.pkcs\\4.7.0\\system.security.cryptography.pkcs.4.7.0.nupkg.sha512",
+    "C:\\Users\\jilts_yz5r2u9\\.nuget\\packages\\system.text.encoding.codepages\\4.5.0\\system.text.encoding.codepages.4.5.0.nupkg.sha512"
+  ],
   "logs": []
 }

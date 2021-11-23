@@ -24,9 +24,9 @@
         <TextBlock Margin="215,534,847,84"><Run Text="Прикрепленное:"/></TextBlock>
         <TextBox Margin="275,15,10,607" x:Name="tbReceivers" IsReadOnly="True"/>
         <TextBox Margin="275,48,10,574" x:Name="tbSubject" IsReadOnly="True"/>
-        <TextBox Margin="215,81,10,121" x:Name="tbContent" IsReadOnly="True" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap"/>
+        <WebBrowser Margin="215,81,10,121" x:Name="wbContent"/>
         <ListBox Margin="358,534,462,10" x:Name="lbAttachments"/>
-        <TextBlock Margin="972,534,10,84" Text="Дата: " x:Name="tbDate"/>
+        <TextBlock Margin="972,534,10,84" Text="Отправлено: " x:Name="tbDate"/>
         <Button Margin="215,608,847,10" Content="Скачать все" Click="ButtonDownloadAll_Click"/>
         <Button Margin="1052,608,10,10" Content="Назад" Click="ButtonBack_Click"/>
         <Button Margin="215,571,847,47" Content="Скачать" Click="ButtonDownloadOne_Click"/>

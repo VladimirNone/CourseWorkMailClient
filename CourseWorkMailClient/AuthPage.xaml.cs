@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CourseWorkMailClient.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,6 +28,8 @@ namespace CourseWorkMailClient
 
         private void Accept_Click(object sender, RoutedEventArgs e)
         {
+            Handlers.Auth(tbLogin.Text, tbPassword.Text);
+
             NavigationService.Navigate(new MainPage());
         }
 

@@ -13,11 +13,14 @@ namespace CourseWorkMailClient.Infrastructure
 {
     public class ImapHandler
     {
-        private ImapClient client;
+        public ImapClient client;
         private IMapper mapper;
 
-        public ImapHandler(ImapClient client)
+        public ImapHandler(string login, string password)
         {
+            client = new ImapClient("imap.gmail.com", 993, true);
+            client.Login(login, password, AuthMethod.Login);
+
             var config = new MapperConfiguration(ctg => ctg.CreateMap<MailMessage, CustomMessage>()
                 .ForMember(dest => dest.Subject, act => act.MapFrom(src => src.Subject))
                 .ForMember(dest => dest.From, act => act.MapFrom(src => src.From.Address))
@@ -26,10 +29,9 @@ namespace CourseWorkMailClient.Infrastructure
                 .ForMember(dest => dest.To, act => act.MapFrom(src => src.To.Select(h => h.Address)))
                 .ForMember(dest => dest.Date, act => act.MapFrom(src => src.Date())));
             mapper = new Mapper(config);
-            this.client = client;
         }
 
-        private string Base64Decode(string base64EncodedData)
+        public string Base64Decode(string base64EncodedData)
         {
             var base64EncodedBytes = Convert.FromBase64String(base64EncodedData);
             return Encoding.UTF8.GetString(base64EncodedBytes);
@@ -55,11 +57,34 @@ namespace CourseWorkMailClient.Infrastructure
             return name;
         }
 
-        public CustomMessage GetMessage(int id)
+        public AlternateView GetAlternateViewContent(MailMessage src, string type = "text/html")
         {
-            var src = client.GetMessage((uint)id);
+            foreach (var item in src.AlternateViews)
+                if (item.ContentType.MediaType == type)
+                    return item;
+
+            return null;
+        }
+
+        public CustomMessage GetMessage(uint id)
+        {
+            var src = client.GetMessage(id);
+            return GetMessage(id, src);
+        }
+
+        public CustomMessage GetMessage(uint id, MailMessage src)
+        {
             var mes = mapper.Map<CustomMessage>(src);
+
             mes.Id = id;
+
+            var altView = GetAlternateViewContent(src);
+            if (altView != null)
+            {
+                using var reader = new StreamReader(altView.ContentStream);
+                mes.HtmlContent = reader.ReadToEnd();
+            }
+            
             return mes;
         }
 
@@ -68,16 +93,16 @@ namespace CourseWorkMailClient.Infrastructure
             var uids = client.Search(SearchCondition.All()).ToList();
             var list = client.GetMessages(uids).ToList();
             var messes = new List<CustomMessage>();
-            for (int i = 0; i < uids.Count(); i++)
+
+            for (int i = 0; i < uids.Count; i++)
             {
-                var mes = mapper.Map<CustomMessage>(list[i]);
-                mes.Id = (int)uids[i];
-                messes.Add(mes);
+                messes.Add(GetMessage(uids[i], list[i]));
             }
+
             return messes;
         }
 
-        public void DownloadAttachment(string name, string path, int mesId)
+        public void DownloadAttachment(string name, string path, uint mesId)
         {
             var src = client.GetMessage((uint)mesId);
 

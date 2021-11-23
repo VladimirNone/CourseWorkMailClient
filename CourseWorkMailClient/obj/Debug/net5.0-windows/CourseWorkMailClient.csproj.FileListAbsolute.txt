@@ -29,3 +29,12 @@ D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\D
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\ReadLetterPage.baml
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\AuthPage.g.cs
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\AuthPage.baml
+D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\bin\Debug\net5.0-windows\AutoMapper.dll
+D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\bin\Debug\net5.0-windows\S22.Imap.dll
+D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\bin\Debug\net5.0-windows\CourseWorkMailClient.Domain.dll
+D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\bin\Debug\net5.0-windows\CourseWorkMailClient.Infrastructure.dll
+D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\bin\Debug\net5.0-windows\CourseWorkMailClient.Infrastructure.pdb
+D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\bin\Debug\net5.0-windows\CourseWorkMailClient.Domain.pdb
+D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\bin\Debug\net5.0-windows\MailKit.dll
+D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\bin\Debug\net5.0-windows\MimeKit.dll
+D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\bin\Debug\net5.0-windows\BouncyCastle.Crypto.dll

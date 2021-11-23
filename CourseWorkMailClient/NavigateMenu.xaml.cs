@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CourseWorkMailClient.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,7 +32,7 @@ namespace CourseWorkMailClient
 
         private void ChangeFolder_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("EEE");
+            Handlers.ActualMessages = Handlers.KitImapHandler.GetMessages();
         }
     }
 }
