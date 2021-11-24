@@ -2,7 +2,6 @@ D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Domai
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Domain\bin\Debug\net5.0\CourseWorkMailClient.Domain.dll
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Domain\bin\Debug\net5.0\ref\CourseWorkMailClient.Domain.dll
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Domain\bin\Debug\net5.0\CourseWorkMailClient.Domain.pdb
-D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Domain\obj\Debug\net5.0\CourseWorkMailClient.Domain.csproj.AssemblyReference.cache
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Domain\obj\Debug\net5.0\CourseWorkMailClient.Domain.GeneratedMSBuildEditorConfig.editorconfig
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Domain\obj\Debug\net5.0\CourseWorkMailClient.Domain.AssemblyInfoInputs.cache
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Domain\obj\Debug\net5.0\CourseWorkMailClient.Domain.AssemblyInfo.cs

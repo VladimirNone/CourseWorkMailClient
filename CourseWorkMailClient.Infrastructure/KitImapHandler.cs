@@ -26,14 +26,23 @@ namespace CourseWorkMailClient.Infrastructure
 
             client.Authenticate(login, password);
 
-            var config = new MapperConfiguration(ctg => ctg.CreateMap<MimeMessage, CustomMessage>()
-                .ForMember(dest => dest.Subject, act => act.MapFrom(src => src.Subject))
-                .ForMember(dest => dest.From, act => act.MapFrom(src => string.Join(", ", src.From.Select(h => h.Name).ToList())))
-                .ForMember(dest => dest.Froms, act => act.MapFrom(src => src.From.Select(h => h.Name).ToList()))
-                .ForMember(dest => dest.Content, act => act.MapFrom(src => src.HtmlBody))
-                .ForMember(dest => dest.Attachments, act => act.MapFrom(src => src.Attachments.Select(h => h.ContentDisposition.FileName)))
-                .ForMember(dest => dest.To, act => act.MapFrom(src => src.To.Select(h => h.Name)))
-                .ForMember(dest => dest.Date, act => act.MapFrom(src => src.Date.DateTime)));
+            var config = new MapperConfiguration(ctg =>
+            {
+                ctg.CreateMap<MimeMessage, CustomMessage>()
+                    .ForMember(dest => dest.Subject, act => act.MapFrom(src => src.Subject))
+                    .ForMember(dest => dest.From, act => act.MapFrom(src => string.Join(", ", src.From.Select(h => h.Name).ToList())))
+                    .ForMember(dest => dest.Froms, act => act.MapFrom(src => src.From.Select(h => h.Name).ToList()))
+                    .ForMember(dest => dest.Content, act => act.MapFrom(src => src.HtmlBody))
+                    .ForMember(dest => dest.Attachments, act => act.MapFrom(src => src.Attachments.Select(h => h.ContentDisposition.FileName)))
+                    .ForMember(dest => dest.To, act => act.MapFrom(src => src.To.Select(h => h.Name)))
+                    .ForMember(dest => dest.Source, act => act.MapFrom(src => src))
+                    .ForMember(dest => dest.Date, act => act.MapFrom(src => src.Date.DateTime));
+
+                ctg.CreateMap<MailFolder, CustomFolder>()
+                    .ForMember(dest => dest.Source, act => act.MapFrom(src => src))
+                    .ForMember(dest => dest.Title, act => act.MapFrom(src => src.Name));
+            });
+
             mapper = new Mapper(config);
         }
 
@@ -43,29 +52,16 @@ namespace CourseWorkMailClient.Infrastructure
             return Encoding.UTF8.GetString(base64EncodedBytes);
         }
 
-        /*        private string GetNameAttachemnt(Attachment attachment)
-                {
-                    var name = "";
-
-                    if (attachment.Name.Contains("=?UTF-8?B?"))
-                    {
-                        var parts = attachment.Name.Split(new[] { "=?UTF-8?B?" }, StringSplitOptions.RemoveEmptyEntries);
-                        for (int i = 0; i < parts.Length; i++)
-                        {
-                            var length = parts[i].IndexOf('?') == -1 ? parts[i].Length : parts[i].IndexOf('?');
-                            parts[i] = parts[i].Substring(0, length);
-                            name += Base64Decode(parts[i]);
-                        }
-                    }
-                    else
-                        name = attachment.Name;
-
-                    return name;
-                }*/
-
-        public CustomMessage GetMessage(uint id, bool readOnly = true, SpecialFolder folder = SpecialFolder.All)
+        public List<CustomFolder> GetFolders()
         {
-            var mimeMes = GetMimeMessage(id, readOnly, folder);
+            var folders = client.GetFolders(client.PersonalNamespaces[0]).ToList();
+
+            return new List<CustomFolder>(folders.Select(h => mapper.Map<CustomFolder>(h)));
+        }
+
+        public CustomMessage GetMessage(uint id, IMailFolder folder)
+        {
+            var mimeMes = GetMimeMessage(id, folder);
 
             var mes = mapper.Map<CustomMessage>(mimeMes);
             mes.Id = id;
@@ -74,35 +70,21 @@ namespace CourseWorkMailClient.Infrastructure
             return mes;
         }
 
-        public List<CustomMessage> GetMessages(SpecialFolder folder = SpecialFolder.All)
+        public List<CustomMessage> GetMessages(IMailFolder folder)
         {
-            var allFolder = client.GetFolder(folder);
-            allFolder.Open(FolderAccess.ReadOnly);
-
-            var uids = allFolder.Search(SearchQuery.All);
+            var uids = folder.Search(SearchQuery.All);
 
             var customMessages = new List<CustomMessage>();
 
             foreach (var uid in uids)
-                customMessages.Add(GetMessage(uid.Id, true, folder));
+                customMessages.Add(GetMessage(uid.Id, folder));
 
             return customMessages;
         }
 
-        public MimeMessage GetMimeMessage(uint id, bool readOnly = true, SpecialFolder folder = SpecialFolder.All)
+        public MimeMessage GetMimeMessage(uint id, IMailFolder folder)
         {
-            var dir = client.GetFolder(folder);
-            if (!dir.IsOpen)
-                dir.Open(readOnly ? FolderAccess.ReadOnly : FolderAccess.ReadWrite);
-
-            return dir.GetMessage(new UniqueId(id));
-        }
-
-        public void DownloadAttachment(string name, string path, uint mesId)
-        {
-            var src = GetMimeMessage(mesId);
-
-            DownloadAttachment(name, path, src);
+            return folder.GetMessage(new UniqueId(id));
         }
 
         public void DownloadAttachment(string name, string path, MimeMessage src)
@@ -124,10 +106,8 @@ namespace CourseWorkMailClient.Infrastructure
             }
         }
 
-        public void DownloadAttachments(List<string> names, string path, uint mesId)
+        public void DownloadAttachments(List<string> names, string path, MimeMessage src)
         {
-            var src = GetMimeMessage(mesId);
-
             foreach (var item in names)
                 DownloadAttachment(item, path, src);
         }

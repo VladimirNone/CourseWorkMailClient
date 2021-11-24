@@ -1,4 +1,6 @@
-﻿using CourseWorkMailClient.Infrastructure;
+﻿using CourseWorkMailClient.Domain;
+using CourseWorkMailClient.Infrastructure;
+using MailKit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,15 +26,22 @@ namespace CourseWorkMailClient
         {
             InitializeComponent();
 
-            lbNavMenu.ItemsSource = new List<object>
-            {
-                new {Title = "Входящие", CountOfMessage=15}
-            };
+            var folders = Handlers.KitImapHandler.GetFolders();
+
+            lbNavMenu.ItemsSource = folders;
         }
 
-        private void ChangeFolder_Click(object sender, RoutedEventArgs e)
+        public void OpenFolder(object sender, RoutedEventArgs e)
         {
-            Handlers.ActualMessages = Handlers.KitImapHandler.GetMessages();
+            var folder = (CustomFolder)((ListBoxItem)sender).DataContext;
+            folder.Source.Open(FolderAccess.ReadWrite);
+            Handlers.ActualMessages = Handlers.KitImapHandler.GetMessages(folder.Source);
+        }
+
+        public void CloseFolder(object sender, RoutedEventArgs e)
+        {
+            var folder = (CustomFolder)((ListBoxItem)sender).DataContext;
+            folder.Source.Close();
         }
     }
 }

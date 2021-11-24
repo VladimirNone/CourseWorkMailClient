@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MimeKit;
+using System;
 using System.Collections.Generic;
 
 namespace CourseWorkMailClient.Domain
@@ -14,5 +15,6 @@ namespace CourseWorkMailClient.Domain
         public List<string> Froms { get; set; }
         public List<string> To { get; set; }
         public List<string> Attachments { get; set; }
+        public MimeMessage Source { get; set; }
     }
 }

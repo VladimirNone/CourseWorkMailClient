@@ -180,6 +180,9 @@
       "CourseWorkMailClient.Domain/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v5.0",
+        "dependencies": {
+          "MailKit": "3.0.0-preview1"
+        },
         "compile": {
           "bin/placeholder/CourseWorkMailClient.Domain.dll": {}
         },

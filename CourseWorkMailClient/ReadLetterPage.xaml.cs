@@ -25,7 +25,7 @@ namespace CourseWorkMailClient
     public partial class ReadLetterPage : Page
     {
         private Page prevPage;
-        private uint MessageId;
+        private CustomMessage Message;
 
         public ReadLetterPage(Page previousPage, CustomMessage messageForRead)
         {
@@ -36,7 +36,7 @@ namespace CourseWorkMailClient
             //Костыль. Необходимо определить кодировку.
             var content = @"<!DOCTYPE html ><html><meta http-equiv='Content-Type' content='text/html;charset=UTF-8'><head></head><body>" + messageForRead.Content + "</body></html>";
 
-            MessageId = messageForRead.Id;
+            Message = messageForRead;
             tbReceivers.Text = string.Join(", ", messageForRead.To);
             tbSubject.Text = messageForRead.Subject;
             tbDate.Text += messageForRead.Date;
@@ -52,13 +52,13 @@ namespace CourseWorkMailClient
 
         private void ButtonDownloadAll_Click(object sender, RoutedEventArgs e)
         {
-            Handlers.KitImapHandler.DownloadAttachments((List<string>)lbAttachments.ItemsSource, "", MessageId);
+            Handlers.KitImapHandler.DownloadAttachments((List<string>)lbAttachments.ItemsSource, "", Message.Source);
         }
 
         private void ButtonDownloadOne_Click(object sender, RoutedEventArgs e)
         {
             var fileName = (string)((ListBoxItem)lbAttachments.SelectedItem).Content;
-            Handlers.KitImapHandler.DownloadAttachment(fileName, "", MessageId);
+            Handlers.KitImapHandler.DownloadAttachment(fileName, "", Message.Source);
         }
     }
 }

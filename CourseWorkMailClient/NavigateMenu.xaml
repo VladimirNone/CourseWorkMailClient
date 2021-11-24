@@ -14,20 +14,20 @@
                 <Style TargetType="ListBoxItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                     <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                    <EventSetter Event="GotFocus" Handler="OpenFolder"/>
+                    <EventSetter Event="LostFocus" Handler="CloseFolder"/>
                 </Style>
             </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Button HorizontalContentAlignment="Stretch" Click="ChangeFolder_Click">
-                        <Grid HorizontalAlignment="Stretch">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="{Binding Path=Title}" Margin="5"/>
-                            <TextBlock Text="{Binding Path=CountOfMessage}" Margin="5" Grid.Column="1" HorizontalAlignment="Right" />
-                        </Grid>
-                    </Button>
+                    <Grid HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding Path=Title}" Margin="5"/>
+                        <TextBlock Text="{Binding Path=CountOfMessage}" Margin="5" Grid.Column="1" HorizontalAlignment="Right" />
+                    </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
