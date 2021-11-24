@@ -40,21 +40,35 @@ namespace CourseWorkMailClient.Infrastructure
 
                 ctg.CreateMap<MailFolder, CustomFolder>()
                     .ForMember(dest => dest.Source, act => act.MapFrom(src => src))
-                    .ForMember(dest => dest.Title, act => act.MapFrom(src => src.Name));
+                    .ForMember(dest => dest.Title, act => act.MapFrom(src => GetParsedName(src.Name)));
             });
 
             mapper = new Mapper(config);
         }
 
-        public string Base64Decode(string base64EncodedData)
+        private string GetParsedName(string folderName)
+        {
+            return folderName == "INBOX" ? "Входящие" : folderName;
+        }
+
+        private string Base64Decode(string base64EncodedData)
         {
             var base64EncodedBytes = Convert.FromBase64String(base64EncodedData);
             return Encoding.UTF8.GetString(base64EncodedBytes);
         }
 
+        public CustomFolder GetFolder(MailFolder folder)
+        {
+            return mapper.Map<CustomFolder>(folder);
+        }
+
         public List<CustomFolder> GetFolders()
         {
             var folders = client.GetFolders(client.PersonalNamespaces[0]).ToList();
+
+            var gmailFolder = folders.FirstOrDefault(h => h.Name == "[Gmail]");
+            if(gmailFolder != null)
+                folders.Remove(gmailFolder);
 
             return new List<CustomFolder>(folders.Select(h => mapper.Map<CustomFolder>(h)));
         }
@@ -82,7 +96,7 @@ namespace CourseWorkMailClient.Infrastructure
             return customMessages;
         }
 
-        public MimeMessage GetMimeMessage(uint id, IMailFolder folder)
+        private MimeMessage GetMimeMessage(uint id, IMailFolder folder)
         {
             return folder.GetMessage(new UniqueId(id));
         }

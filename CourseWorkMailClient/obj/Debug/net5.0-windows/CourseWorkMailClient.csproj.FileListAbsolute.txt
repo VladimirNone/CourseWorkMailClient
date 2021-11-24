@@ -34,8 +34,8 @@ D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\D
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\CourseWorkMailClient.AssemblyInfoInputs.cache
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\CourseWorkMailClient.AssemblyInfo.cs
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\CourseWorkMailClient.csproj.CoreCompileInputs.cache
-D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\CourseWorkMailClient.csproj.CopyComplete
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\CourseWorkMailClient.dll
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\ref\CourseWorkMailClient.dll
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\CourseWorkMailClient.pdb
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\CourseWorkMailClient.genruntimeconfig.cache
+D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\CourseWorkMailClient.csproj.CopyComplete

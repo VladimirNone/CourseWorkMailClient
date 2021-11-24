@@ -2,7 +2,9 @@
 using CourseWorkMailClient.Infrastructure;
 using MailKit;
 using System;
+using System.ComponentModel;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,11 +24,12 @@ namespace CourseWorkMailClient
     /// </summary>
     public partial class NavigateMenu : UserControl
     {
+        private CustomNotifyCollectionCollection<CustomFolder> folders;
         public NavigateMenu()
         {
             InitializeComponent();
 
-            var folders = Handlers.KitImapHandler.GetFolders();
+            folders = new CustomNotifyCollectionCollection<CustomFolder>(Handlers.KitImapHandler.GetFolders());
 
             lbNavMenu.ItemsSource = folders;
         }
@@ -34,8 +37,16 @@ namespace CourseWorkMailClient
         public void OpenFolder(object sender, RoutedEventArgs e)
         {
             var folder = (CustomFolder)((ListBoxItem)sender).DataContext;
-            folder.Source.Open(FolderAccess.ReadWrite);
-            Handlers.ActualMessages = Handlers.KitImapHandler.GetMessages(folder.Source);
+
+            //Костыль. Необходимо получить копию объекта folder
+            var copyFolder = Handlers.KitImapHandler.GetFolder(folder.Source);
+
+            copyFolder.Source.Open(FolderAccess.ReadWrite);
+            copyFolder.CountOfMessage = copyFolder.Source.Count;
+
+            folders.Replace(folder, copyFolder);
+
+            Handlers.ActualMessages = Handlers.KitImapHandler.GetMessages(copyFolder.Source);
         }
 
         public void CloseFolder(object sender, RoutedEventArgs e)

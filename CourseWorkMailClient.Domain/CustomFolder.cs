@@ -10,7 +10,7 @@ namespace CourseWorkMailClient.Domain
     public class CustomFolder
     {
         public string Title { get; set; }
-        public int CountOfMessage { get; set; }
+        public int? CountOfMessage { get; set; }
         public MailFolder Source { get; set; }
     }
 }
