@@ -31,6 +31,7 @@ namespace CourseWorkMailClient.Domain
         public void Replace(T oldItem, T newItem)
         {
             var index = collection.IndexOf(oldItem);
+            collection[index] = newItem;
             OnCollectionChange(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, newItem, oldItem, index));
         }
 

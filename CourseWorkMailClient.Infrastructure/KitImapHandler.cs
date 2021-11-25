@@ -57,7 +57,7 @@ namespace CourseWorkMailClient.Infrastructure
             return Encoding.UTF8.GetString(base64EncodedBytes);
         }
 
-        public CustomFolder GetFolder(MailFolder folder)
+        public CustomFolder GetFolder(IMailFolder folder)
         {
             return mapper.Map<CustomFolder>(folder);
         }
@@ -70,7 +70,7 @@ namespace CourseWorkMailClient.Infrastructure
             if(gmailFolder != null)
                 folders.Remove(gmailFolder);
 
-            return new List<CustomFolder>(folders.Select(h => mapper.Map<CustomFolder>(h)));
+            return new List<CustomFolder>(folders.Select(h => GetFolder(h)));
         }
 
         public CustomMessage GetMessage(uint id, IMailFolder folder)

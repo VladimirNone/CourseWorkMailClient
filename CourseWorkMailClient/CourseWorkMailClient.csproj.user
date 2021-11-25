@@ -21,6 +21,9 @@
     <Page Update="AuthPage.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="CustomControls\ColorForeground.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="MainPage.xaml">
       <SubType>Designer</SubType>
     </Page>

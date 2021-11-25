@@ -4,6 +4,12 @@
              xmlns:local="clr-namespace:CourseWorkMailClient"
              StartupUri="AuthPage.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/CustomControls/ColorForeground.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="/CustomControls/ColorBackground.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+        
     </Application.Resources>
 </Application>

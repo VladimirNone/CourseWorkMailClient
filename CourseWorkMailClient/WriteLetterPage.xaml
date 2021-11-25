@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:cc="clr-namespace:TESTWPF.CustomControls"
       xmlns:local="clr-namespace:CourseWorkMailClient"
       mc:Ignorable="d" 
       WindowTitle="Почтовый клент" 
@@ -16,6 +17,10 @@
         WindowWidth="1220"
         WindowHeight="685"
         FontSize="14">
+    <Page.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Close"
+                        Executed="CloseCommandHandler"/>
+    </Page.CommandBindings>
     <Grid>
         <local:NavigateMenu Margin="10,10,990,0"/>
         <TextBlock Margin="215,15,930,615"><Run Text="Кому:"/></TextBlock>
@@ -23,11 +28,22 @@
         <TextBlock Margin="215,534,847,84"><Run Text="Прикрепленное:"/></TextBlock>
         <TextBox Margin="275,15,10,607" x:Name="tbReceivers"/>
         <TextBox Margin="275,48,10,574" x:Name="tbSubject"/>
-        <TextBox Margin="215,81,10,121" x:Name="tbContent" VerticalScrollBarVisibility="Auto"/>
+        <RichTextBox Margin="215,111,10,121" x:Name="rtbContent" VerticalScrollBarVisibility="Auto" AutoWordSelection="False"/>
         <ListBox Margin="358,534,462,10" x:Name="lbAttachments"/>
         <Button Margin="215,608,847,10" Content="Добавить" Click="ButtonAddAttachment_Click"/>
         <Button Margin="215,571,847,47" Content="Удалить" Click="ButtonRemoveAttachment_Click"/>
         <Button Margin="1052,608,10,10" Content="Отправить" Click="ButtonSend_Click"/>
         <Button Margin="1052,571,10,47" Content="Назад" Click="ButtonBack_Click"/>
+        <Button x:Name="bBold" Click="bBold_Click" Command="ApplicationCommands.Close" Margin="275,81,898,544" Height="25" Width="25">
+            <Run Text="Ж" FontWeight="Bold"/>
+        </Button>
+        <Button x:Name="bItalic" Click="bItalic_Click" Command="ApplicationCommands.Close" Margin="306,81,869,544" Height="25" Width="25">
+            <Run Text="К" FontStyle="Italic"/>
+        </Button>
+        <Button x:Name="bUnderline" Click="bUnderline_Click" Command="ApplicationCommands.Close" Margin="336,81,839,544" Height="25" Width="25">
+            <Run Text="Ч" TextDecorations="Underline"/>
+        </Button>
+        <cc:ColorForeground x:Name="colorOfForegroundText" VerticalAlignment="Top" Margin="366,81,769,0" Height="25"></cc:ColorForeground>
+        <cc:ColorBackground x:Name="colorOfBackgroundText" VerticalAlignment="Top" Margin="436,81,699,0" Height="25"></cc:ColorBackground>
     </Grid>
 </Page>
