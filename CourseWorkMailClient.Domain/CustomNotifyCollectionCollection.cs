@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CourseWorkMailClient.Domain
 {
-    public class CustomNotifyCollectionCollection<T> : INotifyCollectionChanged, IEnumerable
+    public class CustomNotifyCollectionCollection<T> : INotifyCollectionChanged, IEnumerable<T>
     {
         private Collection<T> collection = new Collection<T>();
         public event NotifyCollectionChangedEventHandler CollectionChanged;
@@ -39,6 +39,11 @@ namespace CourseWorkMailClient.Domain
         {
             if (CollectionChanged != null)
                 CollectionChanged(this, e);
+        }
+
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            return collection.GetEnumerator();
         }
 
         public IEnumerator GetEnumerator()

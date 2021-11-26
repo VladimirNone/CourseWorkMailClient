@@ -24,35 +24,62 @@ namespace CourseWorkMailClient
     /// </summary>
     public partial class NavigateMenu : UserControl
     {
-        private CustomNotifyCollectionCollection<CustomFolder> folders;
+        private CustomNotifyCollectionCollection<LightFolder> folders;
         public NavigateMenu()
         {
             InitializeComponent();
 
-            folders = new CustomNotifyCollectionCollection<CustomFolder>(Handlers.KitImapHandler.GetFolders());
+            folders = new CustomNotifyCollectionCollection<LightFolder>(HandlerService.KitImapHandler.GetFolders());
 
             lbNavMenu.ItemsSource = folders;
         }
 
         public void OpenFolder(object sender, RoutedEventArgs e)
         {
-            var folder = (CustomFolder)((ListBoxItem)sender).DataContext;
+            var folder = (LightFolder)((ListBoxItem)sender).DataContext;
 
             //Костыль. Необходимо получить копию объекта folder
-            var copyFolder = Handlers.KitImapHandler.GetFolder(folder.Source);
+            var copyFolder = HandlerService.KitImapHandler.GetFolder(folder.Source);
 
             copyFolder.Source.Open(FolderAccess.ReadWrite);
             copyFolder.CountOfMessage = copyFolder.Source.Count;
 
             folders.Replace(folder, copyFolder);
 
-            Handlers.ActualMessages = Handlers.KitImapHandler.GetMessages(copyFolder.Source);
+            HandlerService.ActualMessages = HandlerService.KitImapHandler.GetMessages(copyFolder.Source);
+        }
+
+        private void ContextMenu_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            if (lbNavMenu.SelectedItem == null)
+            {
+                miDelete.IsEnabled = false;
+            }
+            else
+            {
+                miDelete.IsEnabled = true;
+            }
         }
 
         public void CloseFolder(object sender, RoutedEventArgs e)
         {
-            var folder = (CustomFolder)((ListBoxItem)sender).DataContext;
+            var folder = (LightFolder)((ListBoxItem)sender).DataContext;
             folder.Source.Close();
+        }
+
+        private void miCreate_Click(object sender, RoutedEventArgs e)
+        {
+            var createFolderWindow = new CreateFolderWindow(folders.Select(h=> (h.Title, h.Source)).ToList());
+
+            if (createFolderWindow.ShowDialog() == true)
+            {
+                HandlerService.KitImapHandler.CreateNewFolder(createFolderWindow.NameNewFolder, createFolderWindow.ParentFolder);
+            }
+        }
+
+        private void miDelete_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

@@ -33,7 +33,7 @@ namespace CourseWorkMailClient
         {
             InitializeComponent();
 
-            Handlers.ActualMessagesChanged += (messages) =>
+            HandlerService.ActualMessagesChanged += (messages) =>
             {
                 lbMesList.ItemsSource = null;
                 lbMesList.ItemsSource = messages;
@@ -47,7 +47,7 @@ namespace CourseWorkMailClient
 
         private void bReadMes_Click(object sender, MouseButtonEventArgs e)
         {
-            var mes = (CustomMessage)((ListBoxItem)sender).DataContext;
+            var mes = (LightMessage)((ListBoxItem)sender).DataContext;
 
             NavigationService.Navigate(new ReadLetterPage(this, mes));
         }
@@ -66,5 +66,10 @@ namespace CourseWorkMailClient
             }
         }
 
+        private void bExit_Click(object sender, RoutedEventArgs e)
+        {
+            HandlerService.UnAuth();
+            NavigationService.Navigate(new AuthPage());
+        }
     }
 }

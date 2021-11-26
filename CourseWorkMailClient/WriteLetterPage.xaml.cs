@@ -1,5 +1,7 @@
 ﻿using CourseWorkMailClient.Domain;
+using CourseWorkMailClient.Infrastructure;
 using Microsoft.Win32;
+using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TESTWPF.CustomControls;
+using Newtonsoft.Json;
 
 namespace CourseWorkMailClient
 {
@@ -24,8 +27,7 @@ namespace CourseWorkMailClient
     public partial class WriteLetterPage : Page
     {
         private Page prevPage;
-        private List<CustomMessage> curMessages { get; set; }
-        private bool error { get; set; }
+        private LightMessage curMessage { get; set; } = new LightMessage();
         private Action ChangeCaretPosition;
 
         public WriteLetterPage(Page previousPage)
@@ -42,6 +44,8 @@ namespace CourseWorkMailClient
             {
                 FormatText(TextElement.ForegroundProperty, newColor, new Run() { Foreground = newColor }, false, true);
             };
+
+            
         }
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
@@ -49,8 +53,22 @@ namespace CourseWorkMailClient
             NavigationService.Navigate(prevPage);
         }
 
-        private void ButtonSend_Click(object sender, RoutedEventArgs e)
+        private async void ButtonSend_Click(object sender, RoutedEventArgs e)
         {
+            curMessage.Subject = tbSubject.Text;
+            curMessage.To = tbReceivers.Text.Split(',').Select(h=>h.Trim()).ToList();
+            curMessage.Content = JsonConvert.SerializeObject(rtbContent.Document.Blocks.Where(h => h is Paragraph).Select(h => HandlerService.mapper.Map<LightParagraph>(h)), Formatting.Indented);
+            curMessage.Attachments = new List<string>();
+
+            foreach (var item in lbAttachments.Items)
+            {
+                curMessage.Attachments.Add((string)((ListBoxItem)item).Content);
+            }
+
+            
+
+            await HandlerService.KitSmtpHandler.SendMessage(curMessage);
+
             NavigationService.Navigate(prevPage);
         }
 
@@ -84,7 +102,6 @@ namespace CourseWorkMailClient
             FormatText(Inline.TextDecorationsProperty, TextDecorations.Underline, new Run() { TextDecorations = TextDecorations.Underline }, isButton: true);
         }
 
-
         private void CloseCommandHandler(object sender, ExecutedRoutedEventArgs e)
         {
             if (ChangeCaretPosition != null)
@@ -94,11 +111,12 @@ namespace CourseWorkMailClient
             }
         }
 
+
         private void FormatText(DependencyProperty property, object value, Run newRun, bool isBColor = false, bool isFColor = false, bool isButton = false)
         {
             if (rtbContent.Selection.Start != rtbContent.Selection.End)
             {
-                TextRange searchRange = new TextRange(rtbContent.Selection.Start, rtbContent.Selection.End);
+                var searchRange = new TextRange(rtbContent.Selection.Start, rtbContent.Selection.End);
                 searchRange.ApplyPropertyValue(property, value);
 
                 if (isButton)
@@ -140,6 +158,5 @@ namespace CourseWorkMailClient
                 }
             }
         }
-
     }
 }

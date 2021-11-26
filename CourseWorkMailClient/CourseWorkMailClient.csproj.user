@@ -10,6 +10,9 @@
     <Compile Update="AuthPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="CreateFolderWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="NavigateMenu.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -19,6 +22,9 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="AuthPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="CreateFolderWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="CustomControls\ColorForeground.xaml">

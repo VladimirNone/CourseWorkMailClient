@@ -1,6 +1,6 @@
 ﻿using CourseWorkMailClient.Domain;
 using CourseWorkMailClient.Infrastructure;
-using S22.Imap;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -25,9 +25,9 @@ namespace CourseWorkMailClient
     public partial class ReadLetterPage : Page
     {
         private Page prevPage;
-        private CustomMessage Message;
+        private LightMessage Message;
 
-        public ReadLetterPage(Page previousPage, CustomMessage messageForRead)
+        public ReadLetterPage(Page previousPage, LightMessage messageForRead)
         {
             InitializeComponent();
 
@@ -40,7 +40,31 @@ namespace CourseWorkMailClient
             tbReceivers.Text = string.Join(", ", messageForRead.To);
             tbSubject.Text = messageForRead.Subject;
             tbDate.Text += messageForRead.Date;
-            wbContent.NavigateToString(content);
+
+            if(messageForRead.LocalMessage)
+            {
+                rtbContent.Visibility = Visibility.Visible;
+                wbContent.Visibility = Visibility.Hidden;
+
+                rtbContent.Document.Blocks.Clear();
+
+                var lightParagraphs = JsonConvert.DeserializeObject<LightParagraph[]>(messageForRead.Content);
+
+                foreach (var lightParagraph in lightParagraphs)
+                {
+                    var paragraph = new Paragraph();
+                    paragraph.Inlines.AddRange(lightParagraph.Inlines.Select(h => HandlerService.mapper.Map<Run>(h)));
+
+                    rtbContent.Document.Blocks.Add(paragraph);
+                }
+            }
+            else
+            {
+                rtbContent.Visibility = Visibility.Hidden;
+                wbContent.Visibility = Visibility.Visible;
+
+                wbContent.NavigateToString(content);
+            }
 
             lbAttachments.ItemsSource = messageForRead.Attachments;
         }
@@ -52,13 +76,13 @@ namespace CourseWorkMailClient
 
         private void ButtonDownloadAll_Click(object sender, RoutedEventArgs e)
         {
-            Handlers.KitImapHandler.DownloadAttachments((List<string>)lbAttachments.ItemsSource, "", Message.Source);
+            HandlerService.KitImapHandler.DownloadAttachments((List<string>)lbAttachments.ItemsSource, "", Message.Source);
         }
 
         private void ButtonDownloadOne_Click(object sender, RoutedEventArgs e)
         {
             var fileName = (string)((ListBoxItem)lbAttachments.SelectedItem).Content;
-            Handlers.KitImapHandler.DownloadAttachment(fileName, "", Message.Source);
+            HandlerService.KitImapHandler.DownloadAttachment(fileName, "", Message.Source);
         }
     }
 }

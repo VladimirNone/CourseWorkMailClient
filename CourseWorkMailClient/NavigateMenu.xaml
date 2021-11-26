@@ -9,7 +9,13 @@
         Width="200"
         FontSize="14">
     <Grid>
-        <ListBox x:Name="lbNavMenu">
+        <ListBox x:Name="lbNavMenu" ContextMenuOpening="ContextMenu_ContextMenuOpening">
+            <ListBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem x:Name="miCreate" Header="Создать" Click="miCreate_Click"></MenuItem>
+                    <MenuItem x:Name="miDelete" Header="Удалить" Click="miDelete_Click"></MenuItem>
+                </ContextMenu>
+            </ListBox.ContextMenu>
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />

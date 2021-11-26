@@ -8,9 +8,12 @@
 
   <ItemGroup>
     <PackageReference Include="MailKit" Version="3.0.0-preview1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.115.5" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CourseWorkMailClient.Domain\CourseWorkMailClient.Domain.csproj" />
     <ProjectReference Include="..\CourseWorkMailClient.Infrastructure\CourseWorkMailClient.Infrastructure.csproj" />
   </ItemGroup>
 

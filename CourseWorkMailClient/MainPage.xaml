@@ -20,7 +20,8 @@
         <local:NavigateMenu Margin="10,10,990,0"/>
         <Button 
             Margin="1052,10,10,608"
-            Content="Выйти"/>
+            Content="Выйти"
+            Click="bExit_Click"/>
         <ListBox Margin="215,47,10,49" x:Name="lbMesList" ContextMenuOpening="ContextMenu_ContextMenuOpening">
             <ListBox.ContextMenu>
                 <ContextMenu>

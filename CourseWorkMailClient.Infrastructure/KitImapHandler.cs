@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using CourseWorkMailClient.Domain;
+﻿using CourseWorkMailClient.Domain;
 using MailKit;
 using MailKit.Net.Imap;
 using MailKit.Search;
@@ -16,8 +15,7 @@ namespace CourseWorkMailClient.Infrastructure
 {
     public class KitImapHandler
     {
-        public ImapClient client;
-        private IMapper mapper;
+        private ImapClient client;
 
         public KitImapHandler(string login, string password)
         {
@@ -26,43 +24,20 @@ namespace CourseWorkMailClient.Infrastructure
 
             client.Authenticate(login, password);
 
-            var config = new MapperConfiguration(ctg =>
-            {
-                ctg.CreateMap<MimeMessage, CustomMessage>()
-                    .ForMember(dest => dest.Subject, act => act.MapFrom(src => src.Subject))
-                    .ForMember(dest => dest.From, act => act.MapFrom(src => string.Join(", ", src.From.Select(h => h.Name).ToList())))
-                    .ForMember(dest => dest.Froms, act => act.MapFrom(src => src.From.Select(h => h.Name).ToList()))
-                    .ForMember(dest => dest.Content, act => act.MapFrom(src => src.HtmlBody))
-                    .ForMember(dest => dest.Attachments, act => act.MapFrom(src => src.Attachments.Select(h => h.ContentDisposition.FileName)))
-                    .ForMember(dest => dest.To, act => act.MapFrom(src => src.To.Select(h => h.Name)))
-                    .ForMember(dest => dest.Source, act => act.MapFrom(src => src))
-                    .ForMember(dest => dest.Date, act => act.MapFrom(src => src.Date.DateTime));
-
-                ctg.CreateMap<MailFolder, CustomFolder>()
-                    .ForMember(dest => dest.Source, act => act.MapFrom(src => src))
-                    .ForMember(dest => dest.Title, act => act.MapFrom(src => GetParsedName(src.Name)));
-            });
-
-            mapper = new Mapper(config);
         }
 
-        private string GetParsedName(string folderName)
+        public IMailFolder CreateNewFolder(string folderName, IMailFolder parentFolder)
         {
-            return folderName == "INBOX" ? "Входящие" : folderName;
+            var topFolder = parentFolder ?? client.GetFolder(client.PersonalNamespaces[0]);
+            return topFolder.Create(folderName, true);
         }
 
-        private string Base64Decode(string base64EncodedData)
+        public LightFolder GetFolder(IMailFolder folder)
         {
-            var base64EncodedBytes = Convert.FromBase64String(base64EncodedData);
-            return Encoding.UTF8.GetString(base64EncodedBytes);
+            return HandlerService.mapper.Map<LightFolder>(folder);
         }
 
-        public CustomFolder GetFolder(IMailFolder folder)
-        {
-            return mapper.Map<CustomFolder>(folder);
-        }
-
-        public List<CustomFolder> GetFolders()
+        public List<LightFolder> GetFolders()
         {
             var folders = client.GetFolders(client.PersonalNamespaces[0]).ToList();
 
@@ -70,25 +45,25 @@ namespace CourseWorkMailClient.Infrastructure
             if(gmailFolder != null)
                 folders.Remove(gmailFolder);
 
-            return new List<CustomFolder>(folders.Select(h => GetFolder(h)));
+            return new List<LightFolder>(folders.Select(h => GetFolder(h)));
         }
 
-        public CustomMessage GetMessage(uint id, IMailFolder folder)
+        public LightMessage GetMessage(uint id, IMailFolder folder)
         {
             var mimeMes = GetMimeMessage(id, folder);
 
-            var mes = mapper.Map<CustomMessage>(mimeMes);
+            var mes = HandlerService.mapper.Map<LightMessage>(mimeMes);
             mes.Id = id;
             mes.Date = mimeMes.Date.DateTime;
 
             return mes;
         }
 
-        public List<CustomMessage> GetMessages(IMailFolder folder)
+        public List<LightMessage> GetMessages(IMailFolder folder)
         {
             var uids = folder.Search(SearchQuery.All);
-
-            var customMessages = new List<CustomMessage>();
+            
+            var customMessages = new List<LightMessage>();
 
             foreach (var uid in uids)
                 customMessages.Add(GetMessage(uid.Id, folder));
@@ -124,6 +99,11 @@ namespace CourseWorkMailClient.Infrastructure
         {
             foreach (var item in names)
                 DownloadAttachment(item, path, src);
+        }
+
+        public void Logout()
+        {
+            client.Disconnect(true);
         }
     }
 }
