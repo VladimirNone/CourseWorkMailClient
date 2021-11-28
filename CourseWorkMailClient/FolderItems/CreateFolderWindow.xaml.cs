@@ -13,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace CourseWorkMailClient
+namespace CourseWorkMailClient.FolderItems
 {
     /// <summary>
     /// Interaction logic for CreateFolderWindow.xaml

@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CourseWorkMailClient"
+        xmlns:folder="clr-namespace:CourseWorkMailClient.FolderItems"
         mc:Ignorable="d"
         WindowTitle="Почтовый клент" 
         Background="White"
@@ -17,7 +18,7 @@
         WindowHeight="685"
         FontSize="14">
     <Grid>
-        <local:NavigateMenu Margin="10,10,990,0"/>
+        <folder:NavigateMenu Margin="10,10,990,0"/>
         <Button 
             Margin="1052,10,10,608"
             Content="Выйти"
@@ -25,8 +26,8 @@
         <ListBox Margin="215,47,10,49" x:Name="lbMesList" ContextMenuOpening="ContextMenu_ContextMenuOpening">
             <ListBox.ContextMenu>
                 <ContextMenu>
-                    <MenuItem x:Name="miMoveToOtherFolder" Header="Переместить"></MenuItem>
-                    <MenuItem x:Name="miDelete" Header="Удалить"></MenuItem>
+                    <MenuItem x:Name="miMoveToOtherFolder" Header="Переместить" Click="miMoveToOtherFolder_Click"></MenuItem>
+                    <MenuItem x:Name="miDelete" Header="Удалить" Click="miDelete_Click"></MenuItem>
                 </ContextMenu>
             </ListBox.ContextMenu>
             <ListBox.ItemContainerStyle>

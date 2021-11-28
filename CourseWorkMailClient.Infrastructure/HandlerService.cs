@@ -30,6 +30,8 @@ namespace CourseWorkMailClient.Infrastructure
 
         public static IMapper mapper { get; set; }
 
+        public static LightFolder ActualFolder { get; set; }
+
         static HandlerService()
         {
             var config = new MapperConfiguration(ctg =>
@@ -43,7 +45,7 @@ namespace CourseWorkMailClient.Infrastructure
 
                 ctg.CreateMap<MimeMessage, LightMessage>()
                     .ForMember(dest => dest.Subject, act => act.MapFrom(src => src.Subject))
-                    .ForMember(dest => dest.From, act => act.MapFrom(src => string.Join(", ", src.From.Select(h => h.Name).ToList())))
+                    .ForMember(dest => dest.From, act => act.MapFrom(src => string.Join(", ", src.From.Mailboxes.Select(h => string.IsNullOrEmpty(h.Name) ? h.Address : h.Name))))
                     .ForMember(dest => dest.Froms, act => act.MapFrom(src => src.From.Select(h => h.Name).ToList()))
                     .ForMember(dest => dest.Content, act => act.MapFrom(src => src.HtmlBody ?? src.TextBody))
                     .ForMember(dest => dest.LocalMessage, act => act.MapFrom(src => src.Headers.Contains(HeaderId.Summary)))

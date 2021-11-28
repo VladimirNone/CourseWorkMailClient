@@ -71,5 +71,17 @@ namespace CourseWorkMailClient
             HandlerService.UnAuth();
             NavigationService.Navigate(new AuthPage());
         }
+
+        private void miDelete_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void miMoveToOtherFolder_Click(object sender, RoutedEventArgs e)
+        {
+            var mes = (LightMessage)((ListBoxItem)sender).DataContext;
+            //HandlerService.KitImapHandler.MoveMessage(mes, HandlerService.KitImapHandler.getf)
+        }
+        
     }
 }

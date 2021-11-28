@@ -26,10 +26,24 @@ namespace CourseWorkMailClient.Infrastructure
 
         }
 
-        public IMailFolder CreateNewFolder(string folderName, IMailFolder parentFolder)
+        public LightFolder CreateNewFolder(string folderName, IMailFolder parentFolder)
         {
             var topFolder = parentFolder ?? client.GetFolder(client.PersonalNamespaces[0]);
-            return topFolder.Create(folderName, true);
+            var newFolder = topFolder.Create(folderName, true);
+
+            return GetFolder(newFolder);
+        }
+
+        public LightFolder RenameFolder(string newFolderName, IMailFolder folder)
+        {
+            folder.Rename(folder.ParentFolder, newFolderName);
+
+            return GetFolder(folder);
+        }
+
+        public void DeleteFolder(IMailFolder folder)
+        {
+            folder.Delete();
         }
 
         public LightFolder GetFolder(IMailFolder folder)
@@ -48,8 +62,20 @@ namespace CourseWorkMailClient.Infrastructure
             return new List<LightFolder>(folders.Select(h => GetFolder(h)));
         }
 
-        public LightMessage GetMessage(uint id, IMailFolder folder)
+        public void MoveMessage(MimeMessage message, IMailFolder newMessageFolder)
         {
+/*            if (!newMessageFolder.IsOpen)
+                newMessageFolder.Open(FolderAccess.ReadWrite);*/
+            newMessageFolder.Append(message);
+        }
+
+        public LightMessage GetMessage(string MessageId, IMailFolder folder)
+        {
+            if (!folder.IsOpen)
+                folder.Open(FolderAccess.ReadWrite);
+
+            var id = folder.Search(SearchQuery.HeaderContains("Message-Id", MessageId)).First().Id;
+
             var mimeMes = GetMimeMessage(id, folder);
 
             var mes = HandlerService.mapper.Map<LightMessage>(mimeMes);
@@ -61,14 +87,12 @@ namespace CourseWorkMailClient.Infrastructure
 
         public List<LightMessage> GetMessages(IMailFolder folder)
         {
-            var uids = folder.Search(SearchQuery.All);
-            
-            var customMessages = new List<LightMessage>();
-
-            foreach (var uid in uids)
-                customMessages.Add(GetMessage(uid.Id, folder));
-
-            return customMessages;
+            return folder.Select(h => new LightMessage() {
+                MessageId = h.MessageId,
+                Subject = h.Subject,
+                From = string.Join(", ", h.From.Mailboxes.Select(h => string.IsNullOrEmpty(h.Name) ? h.Address : h.Name).ToList()),
+                Date = h.Date.DateTime })
+            .ToList();
         }
 
         private MimeMessage GetMimeMessage(uint id, IMailFolder folder)

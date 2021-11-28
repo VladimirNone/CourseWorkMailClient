@@ -29,7 +29,7 @@ namespace CourseWorkMailClient.Infrastructure
         public async Task SendMessage(LightMessage messageToSend)
         {
             var message = new MimeMessage();
-            
+
             message.Headers.Add(new Header(HeaderId.Summary, "localMessage"));
 
             message.From.Add(new MailboxAddress("", login));

@@ -102,6 +102,11 @@ namespace CourseWorkMailClient
             FormatText(Inline.TextDecorationsProperty, TextDecorations.Underline, new Run() { TextDecorations = TextDecorations.Underline }, isButton: true);
         }
 
+        private void tbSize_LostFocus(object sender, RoutedEventArgs e)
+        {
+            FormatText(TextElement.FontSizeProperty, double.Parse(tbSize.Text), new Run() { FontSize = double.Parse(tbSize.Text) }, isButton: true);
+        }
+
         private void CloseCommandHandler(object sender, ExecutedRoutedEventArgs e)
         {
             if (ChangeCaretPosition != null)
@@ -158,5 +163,6 @@ namespace CourseWorkMailClient
                 }
             }
         }
+
     }
 }

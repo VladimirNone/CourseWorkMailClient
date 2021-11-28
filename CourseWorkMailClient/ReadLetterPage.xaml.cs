@@ -33,22 +33,23 @@ namespace CourseWorkMailClient
 
             prevPage = previousPage;
 
+            Message = HandlerService.KitImapHandler.GetMessage(messageForRead.MessageId, HandlerService.ActualFolder.Source);
+
             //Костыль. Необходимо определить кодировку.
-            var content = @"<!DOCTYPE html ><html><meta http-equiv='Content-Type' content='text/html;charset=UTF-8'><head></head><body>" + messageForRead.Content + "</body></html>";
+            var content = @"<!DOCTYPE html ><html><meta http-equiv='Content-Type' content='text/html;charset=UTF-8'><head></head><body>" + Message.Content + "</body></html>";
 
-            Message = messageForRead;
-            tbReceivers.Text = string.Join(", ", messageForRead.To);
-            tbSubject.Text = messageForRead.Subject;
-            tbDate.Text += messageForRead.Date;
+            tbReceivers.Text = string.Join(", ", Message.To);
+            tbSubject.Text = Message.Subject;
+            tbDate.Text += Message.Date;
 
-            if(messageForRead.LocalMessage)
+            if(Message.LocalMessage)
             {
                 rtbContent.Visibility = Visibility.Visible;
                 wbContent.Visibility = Visibility.Hidden;
 
                 rtbContent.Document.Blocks.Clear();
 
-                var lightParagraphs = JsonConvert.DeserializeObject<LightParagraph[]>(messageForRead.Content);
+                var lightParagraphs = JsonConvert.DeserializeObject<LightParagraph[]>(Message.Content);
 
                 foreach (var lightParagraph in lightParagraphs)
                 {
@@ -66,7 +67,7 @@ namespace CourseWorkMailClient
                 wbContent.NavigateToString(content);
             }
 
-            lbAttachments.ItemsSource = messageForRead.Attachments;
+            lbAttachments.ItemsSource = Message.Attachments;
         }
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)

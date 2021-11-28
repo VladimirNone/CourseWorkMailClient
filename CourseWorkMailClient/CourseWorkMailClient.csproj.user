@@ -10,10 +10,13 @@
     <Compile Update="AuthPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="CreateFolderWindow.xaml.cs">
+    <Compile Update="FolderItems\CreateFolderWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="NavigateMenu.xaml.cs">
+    <Compile Update="FolderItems\NavigateMenu.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="FolderItems\RenameFolderWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="ReadLetterPage.xaml.cs">
@@ -24,16 +27,19 @@
     <Page Update="AuthPage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="CreateFolderWindow.xaml">
+    <Page Update="FolderItems\CreateFolderWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="CustomControls\ColorForeground.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="FolderItems\RenameFolderWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="MainPage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="NavigateMenu.xaml">
+    <Page Update="FolderItems\NavigateMenu.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="ReadLetterPage.xaml">

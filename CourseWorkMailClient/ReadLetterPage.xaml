@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:CourseWorkMailClient"
+      xmlns:folder="clr-namespace:CourseWorkMailClient.FolderItems"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       WindowTitle="Почтовый клент" 
@@ -18,7 +19,7 @@
         WindowHeight="685"
         FontSize="14">
     <Grid>
-        <local:NavigateMenu Margin="10,10,990,0"/>
+        <folder:NavigateMenu Margin="10,10,990,0"/>
         <TextBlock Margin="215,15,930,615"><Run Text="Кому:"/></TextBlock>
         <TextBlock Margin="215,50,930,576"><Run Text="Тема:"/></TextBlock>
         <TextBlock Margin="215,534,847,84"><Run Text="Прикрепленное:"/></TextBlock>

@@ -1,9 +1,9 @@
-﻿<UserControl  x:Class="CourseWorkMailClient.NavigateMenu"
+﻿<UserControl  x:Class="CourseWorkMailClient.FolderItems.NavigateMenu"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CourseWorkMailClient"
+        xmlns:local="clr-namespace:CourseWorkMailClient.FolderItems"
         mc:Ignorable="d"
         Height="630"
         Width="200"
@@ -13,6 +13,7 @@
             <ListBox.ContextMenu>
                 <ContextMenu>
                     <MenuItem x:Name="miCreate" Header="Создать" Click="miCreate_Click"></MenuItem>
+                    <MenuItem x:Name="miRename" Header="Переименовать" Click="miRename_Click"></MenuItem>
                     <MenuItem x:Name="miDelete" Header="Удалить" Click="miDelete_Click"></MenuItem>
                 </ContextMenu>
             </ListBox.ContextMenu>

@@ -17,7 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace CourseWorkMailClient
+namespace CourseWorkMailClient.FolderItems
 {
     /// <summary>
     /// Interaction logic for NavigateMenu.xaml
@@ -46,6 +46,7 @@ namespace CourseWorkMailClient
 
             folders.Replace(folder, copyFolder);
 
+            HandlerService.ActualFolder = copyFolder;
             HandlerService.ActualMessages = HandlerService.KitImapHandler.GetMessages(copyFolder.Source);
         }
 
@@ -54,17 +55,20 @@ namespace CourseWorkMailClient
             if (lbNavMenu.SelectedItem == null)
             {
                 miDelete.IsEnabled = false;
+                miRename.IsEnabled = false;
             }
             else
             {
                 miDelete.IsEnabled = true;
+                miRename.IsEnabled = true;
             }
         }
 
         public void CloseFolder(object sender, RoutedEventArgs e)
         {
             var folder = (LightFolder)((ListBoxItem)sender).DataContext;
-            folder.Source.Close();
+            if(folder.Source.IsOpen)
+                folder.Source.Close();
         }
 
         private void miCreate_Click(object sender, RoutedEventArgs e)
@@ -73,13 +77,29 @@ namespace CourseWorkMailClient
 
             if (createFolderWindow.ShowDialog() == true)
             {
-                HandlerService.KitImapHandler.CreateNewFolder(createFolderWindow.NameNewFolder, createFolderWindow.ParentFolder);
+                folders.Add(HandlerService.KitImapHandler.CreateNewFolder(createFolderWindow.NameNewFolder, createFolderWindow.ParentFolder));
+            }
+        }
+
+        private void miRename_Click(object sender, RoutedEventArgs e)
+        {
+            var folder = (LightFolder)lbNavMenu.SelectedItem;
+            var renameFolderWindow = new RenameFolderWindow();
+
+            if (renameFolderWindow.ShowDialog() == true)
+            {
+                var updatedFolder = HandlerService.KitImapHandler.RenameFolder(renameFolderWindow.NewFolderName, folder.Source);
+                updatedFolder.CountOfMessage = folder.CountOfMessage;
+                folders.Replace(folder, updatedFolder);
+                lbNavMenu.SelectedItem = updatedFolder;
             }
         }
 
         private void miDelete_Click(object sender, RoutedEventArgs e)
         {
-
+            var folder = (LightFolder)lbNavMenu.SelectedItem;
+            HandlerService.KitImapHandler.DeleteFolder(folder.Source);
+            folders.Delete(folder);
         }
     }
 }

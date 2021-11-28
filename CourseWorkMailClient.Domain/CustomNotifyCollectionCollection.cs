@@ -35,6 +35,13 @@ namespace CourseWorkMailClient.Domain
             OnCollectionChange(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, newItem, oldItem, index));
         }
 
+        public void Delete(T item)
+        {
+            var index = collection.IndexOf(item);
+            collection.Remove(item);
+            OnCollectionChange(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item, index));
+        }
+
         protected virtual void OnCollectionChange(NotifyCollectionChangedEventArgs e)
         {
             if (CollectionChanged != null)

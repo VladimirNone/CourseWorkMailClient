@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:cc="clr-namespace:TESTWPF.CustomControls"
       xmlns:local="clr-namespace:CourseWorkMailClient"
+      xmlns:folder="clr-namespace:CourseWorkMailClient.FolderItems"
       mc:Ignorable="d" 
       WindowTitle="Почтовый клент" 
         Background="White"
@@ -22,7 +23,7 @@
                         Executed="CloseCommandHandler"/>
     </Page.CommandBindings>
     <Grid>
-        <local:NavigateMenu Margin="10,10,990,0"/>
+        <folder:NavigateMenu Margin="10,10,990,0"/>
         <TextBlock Margin="215,15,930,615"><Run Text="Кому:"/></TextBlock>
         <TextBlock Margin="215,50,930,576"><Run Text="Тема:"/></TextBlock>
         <TextBlock Margin="215,534,847,84"><Run Text="Прикрепленное:"/></TextBlock>
@@ -45,5 +46,6 @@
         </Button>
         <cc:ColorForeground x:Name="colorOfForegroundText" VerticalAlignment="Top" Margin="366,81,769,0" Height="25"></cc:ColorForeground>
         <cc:ColorBackground x:Name="colorOfBackgroundText" VerticalAlignment="Top" Margin="436,81,699,0" Height="25"></cc:ColorBackground>
+        <TextBox x:Name="tbSize" Margin="506,81,629,544" Height="25" Text="14" TextAlignment="Right" VerticalContentAlignment="Center" Padding="0,0,3,0" LostFocus="tbSize_LostFocus"/>
     </Grid>
 </Page>
