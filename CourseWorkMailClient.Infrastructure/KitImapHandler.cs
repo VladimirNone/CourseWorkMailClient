@@ -1,4 +1,5 @@
 ﻿using CourseWorkMailClient.Domain;
+using Lab6;
 using MailKit;
 using MailKit.Net.Imap;
 using MailKit.Search;
@@ -26,7 +27,7 @@ namespace CourseWorkMailClient.Infrastructure
 
         }
 
-        public LightFolder CreateNewFolder(string folderName, IMailFolder parentFolder)
+        public Folder CreateNewFolder(string folderName, IMailFolder parentFolder)
         {
             var topFolder = parentFolder ?? client.GetFolder(client.PersonalNamespaces[0]);
             var newFolder = topFolder.Create(folderName, true);
@@ -34,7 +35,7 @@ namespace CourseWorkMailClient.Infrastructure
             return GetFolder(newFolder);
         }
 
-        public LightFolder RenameFolder(string newFolderName, IMailFolder folder)
+        public Folder RenameFolder(string newFolderName, IMailFolder folder)
         {
             folder.Rename(folder.ParentFolder, newFolderName);
 
@@ -46,12 +47,12 @@ namespace CourseWorkMailClient.Infrastructure
             folder.Delete();
         }
 
-        public LightFolder GetFolder(IMailFolder folder)
+        public Folder GetFolder(IMailFolder folder)
         {
-            return HandlerService.mapper.Map<LightFolder>(folder);
+            return HandlerService.mapper.Map<Folder>(folder);
         }
 
-        public List<LightFolder> GetFolders()
+        public List<Folder> GetFolders()
         {
             var folders = client.GetFolders(client.PersonalNamespaces[0]).ToList();
 
@@ -59,7 +60,7 @@ namespace CourseWorkMailClient.Infrastructure
             if(gmailFolder != null)
                 folders.Remove(gmailFolder);
 
-            return new List<LightFolder>(folders.Select(h => GetFolder(h)));
+            return new List<Folder>(folders.Select(h => GetFolder(h)));
         }
 
         public void MoveMessage(MimeMessage message, IMailFolder newMessageFolder)
@@ -69,7 +70,7 @@ namespace CourseWorkMailClient.Infrastructure
             newMessageFolder.Append(message);
         }
 
-        public LightMessage GetMessage(string MessageId, IMailFolder folder)
+        public Letter GetMessage(string MessageId, IMailFolder folder)
         {
             if (!folder.IsOpen)
                 folder.Open(FolderAccess.ReadWrite);
@@ -78,16 +79,15 @@ namespace CourseWorkMailClient.Infrastructure
 
             var mimeMes = GetMimeMessage(id, folder);
 
-            var mes = HandlerService.mapper.Map<LightMessage>(mimeMes);
-            mes.Id = id;
+            var mes = HandlerService.mapper.Map<Letter>(mimeMes);
             mes.Date = mimeMes.Date.DateTime;
 
             return mes;
         }
 
-        public List<LightMessage> GetMessages(IMailFolder folder)
+        public List<Letter> GetMessages(IMailFolder folder)
         {
-            return folder.Select(h => new LightMessage() {
+            return folder.Select(h => new Letter() {
                 MessageId = h.MessageId,
                 Subject = h.Subject,
                 From = string.Join(", ", h.From.Mailboxes.Select(h => string.IsNullOrEmpty(h.Name) ? h.Address : h.Name).ToList()),
@@ -97,7 +97,19 @@ namespace CourseWorkMailClient.Infrastructure
 
         private MimeMessage GetMimeMessage(uint id, IMailFolder folder)
         {
-            return folder.GetMessage(new UniqueId(id));
+            var mes = folder.GetMessage(new UniqueId(id));
+
+            if (mes.Headers.Contains(HeaderId.Summary))
+            {
+                for (int i = 0; i < mes.BodyParts.Count(); i++)
+                {
+                    var item = mes.BodyParts.ElementAt(i);
+                    var textItem = (TextPart)item;
+                    textItem.Text = Encoding.UTF8.GetString(CryptoDES.DecryptUsingDes(Convert.FromBase64String(textItem.Text), "One" + i));
+                }
+            }
+
+            return mes;
         }
 
         public void DownloadAttachment(string name, string path, MimeMessage src)

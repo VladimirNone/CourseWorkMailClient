@@ -25,9 +25,9 @@ namespace CourseWorkMailClient
     public partial class ReadLetterPage : Page
     {
         private Page prevPage;
-        private LightMessage Message;
+        private Letter Message;
 
-        public ReadLetterPage(Page previousPage, LightMessage messageForRead)
+        public ReadLetterPage(Page previousPage, Letter messageForRead)
         {
             InitializeComponent();
 
@@ -37,6 +37,10 @@ namespace CourseWorkMailClient
 
             //Костыль. Необходимо определить кодировку.
             var content = @"<!DOCTYPE html ><html><meta http-equiv='Content-Type' content='text/html;charset=UTF-8'><head></head><body>" + Message.Content + "</body></html>";
+
+            /*            using var memoryStream = new MemoryStream();
+                        Message.Source.WriteTo(memoryStream);
+                        var res = Encoding.UTF8.GetString(memoryStream.ToArray());*/
 
             tbReceivers.Text = string.Join(", ", Message.To);
             tbSubject.Text = Message.Subject;
@@ -82,7 +86,7 @@ namespace CourseWorkMailClient
 
         private void ButtonDownloadOne_Click(object sender, RoutedEventArgs e)
         {
-            var fileName = (string)((ListBoxItem)lbAttachments.SelectedItem).Content;
+            var fileName = (string)lbAttachments.SelectedItem;
             HandlerService.KitImapHandler.DownloadAttachment(fileName, "", Message.Source);
         }
     }

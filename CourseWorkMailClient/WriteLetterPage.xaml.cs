@@ -27,7 +27,7 @@ namespace CourseWorkMailClient
     public partial class WriteLetterPage : Page
     {
         private Page prevPage;
-        private LightMessage curMessage { get; set; } = new LightMessage();
+        private Letter curMessage { get; set; } = new Letter();
         private Action ChangeCaretPosition;
 
         public WriteLetterPage(Page previousPage)
@@ -55,7 +55,7 @@ namespace CourseWorkMailClient
 
         private async void ButtonSend_Click(object sender, RoutedEventArgs e)
         {
-            curMessage.Subject = tbSubject.Text;
+/*            curMessage.Subject = tbSubject.Text;
             curMessage.To = tbReceivers.Text.Split(',').Select(h=>h.Trim()).ToList();
             curMessage.Content = JsonConvert.SerializeObject(rtbContent.Document.Blocks.Where(h => h is Paragraph).Select(h => HandlerService.mapper.Map<LightParagraph>(h)), Formatting.Indented);
             curMessage.Attachments = new List<string>();
@@ -63,7 +63,7 @@ namespace CourseWorkMailClient
             foreach (var item in lbAttachments.Items)
             {
                 curMessage.Attachments.Add((string)((ListBoxItem)item).Content);
-            }
+            }*/
 
             
 

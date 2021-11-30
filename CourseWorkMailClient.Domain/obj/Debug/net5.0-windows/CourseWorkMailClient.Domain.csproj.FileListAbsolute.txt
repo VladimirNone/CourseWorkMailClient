@@ -9,3 +9,4 @@ D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Domai
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Domain\obj\Debug\net5.0-windows\CourseWorkMailClient.Domain.dll
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Domain\obj\Debug\net5.0-windows\ref\CourseWorkMailClient.Domain.dll
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Domain\obj\Debug\net5.0-windows\CourseWorkMailClient.Domain.pdb
+D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Domain\obj\Debug\net5.0-windows\CourseWorkMailClient.Domain.csproj.AssemblyReference.cache

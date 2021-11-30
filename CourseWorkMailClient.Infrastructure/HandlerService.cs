@@ -14,8 +14,8 @@ namespace CourseWorkMailClient.Infrastructure
 {
     public static class HandlerService
     {
-        private static List<LightMessage> actualMessages;
-        public static List<LightMessage> ActualMessages
+        private static List<Letter> actualMessages;
+        public static List<Letter> ActualMessages
         {
             get => actualMessages;
             set
@@ -26,11 +26,11 @@ namespace CourseWorkMailClient.Infrastructure
             }
         }
 
-        public static Action<List<LightMessage>> ActualMessagesChanged { get; set; }
+        public static Action<List<Letter>> ActualMessagesChanged { get; set; }
 
         public static IMapper mapper { get; set; }
 
-        public static LightFolder ActualFolder { get; set; }
+        public static Folder ActualFolder { get; set; }
 
         static HandlerService()
         {
@@ -43,10 +43,10 @@ namespace CourseWorkMailClient.Infrastructure
 
                 ctg.CreateMap<LightRun, Run>();
 
-                ctg.CreateMap<MimeMessage, LightMessage>()
+                ctg.CreateMap<MimeMessage, Letter>()
                     .ForMember(dest => dest.Subject, act => act.MapFrom(src => src.Subject))
                     .ForMember(dest => dest.From, act => act.MapFrom(src => string.Join(", ", src.From.Mailboxes.Select(h => string.IsNullOrEmpty(h.Name) ? h.Address : h.Name))))
-                    .ForMember(dest => dest.Froms, act => act.MapFrom(src => src.From.Select(h => h.Name).ToList()))
+                    .ForMember(dest => dest.Senders, act => act.MapFrom(src => src.From.Select(h => h.Name).ToList()))
                     .ForMember(dest => dest.Content, act => act.MapFrom(src => src.HtmlBody ?? src.TextBody))
                     .ForMember(dest => dest.LocalMessage, act => act.MapFrom(src => src.Headers.Contains(HeaderId.Summary)))
                     .ForMember(dest => dest.Attachments, act => act.MapFrom(src => src.Attachments.Select(h => h.ContentDisposition.FileName)))
@@ -54,7 +54,7 @@ namespace CourseWorkMailClient.Infrastructure
                     .ForMember(dest => dest.Source, act => act.MapFrom(src => src))
                     .ForMember(dest => dest.Date, act => act.MapFrom(src => src.Date.DateTime));
 
-                ctg.CreateMap<MailFolder, LightFolder>()
+                ctg.CreateMap<MailFolder, Folder>()
                     .ForMember(dest => dest.Source, act => act.MapFrom(src => src))
                     .ForMember(dest => dest.Title, act => act.MapFrom(src => PrepareData.GetParsedName(src.Name)));
             });

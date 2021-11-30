@@ -24,19 +24,19 @@ namespace CourseWorkMailClient.FolderItems
     /// </summary>
     public partial class NavigateMenu : UserControl
     {
-        private CustomNotifyCollectionCollection<LightFolder> folders;
+        private CustomNotifyCollectionCollection<Folder> folders;
         public NavigateMenu()
         {
             InitializeComponent();
 
-            folders = new CustomNotifyCollectionCollection<LightFolder>(HandlerService.KitImapHandler.GetFolders());
+            folders = new CustomNotifyCollectionCollection<Folder>(HandlerService.KitImapHandler.GetFolders());
 
             lbNavMenu.ItemsSource = folders;
         }
 
         public void OpenFolder(object sender, RoutedEventArgs e)
         {
-            var folder = (LightFolder)((ListBoxItem)sender).DataContext;
+            var folder = (Folder)((ListBoxItem)sender).DataContext;
 
             //Костыль. Необходимо получить копию объекта folder
             var copyFolder = HandlerService.KitImapHandler.GetFolder(folder.Source);
@@ -66,7 +66,7 @@ namespace CourseWorkMailClient.FolderItems
 
         public void CloseFolder(object sender, RoutedEventArgs e)
         {
-            var folder = (LightFolder)((ListBoxItem)sender).DataContext;
+            var folder = (Folder)((ListBoxItem)sender).DataContext;
             if(folder.Source.IsOpen)
                 folder.Source.Close();
         }
@@ -83,7 +83,7 @@ namespace CourseWorkMailClient.FolderItems
 
         private void miRename_Click(object sender, RoutedEventArgs e)
         {
-            var folder = (LightFolder)lbNavMenu.SelectedItem;
+            var folder = (Folder)lbNavMenu.SelectedItem;
             var renameFolderWindow = new RenameFolderWindow();
 
             if (renameFolderWindow.ShowDialog() == true)
@@ -97,7 +97,7 @@ namespace CourseWorkMailClient.FolderItems
 
         private void miDelete_Click(object sender, RoutedEventArgs e)
         {
-            var folder = (LightFolder)lbNavMenu.SelectedItem;
+            var folder = (Folder)lbNavMenu.SelectedItem;
             HandlerService.KitImapHandler.DeleteFolder(folder.Source);
             folders.Delete(folder);
         }

@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseWorkMailClient", "Cou
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseWorkMailClient.Domain", "CourseWorkMailClient.Domain\CourseWorkMailClient.Domain.csproj", "{41EE9D26-0140-457A-9711-83995018191F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseWorkMailClient.Infrastructure", "CourseWorkMailClient.Infrastructure\CourseWorkMailClient.Infrastructure.csproj", "{CDC2E5CB-5DD9-4163-AFB4-EEDABAA9A135}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseWorkMailClient.Infrastructure", "CourseWorkMailClient.Infrastructure\CourseWorkMailClient.Infrastructure.csproj", "{CDC2E5CB-5DD9-4163-AFB4-EEDABAA9A135}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseWorkMailClient.Data", "CourseWorkMailClient.Data\CourseWorkMailClient.Data.csproj", "{BF44FBC1-C4CF-4148-9794-DD72A61E4F3B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{CDC2E5CB-5DD9-4163-AFB4-EEDABAA9A135}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDC2E5CB-5DD9-4163-AFB4-EEDABAA9A135}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDC2E5CB-5DD9-4163-AFB4-EEDABAA9A135}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF44FBC1-C4CF-4148-9794-DD72A61E4F3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF44FBC1-C4CF-4148-9794-DD72A61E4F3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF44FBC1-C4CF-4148-9794-DD72A61E4F3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF44FBC1-C4CF-4148-9794-DD72A61E4F3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

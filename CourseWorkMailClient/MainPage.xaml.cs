@@ -47,7 +47,7 @@ namespace CourseWorkMailClient
 
         private void bReadMes_Click(object sender, MouseButtonEventArgs e)
         {
-            var mes = (LightMessage)((ListBoxItem)sender).DataContext;
+            var mes = (Letter)((ListBoxItem)sender).DataContext;
 
             NavigationService.Navigate(new ReadLetterPage(this, mes));
         }
@@ -79,7 +79,7 @@ namespace CourseWorkMailClient
 
         private void miMoveToOtherFolder_Click(object sender, RoutedEventArgs e)
         {
-            var mes = (LightMessage)((ListBoxItem)sender).DataContext;
+            var mes = (Letter)((ListBoxItem)sender).DataContext;
             //HandlerService.KitImapHandler.MoveMessage(mes, HandlerService.KitImapHandler.getf)
         }
         
