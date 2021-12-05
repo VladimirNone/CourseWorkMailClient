@@ -24,34 +24,54 @@ namespace CourseWorkMailClient.FolderItems
     /// </summary>
     public partial class NavigateMenu : UserControl
     {
-        private CustomNotifyCollectionCollection<Folder> folders;
         public NavigateMenu()
         {
+            GetDataService.navigatorControl = this;
+
             InitializeComponent();
 
-            folders = new CustomNotifyCollectionCollection<Folder>(HandlerService.KitImapHandler.GetFolders());
+            GetDataService.Folders = new CustomNotifyCollectionCollection<Folder>(GetDataService.GetFolders());
 
-            lbNavMenu.ItemsSource = folders;
+            lbNavMenu.ItemsSource = GetDataService.Folders;
         }
 
         public void OpenFolder(object sender, RoutedEventArgs e)
         {
             var folder = (Folder)((ListBoxItem)sender).DataContext;
+            Folder copyFolder = null;
 
-            //Костыль. Необходимо получить копию объекта folder
-            var copyFolder = HandlerService.KitImapHandler.GetFolder(folder.Source);
+            if (folder.Source != null)
+            {
+                //Костыль. Необходимо получить копию объекта folder
+                copyFolder = HandlerService.KitImapHandler.GetCustedFolder(folder.Source);
+                copyFolder.Id = folder.Id;
 
-            copyFolder.Source.Open(FolderAccess.ReadWrite);
-            copyFolder.CountOfMessage = copyFolder.Source.Count;
+                copyFolder.Source.Open(FolderAccess.ReadWrite);
+                copyFolder.CountOfMessage = copyFolder.Source.Count;
+            }
+            else
+            {
+                copyFolder = HandlerService.mapper.Map<Folder>(folder);
+                if (copyFolder == folder)
+                    _ = 5;
+            }
 
-            folders.Replace(folder, copyFolder);
 
-            HandlerService.ActualFolder = copyFolder;
-            HandlerService.ActualMessages = HandlerService.KitImapHandler.GetMessages(copyFolder.Source);
+            GetDataService.Folders.Replace(folder, copyFolder);
+
+            GetDataService.ActualFolder = copyFolder;
         }
 
         private void ContextMenu_ContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
+            if (HandlerService.KitImapHandler == null)
+            {
+                miCreate.IsEnabled = false;
+                miDelete.IsEnabled = false;
+                miRename.IsEnabled = false;
+                return;
+            }
+
             if (lbNavMenu.SelectedItem == null)
             {
                 miDelete.IsEnabled = false;
@@ -67,17 +87,20 @@ namespace CourseWorkMailClient.FolderItems
         public void CloseFolder(object sender, RoutedEventArgs e)
         {
             var folder = (Folder)((ListBoxItem)sender).DataContext;
-            if(folder.Source.IsOpen)
+
+            if (folder.Source != null && folder.Source.IsOpen)
+            {
                 folder.Source.Close();
+            }
         }
 
         private void miCreate_Click(object sender, RoutedEventArgs e)
         {
-            var createFolderWindow = new CreateFolderWindow(folders.Select(h=> (h.Title, h.Source)).ToList());
+            var createFolderWindow = new CreateFolderWindow(GetDataService.Folders.Select(h=> (h.Title, h.Source)).ToList());
 
             if (createFolderWindow.ShowDialog() == true)
             {
-                folders.Add(HandlerService.KitImapHandler.CreateNewFolder(createFolderWindow.NameNewFolder, createFolderWindow.ParentFolder));
+                GetDataService.Folders.Add(HandlerService.KitImapHandler.CreateNewFolder(createFolderWindow.NameNewFolder, createFolderWindow.ParentFolder));
             }
         }
 
@@ -90,7 +113,7 @@ namespace CourseWorkMailClient.FolderItems
             {
                 var updatedFolder = HandlerService.KitImapHandler.RenameFolder(renameFolderWindow.NewFolderName, folder.Source);
                 updatedFolder.CountOfMessage = folder.CountOfMessage;
-                folders.Replace(folder, updatedFolder);
+                GetDataService.Folders.Replace(folder, updatedFolder);
                 lbNavMenu.SelectedItem = updatedFolder;
             }
         }
@@ -99,7 +122,7 @@ namespace CourseWorkMailClient.FolderItems
         {
             var folder = (Folder)lbNavMenu.SelectedItem;
             HandlerService.KitImapHandler.DeleteFolder(folder.Source);
-            folders.Delete(folder);
+            GetDataService.Folders.Delete(folder);
         }
     }
 }

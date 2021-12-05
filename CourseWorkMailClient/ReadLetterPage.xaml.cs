@@ -1,5 +1,6 @@
 ﻿using CourseWorkMailClient.Domain;
 using CourseWorkMailClient.Infrastructure;
+using Lab6;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -33,14 +34,10 @@ namespace CourseWorkMailClient
 
             prevPage = previousPage;
 
-            Message = HandlerService.KitImapHandler.GetMessage(messageForRead.MessageId, HandlerService.ActualFolder.Source);
+            Message = GetDataService.GetMessage(messageForRead, GetDataService.ActualFolder);
 
             //Костыль. Необходимо определить кодировку.
             var content = @"<!DOCTYPE html ><html><meta http-equiv='Content-Type' content='text/html;charset=UTF-8'><head></head><body>" + Message.Content + "</body></html>";
-
-            /*            using var memoryStream = new MemoryStream();
-                        Message.Source.WriteTo(memoryStream);
-                        var res = Encoding.UTF8.GetString(memoryStream.ToArray());*/
 
             tbReceivers.Text = string.Join(", ", Message.To);
             tbSubject.Text = Message.Subject;
@@ -71,7 +68,7 @@ namespace CourseWorkMailClient
                 wbContent.NavigateToString(content);
             }
 
-            lbAttachments.ItemsSource = Message.Attachments;
+            lbAttachments.ItemsSource = Message.Attachments.Select(h=>h.Name);
         }
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)

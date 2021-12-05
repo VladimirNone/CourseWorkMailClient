@@ -15,5 +15,7 @@ namespace CourseWorkMailClient.Domain
         public int? CountOfMessage { get; set; }
         [NotMapped]
         public MailFolder Source { get; set; }
+
+        public List<Letter> Letters { get; set; }
     }
 }

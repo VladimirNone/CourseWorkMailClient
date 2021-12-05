@@ -2,7 +2,9 @@ D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Infra
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Infrastructure\bin\Debug\net5.0-windows\CourseWorkMailClient.Infrastructure.dll
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Infrastructure\bin\Debug\net5.0-windows\ref\CourseWorkMailClient.Infrastructure.dll
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Infrastructure\bin\Debug\net5.0-windows\CourseWorkMailClient.Infrastructure.pdb
+D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Infrastructure\bin\Debug\net5.0-windows\CourseWorkMailClient.Data.dll
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Infrastructure\bin\Debug\net5.0-windows\CourseWorkMailClient.Domain.dll
+D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Infrastructure\bin\Debug\net5.0-windows\CourseWorkMailClient.Data.pdb
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Infrastructure\bin\Debug\net5.0-windows\CourseWorkMailClient.Domain.pdb
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Infrastructure\obj\Debug\net5.0-windows\CourseWorkMailClient.Infrastructure.csproj.AssemblyReference.cache
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Infrastructure\obj\Debug\net5.0-windows\CourseWorkMailClient.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
@@ -12,6 +14,3 @@ D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Infra
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Infrastructure\obj\Debug\net5.0-windows\CourseWorkMailClient.Infrastructure.dll
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Infrastructure\obj\Debug\net5.0-windows\ref\CourseWorkMailClient.Infrastructure.dll
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Infrastructure\obj\Debug\net5.0-windows\CourseWorkMailClient.Infrastructure.pdb
-D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Infrastructure\obj\Debug\net5.0-windows\CourseWorkMailClient.Infrastructure.csproj.CopyComplete
-D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Infrastructure\bin\Debug\net5.0-windows\CourseWorkMailClient.Data.dll
-D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Infrastructure\bin\Debug\net5.0-windows\CourseWorkMailClient.Data.pdb

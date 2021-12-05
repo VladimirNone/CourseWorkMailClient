@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CourseWorkMailClient.Domain.Keys;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,31 +13,9 @@ namespace Lab6
     {
         private RSACryptoServiceProvider RsaService { get; set; }
 
-        public void CreateNewKey(string keyName)
+        public void CreateNewRsaKey()
         {
             RsaService = new RSACryptoServiceProvider(2048);
-            //KeyContainer.WriteKeyToConteiner(RsaService.ToXmlString(true), keyName, isPrivate: true, isSignature: false);
-        }
-
-        public void SavePublicKey(string keyName)
-        {
-            if (RsaService == null)
-                throw new Exception("Публичный ключ отсутсвует");
-
-            //KeyContainer.WriteKeyToConteiner(RsaService.ToXmlString(false), keyName, isPrivate: false, isSignature: false);
-        }
-
-        public void LoadKey(string keyName, bool isPrivate)
-        {
-            RsaService = new RSACryptoServiceProvider(2048);
-            try
-            {
-                //RsaService.FromXmlString(KeyContainer.ReadKeyFromContainer(keyName, isPrivate, isSignature: false));
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
         }
 
         public byte[] EncryptUsingRsa(byte[] data)
@@ -58,7 +37,26 @@ namespace Lab6
             }
         }
 
-        public static byte[] EncryptUsingDes(byte[] encryptedData, string nameOfKey)
+        public DESRsaKey GetRsaKey()
+        {
+            var key = new DESRsaKey() { DeathTime = DateTime.Now.AddDays(14) };
+
+            key.PublicKey = RsaService.ToXmlString(false);
+
+            if (!RsaService.PublicOnly)
+            {
+                key.PrivateKey = RsaService.ToXmlString(true);
+            }
+
+            return key;
+        }
+
+        public void SetRsaKey(string key)
+        {
+            RsaService.FromXmlString(key);
+        }
+
+        public byte[] EncryptUsingDes(byte[] encryptedData)
         {
             using MemoryStream memoryStream = new(encryptedData);
 
@@ -69,26 +67,29 @@ namespace Lab6
             var iv = des.IV;
             var ivLength = BitConverter.GetBytes(iv.Length);
 
-            string SymKey = Convert.ToBase64String(des.Key);
-
-            KeyContainer.WriteKeyToConteiner(SymKey, nameOfKey);
+            var encryptedSymKey = EncryptUsingRsa(des.Key);
+            var encryptedSymKeyLength = BitConverter.GetBytes(encryptedSymKey.Length);
 
             using CryptoStream cryptoStream = new(memoryStream, des.CreateEncryptor(), CryptoStreamMode.Read);
             using var memoryStream2 = new MemoryStream();
             cryptoStream.CopyTo(memoryStream2);
 
-            return memoryStream2.ToArray().Concat(iv).Concat(ivLength).ToArray();
+            return memoryStream2.ToArray().Concat(iv).Concat(ivLength).Concat(encryptedSymKey).Concat(encryptedSymKeyLength).ToArray();
         }
 
-        public static byte[] DecryptUsingDes(byte[] encryptedData, string nameOfKey)
+        public byte[] DecryptUsingDes(byte[] encryptedData)
         {
-            var ivLength = BitConverter.ToInt32(encryptedData[^4..]);
+            var encryptedSymKeyLength = BitConverter.ToInt32(encryptedData[^4..]);
 
-            var iv = encryptedData[^(ivLength + 4)..^4];
+            var encryptedSymKey = encryptedData[^(encryptedSymKeyLength + 4)..^4];
 
-            var SymKey = Convert.FromBase64String(KeyContainer.ReadKeyFromContainer(nameOfKey));
+            var ivLength = BitConverter.ToInt32(encryptedData[^(encryptedSymKeyLength + 4 + 4)..^(encryptedSymKeyLength + 4)]);
 
-            using MemoryStream memoryStream = new(encryptedData[..^(ivLength + 4)]);
+            var iv = encryptedData[^(encryptedSymKeyLength + ivLength + 4 + 4)..^(encryptedSymKeyLength + 4 + 4)];
+
+            var SymKey = DecryptUsingRsa(encryptedSymKey);
+
+            using MemoryStream memoryStream = new(encryptedData[..^(encryptedSymKeyLength + ivLength + 4 + 4)]);
             using DES des = DES.Create();
             using CryptoStream cryptoStream = new(memoryStream, des.CreateDecryptor(SymKey, iv), CryptoStreamMode.Read);
             MemoryStream memoryStream2 = new MemoryStream();

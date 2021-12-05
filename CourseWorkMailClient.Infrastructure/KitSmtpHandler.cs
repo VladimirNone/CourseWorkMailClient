@@ -9,6 +9,7 @@ using MimeKit;
 using MimeKit.Cryptography;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,15 +29,15 @@ namespace CourseWorkMailClient.Infrastructure
             client.Authenticate(login, password);
         }
 
-        public async Task SendMessage(Letter messageToSend)
+        public async Task SendMessage(Letter messageToSend, bool useCryptography)
         {
             var message = new MimeMessage();
 
             message.Headers.Add(new Header(HeaderId.Summary, "localMessage"));
 
-            message.From.Add(new MailboxAddress("", login));
+            message.From.Add(new MailboxAddress(login, login));
 
-            //messageToSend.To.ForEach(h => message.To.Add(new MailboxAddress("", h)));
+            messageToSend.Receivers.ForEach(h => message.To.Add(new MailboxAddress(h.Email, h.Email)));
 
             message.Subject = messageToSend.Subject;
 
@@ -44,19 +45,45 @@ namespace CourseWorkMailClient.Infrastructure
 
             builder.TextBody = messageToSend.Content;
 
-            //messageToSend.Attachments?.ForEach(h => builder.Attachments.Add(h));
+            messageToSend.Attachments?.ForEach(h => builder.Attachments.Add(h.Name));
 
             message.Body = builder.ToMessageBody();
 
-            for (int i = 0; i < message.BodyParts.Count(); i++)
+            if (useCryptography)
             {
-                var item = message.BodyParts.ElementAt(i);
-                if (item is TextPart)
+                var md5 = new CryptoMD5();
+                var des = new CryptoDES();
+
+                md5.CreateNewRsaKey();
+                des.CreateNewRsaKey();
+
+                for (int i = 0; i < message.BodyParts.Count(); i++)
                 {
-                    var textItem = (TextPart)item;
-                    textItem.Text = Convert.ToBase64String(CryptoDES.EncryptUsingDes(Encoding.UTF8.GetBytes(textItem.Text), "One" + i));
+                    var item = message.BodyParts.ElementAt(i);
+                    if (item is TextPart)
+                    {
+                        var textItem = (TextPart)item;
+                        var textInBytes = Encoding.UTF8.GetBytes(textItem.Text);
+
+                        textItem.Text = Convert.ToBase64String(des.EncryptUsingDes(textInBytes));
+                        textItem.ContentMd5 = Convert.ToBase64String(md5.GetHash(textInBytes));
+                    }
                 }
+
+                messageToSend.MD5RsaKey = md5.GetRsaKey();
+                messageToSend.DESRsaKey = des.GetRsaKey();
+
+                message.Headers.Add(HeaderId.Encrypted, messageToSend.DESRsaKey.PublicKey);
+                message.Headers.Add(HeaderId.ContentMd5, messageToSend.MD5RsaKey.PublicKey);
             }
+
+            var fileMesPath = Path.Combine("Letters", message.MessageId.Substring(0, message.MessageId.IndexOf('@')) + ".mes");
+
+            message.WriteTo(fileMesPath);
+            messageToSend.PathToFullMessageFile = fileMesPath;
+
+            HandlerService.repo.AddMessage(messageToSend);
+            HandlerService.repo.SaveChanged();
 
             await client.SendAsync(message);
         }

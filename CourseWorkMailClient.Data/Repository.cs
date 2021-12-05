@@ -1,7 +1,9 @@
-﻿using CourseWorkMailClient.Domain.Keys;
+﻿using CourseWorkMailClient.Domain;
+using CourseWorkMailClient.Domain.Keys;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,27 +19,88 @@ namespace CourseWorkMailClient.Data
             db = new KeyDbContext();
         }
 
-        public bool TryGetRsaKeys(string emailOfInterlocutor, out DESRsaKey desRsaKey, out MD5RsaKey md5RsaKey)
+        public Interlocutor GetInterlocutor(string email)
         {
-            var interlocutor = db.Interlocutors.Include(h => h.LastMD5RsaKey).Include(h => h.LastDESRsaKey).FirstOrDefault(h => h.Email == emailOfInterlocutor);
-
-            if (interlocutor == null)
-            {
-                desRsaKey = null;
-                md5RsaKey = null;
-
-                return false;
-            }
-
-            desRsaKey = interlocutor.LastDESRsaKey;
-            md5RsaKey = interlocutor.LastMD5RsaKey;
-
-            return true;
+            return db.Interlocutors.FirstOrDefault(h => h.Email == email);
         }
 
-        public void AddRsaKeys(string emailOfInterlocutor, DESRsaKey desRsaKey, MD5RsaKey md5RsaKey)
+        public void AddMessage(Letter letter)
         {
-            var interlocutor = db.Interlocutors.Include(h => h.LastMD5RsaKey).Include(h => h.LastDESRsaKey).FirstOrDefault(h => h.Email == emailOfInterlocutor);
+            db.Letters.Add(letter);
+        }
+
+        public void AddMessages(List<Letter> letters)
+        {
+            db.Letters.AddRange(letters);
+        }
+
+        public void AddFolder(Folder folder)
+        {
+            db.Folders.Add(folder);
+        }
+
+        public void AddUser(User user, string mail)
+        {
+            user.MailServer = db.MailServers.FirstOrDefault(h => h.ServerName.Contains(mail));
+            db.Users.Add(user);
+        }
+
+        public void RemoveMessage(int letterId)
+        {
+            db.Letters.Remove(db.Letters.Find(letterId));
+        }
+
+        public void SelectAndAddNewFolders(List<Folder> folderFromServer, MailServer mailServer)
+        {
+            var foldersInDb = db.Folders.Where(h => h.MailServerId == mailServer.Id).Select(h => h.Title);
+            var copyFoldersFromServer = folderFromServer.ToList();
+            copyFoldersFromServer.RemoveAll(h => foldersInDb.Contains(h.Title));
+            db.Folders.AddRange(copyFoldersFromServer);
+        }
+
+        public void SelectAndAddNewLetters(List<Letter> lettersFromServer, Folder folder)
+        {
+            var lettersInDb = db.Letters.Where(h => h.FolderId == folder.Id).Select(h => h.MessageId);
+            var copyLettersFromServer = lettersFromServer.ToList();
+            copyLettersFromServer.RemoveAll(h => lettersInDb.Contains(h.MessageId));
+            db.Letters.AddRange(copyLettersFromServer);
+        }
+
+        public Folder GetFolder(MailServer mailServer, string folderName)
+        {
+            return db.Folders.FirstOrDefault(h => h.MailServerId == mailServer.Id && h.Title == folderName);
+        }
+
+        public List<Folder> GetFolders(MailServer mailServer)
+        {
+            return db.Folders.Where(h => h.MailServerId == mailServer.Id).ToList();
+        }
+
+        public List<User> GetUsers()
+        {
+            return db.Users.Include(h=>h.MailServer).ToList();
+        }
+
+        public Letter GetMessage(string messageId, bool lightVersion = true)
+        {
+            var query = db.Letters.AsNoTracking();
+
+            if (!lightVersion)
+            {
+                query = query.Include(h => h.MD5RsaKey).Include(h => h.DESRsaKey).Include(h => h.Senders).Include(h => h.Receivers).Include(h => h.Attachments);
+            }
+
+            return query.FirstOrDefault(h => h.MessageId == messageId);
+        }
+
+        public List<Letter> GetMessages(int folderId)
+        {
+            return db.Letters.AsNoTracking().Where(h => h.FolderId == folderId).ToList();
+        }
+
+        public void SaveChanged()
+        {
+            db.SaveChanges();
         }
     }
 }

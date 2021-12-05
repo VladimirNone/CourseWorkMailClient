@@ -14,6 +14,7 @@ namespace CourseWorkMailClient.Data
         public DbSet<Folder> Folders { get; set; }
         public DbSet<MailServer> MailServers { get; set; }
         public DbSet<Attachment> Attachments { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -35,6 +36,9 @@ namespace CourseWorkMailClient.Data
             modelBuilder.Entity<MailServer>().HasData(
                 new MailServer { Id = 1, ServerName = "gmail.com" },
                 new MailServer { Id = 2, ServerName = "yandex.ru" });
+
+            modelBuilder.Entity<User>().HasData(
+                new User { Id = 1, Login = "CourseWork41@gmail.com", Password = "C9v-EzB-3sT-kfT", MailServerId = 1 });
         }
     }
 }

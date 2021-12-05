@@ -31,5 +31,8 @@ namespace CourseWorkMailClient.Domain
 
         public int? DESRsaKeyId { get; set; }
         public DESRsaKey DESRsaKey { get; set; }
+
+        public int FolderId { get; set; }
+        public Folder Folder { get; set; }
     }
 }

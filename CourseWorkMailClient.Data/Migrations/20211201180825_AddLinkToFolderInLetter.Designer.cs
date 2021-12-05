@@ -4,14 +4,16 @@ using CourseWorkMailClient.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CourseWorkMailClient.Data.Migrations
 {
     [DbContext(typeof(KeyDbContext))]
-    partial class KeyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211201180825_AddLinkToFolderInLetter")]
+    partial class AddLinkToFolderInLetter
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,6 +97,9 @@ namespace CourseWorkMailClient.Data.Migrations
                     b.Property<DateTime>("DeathTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("LifeTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("MessageId")
                         .HasColumnType("nvarchar(max)");
 
@@ -117,6 +122,9 @@ namespace CourseWorkMailClient.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("DeathTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LifeTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("MessageId")
@@ -211,38 +219,6 @@ namespace CourseWorkMailClient.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("CourseWorkMailClient.Domain.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Login")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("MailServerId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MailServerId");
-
-                    b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Login = "CourseWork41@gmail.com",
-                            MailServerId = 1,
-                            Password = "C9v-EzB-3sT-kfT"
-                        });
-                });
-
             modelBuilder.Entity("InterlocutorLetter", b =>
                 {
                     b.Property<int>("SendedLettersId")
@@ -316,17 +292,6 @@ namespace CourseWorkMailClient.Data.Migrations
                     b.Navigation("Folder");
 
                     b.Navigation("MD5RsaKey");
-                });
-
-            modelBuilder.Entity("CourseWorkMailClient.Domain.User", b =>
-                {
-                    b.HasOne("CourseWorkMailClient.Domain.MailServer", "MailServer")
-                        .WithMany()
-                        .HasForeignKey("MailServerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MailServer");
                 });
 
             modelBuilder.Entity("InterlocutorLetter", b =>

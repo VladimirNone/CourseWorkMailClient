@@ -28,7 +28,9 @@ namespace CourseWorkMailClient
 
         private void Accept_Click(object sender, RoutedEventArgs e)
         {
-            HandlerService.Auth(tbLogin.Text, tbPassword.Text);
+            //HandlerService.Auth(tbLogin.Text, tbPassword.Text);
+
+            HandlerService.Auth(HandlerService.repo.GetUsers().First());
 
             NavigationService.Navigate(new MainPage());
         }

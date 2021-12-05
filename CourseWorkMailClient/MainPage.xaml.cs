@@ -31,13 +31,13 @@ namespace CourseWorkMailClient
     {
         public MainPage()
         {
+            GetDataService.mainPage = this;
+
             InitializeComponent();
 
-            HandlerService.ActualMessagesChanged += (messages) =>
-            {
-                lbMesList.ItemsSource = null;
-                lbMesList.ItemsSource = messages;
-            };
+            lbMesList.ItemsSource = GetDataService.Letters;
+
+
         }
 
         private void bWriteMes_Click(object sender, RoutedEventArgs e)

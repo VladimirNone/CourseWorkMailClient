@@ -14,6 +14,11 @@ namespace CourseWorkMailClient.Domain
         private Collection<T> collection = new Collection<T>();
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
+        public CustomNotifyCollectionCollection()
+        {
+            
+        }
+
         public CustomNotifyCollectionCollection(List<T> list)
         {
             foreach (var item in list)
@@ -40,6 +45,17 @@ namespace CourseWorkMailClient.Domain
             var index = collection.IndexOf(item);
             collection.Remove(item);
             OnCollectionChange(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item, index));
+        }
+
+        public void Reset(List<T> items)
+        {
+            collection.Clear();
+            foreach (var item in items)
+            {
+                collection.Add(item);
+            }
+
+            OnCollectionChange(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         protected virtual void OnCollectionChange(NotifyCollectionChangedEventArgs e)

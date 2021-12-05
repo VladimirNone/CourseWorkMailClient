@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
+using CourseWorkMailClient.Data;
 using CourseWorkMailClient.Domain;
 using MailKit;
+using MailKit.Search;
 using MimeKit;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,23 +17,9 @@ namespace CourseWorkMailClient.Infrastructure
 {
     public static class HandlerService
     {
-        private static List<Letter> actualMessages;
-        public static List<Letter> ActualMessages
-        {
-            get => actualMessages;
-            set
-            {
-                actualMessages = value;
-                if(ActualMessagesChanged != null)
-                    ActualMessagesChanged(actualMessages);
-            }
-        }
-
-        public static Action<List<Letter>> ActualMessagesChanged { get; set; }
-
         public static IMapper mapper { get; set; }
 
-        public static Folder ActualFolder { get; set; }
+        public static Repository repo { get; set; }
 
         static HandlerService()
         {
@@ -43,26 +32,43 @@ namespace CourseWorkMailClient.Infrastructure
 
                 ctg.CreateMap<LightRun, Run>();
 
-                ctg.CreateMap<MimeMessage, Letter>()
-                    .ForMember(dest => dest.Subject, act => act.MapFrom(src => src.Subject))
-                    .ForMember(dest => dest.From, act => act.MapFrom(src => string.Join(", ", src.From.Mailboxes.Select(h => string.IsNullOrEmpty(h.Name) ? h.Address : h.Name))))
-                    .ForMember(dest => dest.Senders, act => act.MapFrom(src => src.From.Select(h => h.Name).ToList()))
-                    .ForMember(dest => dest.Content, act => act.MapFrom(src => src.HtmlBody ?? src.TextBody))
-                    .ForMember(dest => dest.LocalMessage, act => act.MapFrom(src => src.Headers.Contains(HeaderId.Summary)))
-                    .ForMember(dest => dest.Attachments, act => act.MapFrom(src => src.Attachments.Select(h => h.ContentDisposition.FileName)))
-                    .ForMember(dest => dest.To, act => act.MapFrom(src => src.To.Select(h => h.Name)))
-                    .ForMember(dest => dest.Source, act => act.MapFrom(src => src))
-                    .ForMember(dest => dest.Date, act => act.MapFrom(src => src.Date.DateTime));
+                ctg.CreateMap<MimeEntity, Attachment>()
+                    .ForMember(dest => dest.Name, act => act.MapFrom(src => src.ContentDisposition.FileName));
+
+                ctg.CreateMap<InternetAddress, Interlocutor>()
+                    .ForMember(dest => dest.Email, act => act.MapFrom(src => ((MailboxAddress)src).Address));
 
                 ctg.CreateMap<MailFolder, Folder>()
                     .ForMember(dest => dest.Source, act => act.MapFrom(src => src))
+                    .ForMember(dest => dest.MailServerId, act => act.MapFrom(src => GetDataService.ActualMailServer.Id))
                     .ForMember(dest => dest.Title, act => act.MapFrom(src => PrepareData.GetParsedName(src.Name)));
+
+                ctg.CreateMap<MimeMessage, Letter>()
+                    .ForMember(dest => dest.Subject, act => act.MapFrom(src => src.Subject))
+                    .ForMember(dest => dest.From, act => act.MapFrom(src => string.Join(", ", src.From.Mailboxes.Select(h => string.IsNullOrEmpty(h.Name) ? h.Address : h.Name))))
+                    .ForMember(dest => dest.To, act => act.MapFrom(src => string.Join(", ", src.To.Mailboxes.Select(h => string.IsNullOrEmpty(h.Name) ? h.Address : h.Name))))
+                    .ForMember(dest => dest.Senders, act => act.MapFrom(src => src.From.Select(h => mapper.Map<Interlocutor>(h)).ToList()))
+                    .ForMember(dest => dest.Receivers, act => act.MapFrom(src => src.To.Select(h => mapper.Map<Interlocutor>(h)).ToList()))
+                    .ForMember(dest => dest.Content, act => act.MapFrom(src => src.HtmlBody ?? src.TextBody))
+                    .ForMember(dest => dest.LocalMessage, act => act.MapFrom(src => src.Headers.Contains(HeaderId.Summary)))
+                    .ForMember(dest => dest.Attachments, act => act.MapFrom(src => src.Attachments.Select(h => mapper.Map<Attachment>(h)).ToList()))
+                    .ForMember(dest => dest.Source, act => act.MapFrom(src => src))
+                    .ForMember(dest => dest.Date, act => act.MapFrom(src => src.Date.DateTime));
+
+                ctg.CreateMap<Folder, Folder>()
+                    .ForMember(dest => dest.Source, act => act.Ignore());
+
+                ctg.CreateMap<Letter, Letter>()
+                    .ForMember(dest => dest.Id, act => act.Ignore());
             });
 
             mapper = new Mapper(config);
+            repo = new Repository();
+
+
         }
-              
-        public static void Auth(string login, string password)
+
+        public static void Auth(User user)
         {
             //vladimir56545@gmail.com
             //RDk-YDZ-NJb-ucF
@@ -70,8 +76,23 @@ namespace CourseWorkMailClient.Infrastructure
             //CourseWork41@gmail.com
             //C9v-EzB-3sT-kfT
 
+            KitImapHandler = new KitImapHandler(user.Login, user.Password);
+            KitSmtpHandler = new KitSmtpHandler(user.Login, user.Password);
+
+            GetDataService.ActualMailServer = user.MailServer;
+        }
+
+        public static void Auth(string login, string password)
+        {
             KitImapHandler = new KitImapHandler(login, password);
             KitSmtpHandler = new KitSmtpHandler(login, password);
+
+            var newUser = new User() { Login = login, Password = password };
+
+            repo.AddUser(newUser, login.Substring(login.IndexOf('@')));
+            repo.SaveChanged();
+
+            GetDataService.ActualMailServer = newUser.MailServer;
         }
 
         public static void UnAuth()
