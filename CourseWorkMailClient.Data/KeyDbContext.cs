@@ -33,6 +33,11 @@ namespace CourseWorkMailClient.Data
                 .WithMany(s => s.ReceivedLetters)
                 .UsingEntity(j => j.ToTable("ReceiversReceivedLetters"));
 
+            modelBuilder.Entity<Letter>()
+                .HasMany(l => l.Folders)
+                .WithMany(s => s.Letters)
+                .UsingEntity(j => j.ToTable("LettersFolders"));
+
             modelBuilder.Entity<MailServer>().HasData(
                 new MailServer { Id = 1, ServerName = "gmail.com" },
                 new MailServer { Id = 2, ServerName = "yandex.ru" });

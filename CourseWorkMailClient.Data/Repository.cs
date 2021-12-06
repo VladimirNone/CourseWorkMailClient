@@ -60,7 +60,7 @@ namespace CourseWorkMailClient.Data
 
         public void SelectAndAddNewLetters(List<Letter> lettersFromServer, Folder folder)
         {
-            var lettersInDb = db.Letters.Where(h => h.FolderId == folder.Id).Select(h => h.MessageId);
+            var lettersInDb = db.Folders.Include(h=>h.Letters).First(h=>h.Id == folder.Id).Letters.Select(h => h.MessageId);
             var copyLettersFromServer = lettersFromServer.ToList();
             copyLettersFromServer.RemoveAll(h => lettersInDb.Contains(h.MessageId));
             db.Letters.AddRange(copyLettersFromServer);
@@ -95,7 +95,7 @@ namespace CourseWorkMailClient.Data
 
         public List<Letter> GetMessages(int folderId)
         {
-            return db.Letters.AsNoTracking().Where(h => h.FolderId == folderId).ToList();
+            return db.Folders.Include(h => h.Letters).First(h => h.Id == folderId).Letters;
         }
 
         public void SaveChanged()

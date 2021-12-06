@@ -107,7 +107,8 @@ namespace CourseWorkMailClient.Infrastructure
             var mimeMes = GetMimeMessage(id, folder.Source);
             
             var mes = HandlerService.mapper.Map<Letter>(mimeMes);
-            mes.FolderId = folder.Id;
+            //НУЖНО ПОФИКСИТЬ
+            //mes.FolderId = folder.Id;
 
             var fileMesPath = Path.Combine("Letters", mes.MessageId.Substring(0, mes.MessageId.IndexOf('@')) + ".mes");
             
@@ -125,7 +126,7 @@ namespace CourseWorkMailClient.Infrastructure
                 Subject = h.Subject,
                 From = string.Join(", ", h.From.Mailboxes.Select(h => string.IsNullOrEmpty(h.Name) ? h.Address : h.Name).ToList()),
                 Date = h.Date.DateTime,
-                FolderId = folder.Id
+                //FolderId = folder.Id
             })
             .ToList();
 
