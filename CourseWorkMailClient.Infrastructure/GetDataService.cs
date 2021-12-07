@@ -23,12 +23,19 @@ namespace CourseWorkMailClient.Infrastructure
             get => actualFolder;
             set
             {
+                if(actualFolder != null)
+                    HandlerService.KitImapHandler.CloseFolder(actualFolder);
+
                 actualFolder = value;
+                Pagination.Page = 1;
+                Pagination.ChangePage(0);
                 Letters.Reset(GetMessages(value));
             }
         }
 
         public static MailServer ActualMailServer { get; set; }
+
+        public static PaginationService Pagination { get; set; } = new PaginationService();
 
         public static List<Folder> GetFolders()
         {

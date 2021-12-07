@@ -38,28 +38,10 @@ namespace CourseWorkMailClient.FolderItems
         public void OpenFolder(object sender, RoutedEventArgs e)
         {
             var folder = (Folder)((ListBoxItem)sender).DataContext;
-            Folder copyFolder = null;
 
-            if (folder.Source != null)
-            {
-                //Костыль. Необходимо получить копию объекта folder
-                copyFolder = HandlerService.KitImapHandler.GetCustedFolder(folder.Source);
-                copyFolder.Id = folder.Id;
+            HandlerService.KitImapHandler.OpenFolder(folder);
 
-                copyFolder.Source.Open(FolderAccess.ReadWrite);
-                copyFolder.CountOfMessage = copyFolder.Source.Count;
-            }
-            else
-            {
-                copyFolder = HandlerService.mapper.Map<Folder>(folder);
-                if (copyFolder == folder)
-                    _ = 5;
-            }
-
-
-            GetDataService.Folders.Replace(folder, copyFolder);
-
-            GetDataService.ActualFolder = copyFolder;
+            GetDataService.ActualFolder = folder;
         }
 
         private void ContextMenu_ContextMenuOpening(object sender, ContextMenuEventArgs e)
@@ -88,10 +70,7 @@ namespace CourseWorkMailClient.FolderItems
         {
             var folder = (Folder)((ListBoxItem)sender).DataContext;
 
-            if (folder.Source != null && folder.Source.IsOpen)
-            {
-                folder.Source.Close();
-            }
+            HandlerService.KitImapHandler.CloseFolder(folder);
         }
 
         private void miCreate_Click(object sender, RoutedEventArgs e)

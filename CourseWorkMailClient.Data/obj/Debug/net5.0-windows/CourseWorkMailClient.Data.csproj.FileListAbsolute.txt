@@ -11,6 +11,7 @@ D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Data\
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Data\obj\Debug\net5.0-windows\CourseWorkMailClient.Data.AssemblyInfoInputs.cache
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Data\obj\Debug\net5.0-windows\CourseWorkMailClient.Data.AssemblyInfo.cs
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Data\obj\Debug\net5.0-windows\CourseWorkMailClient.Data.csproj.CoreCompileInputs.cache
+D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Data\obj\Debug\net5.0-windows\CourseWorkMailClient.Data.csproj.CopyComplete
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Data\obj\Debug\net5.0-windows\CourseWorkMailClient.Data.dll
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Data\obj\Debug\net5.0-windows\ref\CourseWorkMailClient.Data.dll
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient.Data\obj\Debug\net5.0-windows\CourseWorkMailClient.Data.pdb

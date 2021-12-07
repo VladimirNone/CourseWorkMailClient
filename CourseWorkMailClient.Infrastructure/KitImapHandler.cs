@@ -25,6 +25,8 @@ namespace CourseWorkMailClient.Infrastructure
     public class KitImapHandler
     {
         private ImapClient client;
+        private List<UniqueId> uniqueIdsLastFolder { get; set; }
+        private List<UniqueId> uniqueIdsCurrentPage { get; set; }
 
         public KitImapHandler(string login, string password)
         {
@@ -33,6 +35,32 @@ namespace CourseWorkMailClient.Infrastructure
 
             client.Authenticate(login, password);
 
+            GetDataService.Pagination.ChangingPage += (curPage, itemsOnPage) =>
+            {
+                uniqueIdsCurrentPage = uniqueIdsLastFolder.Skip((curPage - 1) * itemsOnPage).Take(itemsOnPage).ToList();
+
+                GetDataService.Letters.Reset(GetDataService.GetMessages(GetDataService.ActualFolder));
+            };
+        }
+
+        public void OpenFolder(Folder folder)
+        {
+            if (folder.Source != null)
+            {
+                folder.Source.Open(FolderAccess.ReadWrite);
+                folder.CountOfMessage = folder.Source.Count;
+
+                uniqueIdsLastFolder = folder.Source.Search(SearchQuery.All).ToList();
+                GetDataService.Pagination.MaxCountOfPage = (int)folder.CountOfMessage / GetDataService.Pagination.ItemsOnPage + ((int)folder.CountOfMessage % GetDataService.Pagination.ItemsOnPage == 0 ? 0 : 1);
+            }
+        }
+
+        public void CloseFolder(Folder folder)
+        {
+            if (folder.Source != null && folder.Source.IsOpen)
+            {
+                folder.Source.Close();
+            }
         }
 
         public Folder CreateNewFolder(string folderName, IMailFolder parentFolder)
@@ -107,8 +135,7 @@ namespace CourseWorkMailClient.Infrastructure
             var mimeMes = GetMimeMessage(id, folder.Source);
             
             var mes = HandlerService.mapper.Map<Letter>(mimeMes);
-            //НУЖНО ПОФИКСИТЬ
-            //mes.FolderId = folder.Id;
+            mes.Folders.Add(folder);
 
             var fileMesPath = Path.Combine("Letters", mes.MessageId.Substring(0, mes.MessageId.IndexOf('@')) + ".mes");
             
@@ -120,17 +147,15 @@ namespace CourseWorkMailClient.Infrastructure
 
         public List<Letter> GetMessages(Folder folder)
         {
-            var messages = folder.Source.Select(h => new Letter()
-            {
-                MessageId = h.MessageId,
-                Subject = h.Subject,
-                From = string.Join(", ", h.From.Mailboxes.Select(h => string.IsNullOrEmpty(h.Name) ? h.Address : h.Name).ToList()),
-                Date = h.Date.DateTime,
-                //FolderId = folder.Id
-            })
-            .ToList();
+            var messages = folder.Source.Fetch(uniqueIdsCurrentPage, MessageSummaryItems.Headers);
+            var letters = new List<Letter>();
 
-            return messages;
+            foreach (var item in messages)
+            {
+                letters.Add(HandlerService.mapper.Map<MimeMessage,Letter>(new MimeMessage(item.Headers)));
+            }
+
+            return letters;
         }
 
         public MimeMessage GetMimeMessage(uint id, IMailFolder folder)

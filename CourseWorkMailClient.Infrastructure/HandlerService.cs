@@ -20,6 +20,8 @@ namespace CourseWorkMailClient.Infrastructure
         public static IMapper mapper { get; set; }
 
         public static Repository repo { get; set; }
+        public static KitImapHandler KitImapHandler { get; set; }
+        public static KitSmtpHandler KitSmtpHandler { get; set; }
 
         static HandlerService()
         {
@@ -86,7 +88,7 @@ namespace CourseWorkMailClient.Infrastructure
         {
             KitImapHandler = new KitImapHandler(login, password);
             KitSmtpHandler = new KitSmtpHandler(login, password);
-
+            //сначало необходимо поискать в бд
             var newUser = new User() { Login = login, Password = password };
 
             repo.AddUser(newUser, login.Substring(login.IndexOf('@')));
@@ -100,8 +102,5 @@ namespace CourseWorkMailClient.Infrastructure
             KitImapHandler.Logout();
             KitSmtpHandler.Logout();
         }
-
-        public static KitImapHandler KitImapHandler { get; set; }
-        public static KitSmtpHandler KitSmtpHandler { get; set; }
     }
 }

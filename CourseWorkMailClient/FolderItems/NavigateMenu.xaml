@@ -22,7 +22,6 @@
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                     <Setter Property="VerticalContentAlignment" Value="Stretch" />
                     <EventSetter Event="GotFocus" Handler="OpenFolder"/>
-                    <EventSetter Event="LostFocus" Handler="CloseFolder"/>
                 </Style>
             </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>

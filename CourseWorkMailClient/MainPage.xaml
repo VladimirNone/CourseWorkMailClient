@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CourseWorkMailClient"
         xmlns:folder="clr-namespace:CourseWorkMailClient.FolderItems"
+        xmlns:pagination="clr-namespace:CourseWorkMailClient.Pagination"
         mc:Ignorable="d"
         WindowTitle="Почтовый клент" 
         Background="White"
@@ -53,10 +54,16 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <pagination:Pagination Margin="318,608,655,10"/>
         <Button
                 Margin="1052,608,10,10" 
                 Content="Написать"
                 x:Name="bWriteMes"
                 Click="bWriteMes_Click"/>
+        <Button
+            Margin="622,608,440,10" 
+            Content="Обновить"
+            x:Name="bUpdateMesList"
+            Click="bbUpdateMesList_Click"/>
     </Grid>
 </Page>

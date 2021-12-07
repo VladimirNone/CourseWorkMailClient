@@ -83,7 +83,7 @@ namespace CourseWorkMailClient.Data
 
         public Letter GetMessage(string messageId, bool lightVersion = true)
         {
-            var query = db.Letters.AsNoTracking();
+            var query = db.Letters.AsQueryable();
 
             if (!lightVersion)
             {

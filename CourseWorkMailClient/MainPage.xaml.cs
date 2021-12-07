@@ -39,6 +39,11 @@ namespace CourseWorkMailClient
 
 
         }
+        
+        private void bbUpdateMesList_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
 
         private void bWriteMes_Click(object sender, RoutedEventArgs e)
         {

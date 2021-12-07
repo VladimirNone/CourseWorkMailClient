@@ -19,6 +19,9 @@
     <Compile Update="FolderItems\RenameFolderWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Pagination\Pagination.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="ReadLetterPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -40,6 +43,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="FolderItems\NavigateMenu.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pagination\Pagination.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="ReadLetterPage.xaml">

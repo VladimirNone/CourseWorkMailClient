@@ -60,6 +60,7 @@ D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\D
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\FolderItems\NavigateMenu.g.cs
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\FolderItems\RenameFolderWindow.g.cs
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\MainPage.g.cs
+D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\Pagination\Pagination.g.cs
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\ReadLetterPage.g.cs
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\WriteLetterPage.g.cs
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\App.g.cs
@@ -74,6 +75,7 @@ D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\D
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\FolderItems\NavigateMenu.baml
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\FolderItems\RenameFolderWindow.baml
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\MainPage.baml
+D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\Pagination\Pagination.baml
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\ReadLetterPage.baml
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\WriteLetterPage.baml
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\CourseWorkMailClient.g.resources
