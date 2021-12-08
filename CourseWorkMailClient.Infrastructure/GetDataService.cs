@@ -29,7 +29,6 @@ namespace CourseWorkMailClient.Infrastructure
                 actualFolder = value;
                 Pagination.Page = 1;
                 Pagination.ChangePage(0);
-                Letters.Reset(GetMessages(value));
             }
         }
 

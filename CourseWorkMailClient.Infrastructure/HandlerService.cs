@@ -66,8 +66,6 @@ namespace CourseWorkMailClient.Infrastructure
 
             mapper = new Mapper(config);
             repo = new Repository();
-
-
         }
 
         public static void Auth(User user)
@@ -82,6 +80,8 @@ namespace CourseWorkMailClient.Infrastructure
             KitSmtpHandler = new KitSmtpHandler(user.Login, user.Password);
 
             GetDataService.ActualMailServer = user.MailServer;
+
+            //KitImapHandler.LoadLastLetters();
         }
 
         public static void Auth(string login, string password)
@@ -95,6 +95,8 @@ namespace CourseWorkMailClient.Infrastructure
             repo.SaveChanged();
 
             GetDataService.ActualMailServer = newUser.MailServer;
+
+            //KitImapHandler.LoadLastLetters();
         }
 
         public static void UnAuth()

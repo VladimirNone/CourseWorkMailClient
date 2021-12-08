@@ -60,10 +60,20 @@ namespace CourseWorkMailClient.Data
 
         public void SelectAndAddNewLetters(List<Letter> lettersFromServer, Folder folder)
         {
-            var lettersInDb = db.Folders.Include(h=>h.Letters).First(h=>h.Id == folder.Id).Letters.Select(h => h.MessageId);
-            var copyLettersFromServer = lettersFromServer.ToList();
-            copyLettersFromServer.RemoveAll(h => lettersInDb.Contains(h.MessageId));
-            db.Letters.AddRange(copyLettersFromServer);
+            var lettFromServerMessageIds = lettersFromServer.Select(h => h.MessageId);
+
+            var lettersInDb = db.Letters.Where(h => lettFromServerMessageIds.Contains(h.MessageId)).Include(h => h.Folders).ToList();
+            var lettNotInDb = lettersFromServer.Except(lettersInDb);
+
+            foreach (var item in lettersFromServer)
+            {
+                if (item.Folders == null)
+                    item.Folders = new List<Folder>();
+
+                item.Folders.Add(folder);
+            }
+
+            db.Letters.AddRange(lettNotInDb);
         }
 
         public Folder GetFolder(MailServer mailServer, string folderName)
@@ -78,7 +88,7 @@ namespace CourseWorkMailClient.Data
 
         public List<User> GetUsers()
         {
-            return db.Users.Include(h=>h.MailServer).ToList();
+            return db.Users.Include(h => h.MailServer).Include(h => h.Interlocutor).ToList();
         }
 
         public Letter GetMessage(string messageId, bool lightVersion = true)

@@ -41,6 +41,12 @@ namespace CourseWorkMailClient.Infrastructure
 
                 GetDataService.Letters.Reset(GetDataService.GetMessages(GetDataService.ActualFolder));
             };
+           
+        }
+
+        public void LoadLastLetters()
+        {
+            ParallelFunction.LoadLastLetter(HandlerService.mapper.Map<Folder>(client.GetFolder(SpecialFolder.All)), 50);
         }
 
         public void OpenFolder(Folder folder)
@@ -152,7 +158,7 @@ namespace CourseWorkMailClient.Infrastructure
 
             foreach (var item in messages)
             {
-                letters.Add(HandlerService.mapper.Map<MimeMessage,Letter>(new MimeMessage(item.Headers)));
+                letters.Add(HandlerService.mapper.Map<MimeMessage, Letter>(new MimeMessage(item.Headers)));
             }
 
             return letters;

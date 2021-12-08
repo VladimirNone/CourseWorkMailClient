@@ -13,7 +13,13 @@ namespace CourseWorkMailClient.Infrastructure
             }
             set
             {
-                page = value < 1 ? 1 : value;
+                if (value < 1)
+                    page = 1;
+                else if (value > MaxCountOfPage)
+                    page = MaxCountOfPage;
+                else
+                    page = value;
+
             }
         }
         public int MaxCountOfPage { get; set; }
@@ -23,6 +29,7 @@ namespace CourseWorkMailClient.Infrastructure
 
         public void ChangePage(int value)
         {
+
             Page += value;
 
             ChangingPage(Page, ItemsOnPage);

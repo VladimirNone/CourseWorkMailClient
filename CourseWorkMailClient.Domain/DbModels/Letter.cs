@@ -11,6 +11,7 @@ namespace CourseWorkMailClient.Domain
         public string MessageId { get; set; }
         public DateTime Date { get; set; }
         public string Subject { get; set; }
+        [NotMapped]
         public string Content { get; set; }
         public bool LocalMessage { get; set; }
 

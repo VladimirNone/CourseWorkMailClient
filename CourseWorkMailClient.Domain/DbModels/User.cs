@@ -13,5 +13,8 @@ namespace CourseWorkMailClient.Domain
 
         public int MailServerId { get; set; }
         public MailServer MailServer { get; set; }
+
+        public int? InterlocutorId { get; set; }
+        public Interlocutor Interlocutor { get; set; }
     }
 }

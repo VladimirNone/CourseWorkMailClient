@@ -24,6 +24,11 @@ namespace CourseWorkMailClient.Pagination
         public Pagination()
         {
             InitializeComponent();
+
+            GetDataService.Pagination.ChangingPage += (page, countItems) =>
+            {
+                tbPagination.Text = page + "/" + GetDataService.Pagination.MaxCountOfPage;
+            };
         }
 
         private void bChangePageForward_Click(object sender, RoutedEventArgs e)
@@ -43,7 +48,5 @@ namespace CourseWorkMailClient.Pagination
 
         private void bChangePagesToEnd_Click(object sender, RoutedEventArgs e)
             => GetDataService.Pagination.ChangePage(GetDataService.Pagination.MaxCountOfPage - GetDataService.Pagination.Page);
-
-
     }
 }

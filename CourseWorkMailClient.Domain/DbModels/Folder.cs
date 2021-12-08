@@ -15,7 +15,7 @@ namespace CourseWorkMailClient.Domain
         public string Title { get; set; }
         public int MailServerId { get; set; }
         private int? countOfMessage;
-
+        [NotMapped]
         public int? CountOfMessage
         {
             get { return countOfMessage; }

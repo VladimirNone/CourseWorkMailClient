@@ -8,34 +8,43 @@
              Height="32"
              Width="227"
              FontSize="14">
-    <Grid>
-        <Button
+    <Grid Margin="0,0,-140,0">
+        <Grid Width="227" HorizontalAlignment="Left">
+            <Button
                 Width="53"
                 Content="Начало" 
                 Click="bChangePagesToStart_Click" 
                 Margin="0,0,174,0" />
-        <Button
+            <Button
                 Content="Конец" 
                 Click="bChangePagesToEnd_Click" 
                 Margin="174,0,0,0"/>
-        <Button
+            <Button
                 Width="24"
                 Content="&lt;&lt;"
                 Click="bChangePagesBack_Click" 
                 Margin="58,0,145,0"/>
-        <Button
+            <Button
                 Content="&lt;"
                 Click="bChangePageBack_Click" 
                 Margin="87,0,116,0"/>
-        <Button
+            <Button
                 Width="24"
                 Content="&gt;"
                 Click="bChangePageForward_Click" 
                 Margin="116,0,87,0"/>
-        <Button
+            <Button
                 Width="24"
                 Content="&gt;&gt;"
                 Click="bChangePagesForward_Click" 
                 Margin="145,0,58,0"/>
+        </Grid>
+        <TextBlock
+            x:Name="tbPagination"
+            HorizontalAlignment="Right"
+            TextAlignment="Center"
+            VerticalAlignment="Center"
+            FontSize="18"
+            Width="130"/>
     </Grid>
 </UserControl>

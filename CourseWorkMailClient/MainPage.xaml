@@ -61,7 +61,7 @@
                 x:Name="bWriteMes"
                 Click="bWriteMes_Click"/>
         <Button
-            Margin="622,608,440,10" 
+            Margin="795,608,267,10" 
             Content="Обновить"
             x:Name="bUpdateMesList"
             Click="bbUpdateMesList_Click"/>
