@@ -8,7 +8,7 @@ namespace CourseWorkMailClient.Domain
 {
     public class Letter : Entity
     {
-        public string MessageId { get; set; }
+        public int UniqueId { get; set; }
         public DateTime Date { get; set; }
         public string Subject { get; set; }
         [NotMapped]
@@ -33,6 +33,7 @@ namespace CourseWorkMailClient.Domain
         public int? DESRsaKeyId { get; set; }
         public DESRsaKey DESRsaKey { get; set; }
 
-        public List<Folder> Folders { get; set; }
+        public int FolderId { get; set; }
+        public Folder Folder { get; set; }
     }
 }

@@ -28,7 +28,7 @@ namespace CourseWorkMailClient.Domain
 
         [NotMapped]
         public MailFolder Source { get; set; }
-
+        
         public List<Letter> Letters { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;

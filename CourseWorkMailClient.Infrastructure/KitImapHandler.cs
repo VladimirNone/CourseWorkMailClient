@@ -25,8 +25,7 @@ namespace CourseWorkMailClient.Infrastructure
     public class KitImapHandler
     {
         private ImapClient client;
-        private List<UniqueId> uniqueIdsLastFolder { get; set; }
-        private List<UniqueId> uniqueIdsCurrentPage { get; set; }
+        public bool IsConnected { get => client.IsConnected; }
 
         public KitImapHandler(string login, string password)
         {
@@ -34,14 +33,6 @@ namespace CourseWorkMailClient.Infrastructure
             client.Connect("imap.gmail.com", 993, SecureSocketOptions.SslOnConnect);
 
             client.Authenticate(login, password);
-
-            GetDataService.Pagination.ChangingPage += (curPage, itemsOnPage) =>
-            {
-                uniqueIdsCurrentPage = uniqueIdsLastFolder.Skip((curPage - 1) * itemsOnPage).Take(itemsOnPage).ToList();
-
-                GetDataService.Letters.Reset(GetDataService.GetMessages(GetDataService.ActualFolder));
-            };
-           
         }
 
         public void LoadLastLetters()
@@ -56,7 +47,7 @@ namespace CourseWorkMailClient.Infrastructure
                 folder.Source.Open(FolderAccess.ReadWrite);
                 folder.CountOfMessage = folder.Source.Count;
 
-                uniqueIdsLastFolder = folder.Source.Search(SearchQuery.All).ToList();
+                GetDataService.uniqueIdsLastFolder = folder.Source.Search(SearchQuery.All).ToList();
                 GetDataService.Pagination.MaxCountOfPage = (int)folder.CountOfMessage / GetDataService.Pagination.ItemsOnPage + ((int)folder.CountOfMessage % GetDataService.Pagination.ItemsOnPage == 0 ? 0 : 1);
             }
         }
@@ -94,17 +85,6 @@ namespace CourseWorkMailClient.Infrastructure
             return HandlerService.mapper.Map<Folder>(folder);
         }
 
-        /// <summary>
-        /// запрашивает папку с сервера и помещает ее в Sourse
-        /// </summary>
-        /// <param name="folder"></param>
-        /// <returns></returns>
-        public Folder GetServerFolder(Folder folder)
-        {
-            //folder = client.GetFolder()
-            return folder;
-        }
-
         public List<Folder> GetServerFolders()
         {
             var folders = client.GetFolders(client.PersonalNamespaces[0]).ToList();
@@ -128,37 +108,35 @@ namespace CourseWorkMailClient.Infrastructure
         /// <summary>
         /// Возвращает полную версию сообщения
         /// </summary>
-        /// <param name="MessageId"></param>
+        /// <param name="letter"></param>
         /// <param name="folder"></param>
         /// <returns></returns>
-        public Letter GetMessage(string MessageId, Folder folder)
+        public Letter GetFullMessage(Letter letter, Folder folder)
         {
             if (!folder.Source.IsOpen)
                 folder.Source.Open(FolderAccess.ReadWrite);
 
-            var id = folder.Source.Search(SearchQuery.HeaderContains("Message-Id", MessageId)).First().Id;
+            letter.Source = GetMimeMessage((uint)letter.UniqueId, folder.Source);
 
-            var mimeMes = GetMimeMessage(id, folder.Source);
-            
-            var mes = HandlerService.mapper.Map<Letter>(mimeMes);
-            mes.Folders.Add(folder);
+            var fileMesPath = Path.Combine("Letters", Guid.NewGuid().ToString() + ".mes");
 
-            var fileMesPath = Path.Combine("Letters", mes.MessageId.Substring(0, mes.MessageId.IndexOf('@')) + ".mes");
-            
-            mes.Source.WriteTo(fileMesPath);
-            mes.PathToFullMessageFile = fileMesPath;
+            letter.Source.WriteTo(fileMesPath);
+            letter.PathToFullMessageFile = fileMesPath;
 
-            return mes;
+            return letter;
         }
 
         public List<Letter> GetMessages(Folder folder)
         {
-            var messages = folder.Source.Fetch(uniqueIdsCurrentPage, MessageSummaryItems.Headers);
+            var messages = folder.Source.Fetch(GetDataService.uniqueIdsCurrentPage, MessageSummaryItems.Headers);
+
             var letters = new List<Letter>();
 
             foreach (var item in messages)
             {
-                letters.Add(HandlerService.mapper.Map<MimeMessage, Letter>(new MimeMessage(item.Headers)));
+                var message = HandlerService.mapper.Map<MimeMessage, Letter>(new MimeMessage(item.Headers));
+                message.UniqueId = (int)item.UniqueId.Id;
+                letters.Add(message);
             }
 
             return letters;

@@ -76,6 +76,9 @@ namespace CourseWorkMailClient.Infrastructure
             //CourseWork41@gmail.com
             //C9v-EzB-3sT-kfT
 
+            //korolevi4k@yandex.ru
+            //XcB-b53-irU-AxV
+
             KitImapHandler = new KitImapHandler(user.Login, user.Password);
             KitSmtpHandler = new KitSmtpHandler(user.Login, user.Password);
 
@@ -91,7 +94,7 @@ namespace CourseWorkMailClient.Infrastructure
             //сначало необходимо поискать в бд
             var newUser = new User() { Login = login, Password = password };
 
-            repo.AddUser(newUser, login.Substring(login.IndexOf('@')));
+            repo.AddUser(newUser, login.Substring(login.IndexOf('@')+1));
             repo.SaveChanged();
 
             GetDataService.ActualMailServer = newUser.MailServer;

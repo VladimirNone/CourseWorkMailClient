@@ -39,7 +39,7 @@ namespace CourseWorkMailClient.FolderItems
         {
             var folder = (Folder)((ListBoxItem)sender).DataContext;
 
-            HandlerService.KitImapHandler.OpenFolder(folder);
+            GetDataService.OpenFolder(folder);
 
             GetDataService.ActualFolder = folder;
         }
@@ -75,7 +75,7 @@ namespace CourseWorkMailClient.FolderItems
 
         private void miCreate_Click(object sender, RoutedEventArgs e)
         {
-            var createFolderWindow = new CreateFolderWindow(GetDataService.Folders.Select(h=> (h.Title, h.Source)).ToList());
+            var createFolderWindow = new CreateFolderWindow(GetDataService.Folders.Select(h => (h.Title, h.Source)).ToList());
 
             if (createFolderWindow.ShowDialog() == true)
             {

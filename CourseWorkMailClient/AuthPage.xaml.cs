@@ -30,7 +30,7 @@ namespace CourseWorkMailClient
         {
             //HandlerService.Auth(tbLogin.Text, tbPassword.Text);
 
-            HandlerService.Auth(HandlerService.repo.GetUsers().First());
+            HandlerService.Auth(HandlerService.repo.GetUsers()[0]);
 
             NavigationService.Navigate(new MainPage());
         }

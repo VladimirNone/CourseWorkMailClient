@@ -4,14 +4,16 @@ using CourseWorkMailClient.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CourseWorkMailClient.Data.Migrations
 {
     [DbContext(typeof(KeyDbContext))]
-    partial class KeyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211209122718_ChangeMesIdToUid")]
+    partial class ChangeMesIdToUid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -143,9 +145,6 @@ namespace CourseWorkMailClient.Data.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("FolderId")
-                        .HasColumnType("int");
-
                     b.Property<string>("From")
                         .HasColumnType("nvarchar(max)");
 
@@ -170,8 +169,6 @@ namespace CourseWorkMailClient.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("DESRsaKeyId");
-
-                    b.HasIndex("FolderId");
 
                     b.HasIndex("MD5RsaKeyId");
 
@@ -242,6 +239,21 @@ namespace CourseWorkMailClient.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("FolderLetter", b =>
+                {
+                    b.Property<int>("FoldersId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LettersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("FoldersId", "LettersId");
+
+                    b.HasIndex("LettersId");
+
+                    b.ToTable("LettersFolders");
+                });
+
             modelBuilder.Entity("InterlocutorLetter", b =>
                 {
                     b.Property<int>("SendedLettersId")
@@ -300,19 +312,11 @@ namespace CourseWorkMailClient.Data.Migrations
                         .WithMany()
                         .HasForeignKey("DESRsaKeyId");
 
-                    b.HasOne("CourseWorkMailClient.Domain.Folder", "Folder")
-                        .WithMany()
-                        .HasForeignKey("FolderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("CourseWorkMailClient.Domain.Keys.MD5RsaKey", "MD5RsaKey")
                         .WithMany()
                         .HasForeignKey("MD5RsaKeyId");
 
                     b.Navigation("DESRsaKey");
-
-                    b.Navigation("Folder");
 
                     b.Navigation("MD5RsaKey");
                 });
@@ -332,6 +336,21 @@ namespace CourseWorkMailClient.Data.Migrations
                     b.Navigation("Interlocutor");
 
                     b.Navigation("MailServer");
+                });
+
+            modelBuilder.Entity("FolderLetter", b =>
+                {
+                    b.HasOne("CourseWorkMailClient.Domain.Folder", null)
+                        .WithMany()
+                        .HasForeignKey("FoldersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CourseWorkMailClient.Domain.Letter", null)
+                        .WithMany()
+                        .HasForeignKey("LettersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("InterlocutorLetter", b =>

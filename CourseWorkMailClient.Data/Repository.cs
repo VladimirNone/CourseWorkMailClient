@@ -58,22 +58,37 @@ namespace CourseWorkMailClient.Data
             db.Folders.AddRange(copyFoldersFromServer);
         }
 
-        public void SelectAndAddNewLetters(List<Letter> lettersFromServer, Folder folder)
+        /// <summary>
+        /// Возвращает сообщения из бд, если таковы есть и добавляет в бд новые и возвращает их в том числе
+        /// </summary>
+        /// <param name="lettersFromServer"></param>
+        /// <param name="folder"></param>
+        /// <returns></returns>
+        public List<Letter> SelectAndAddNewLetters(List<Letter> lettersFromServer, Folder folder)
         {
-            var lettFromServerMessageIds = lettersFromServer.Select(h => h.MessageId);
+            var lettFromDbUids = db.Letters.Where(h => h.FolderId == folder.Id).Select(h => h.UniqueId).ToList();
 
-            var lettersInDb = db.Letters.Where(h => lettFromServerMessageIds.Contains(h.MessageId)).Include(h => h.Folders).ToList();
-            var lettNotInDb = lettersFromServer.Except(lettersInDb);
+            var lettersInDb = lettersFromServer.Where(h => lettFromDbUids.Contains(h.UniqueId)).ToList();
+            var lettNotInDb = lettersFromServer.Where(h => !lettFromDbUids.Contains(h.UniqueId)).ToList();
 
             foreach (var item in lettersFromServer)
             {
-                if (item.Folders == null)
-                    item.Folders = new List<Folder>();
-
-                item.Folders.Add(folder);
+                item.FolderId = folder.Id;
             }
 
             db.Letters.AddRange(lettNotInDb);
+
+            return lettersInDb.Concat(lettNotInDb).ToList();
+        }
+
+        public List<int> GetUniqueIds(Folder folder)
+        {
+            return db.Letters.Where(h => h.FolderId == folder.Id).OrderBy(h=>h.UniqueId).Select(h => h.UniqueId).ToList();
+        }
+
+        public Folder GetFolderWithLetters(MailServer mailServer, string folderName)
+        {
+            return db.Folders.FirstOrDefault(h => h.MailServerId == mailServer.Id && h.Title == folderName);
         }
 
         public Folder GetFolder(MailServer mailServer, string folderName)
@@ -91,7 +106,7 @@ namespace CourseWorkMailClient.Data
             return db.Users.Include(h => h.MailServer).Include(h => h.Interlocutor).ToList();
         }
 
-        public Letter GetMessage(string messageId, bool lightVersion = true)
+        public Letter GetMessage(int uniqueId, bool lightVersion = true)
         {
             var query = db.Letters.AsQueryable();
 
@@ -100,12 +115,17 @@ namespace CourseWorkMailClient.Data
                 query = query.Include(h => h.MD5RsaKey).Include(h => h.DESRsaKey).Include(h => h.Senders).Include(h => h.Receivers).Include(h => h.Attachments);
             }
 
-            return query.FirstOrDefault(h => h.MessageId == messageId);
+            return query.FirstOrDefault(h => h.UniqueId == uniqueId);
         }
 
-        public List<Letter> GetMessages(int folderId)
+        public List<Letter> GetMessages(int folderId, List<int> uids)
         {
-            return db.Folders.Include(h => h.Letters).First(h => h.Id == folderId).Letters;
+            return db.Letters.Where(h => h.FolderId == folderId && uids.Contains(h.UniqueId)).ToList();
+        }
+
+        public int GetCountOfMessages(int folderId)
+        {
+            return db.Folders.Include(h => h.Letters).First(h => h.Id == folderId).Letters.Count;
         }
 
         public void SaveChanged()

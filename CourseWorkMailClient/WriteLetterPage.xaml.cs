@@ -32,6 +32,12 @@ namespace CourseWorkMailClient
 
         public WriteLetterPage(Page previousPage)
         {
+            GetDataService.ChangeActualFolder += () =>
+            {
+                if (NavigationService != null)
+                    NavigationService.Navigate(previousPage);
+            };
+
             prevPage = previousPage;
             InitializeComponent();
 
@@ -59,7 +65,7 @@ namespace CourseWorkMailClient
             curMessage.Receivers = tbReceivers.Text.Split(',').Select(h => HandlerService.repo.GetInterlocutor(h.Trim())).ToList();
             curMessage.Content = JsonConvert.SerializeObject(rtbContent.Document.Blocks.Where(h => h is Paragraph).Select(h => HandlerService.mapper.Map<LightParagraph>(h)), Formatting.Indented);
             curMessage.Attachments = new List<Attachment>();
-            curMessage.Folders.Add(HandlerService.repo.GetFolder(GetDataService.ActualMailServer, "Отправленные"));
+            curMessage.Folder = HandlerService.repo.GetFolder(GetDataService.ActualMailServer, "Отправленные");
 
             foreach (var item in lbAttachments.Items)
             {

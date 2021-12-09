@@ -30,9 +30,15 @@ namespace CourseWorkMailClient
 
         public ReadLetterPage(Page previousPage, Letter messageForRead)
         {
-            InitializeComponent();
+            GetDataService.ChangeActualFolder += () =>
+            {
+                if(NavigationService != null)
+                    NavigationService.Navigate(previousPage);
+            };
 
             prevPage = previousPage;
+
+            InitializeComponent();
 
             Message = GetDataService.GetMessage(messageForRead, GetDataService.ActualFolder);
 
