@@ -101,6 +101,11 @@ namespace CourseWorkMailClient.Data
             return db.Folders.Where(h => h.MailServerId == mailServer.Id).ToList();
         }
 
+        public User GetUser(string login)
+        {
+            return db.Users.FirstOrDefault(h => h.Login == login);
+        }
+
         public List<User> GetUsers()
         {
             return db.Users.Include(h => h.MailServer).Include(h => h.Interlocutor).ToList();

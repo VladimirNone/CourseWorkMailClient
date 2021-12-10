@@ -24,13 +24,27 @@ namespace CourseWorkMailClient
         public AuthPage()
         {
             InitializeComponent();
+
+            var users = HandlerService.repo.GetUsers();
+
+            cbUsers.ItemsSource = users;
         }
 
         private void Accept_Click(object sender, RoutedEventArgs e)
         {
-            //HandlerService.Auth(tbLogin.Text, tbPassword.Text);
-
-            HandlerService.Auth(HandlerService.repo.GetUsers()[0]);
+            if(!string.IsNullOrWhiteSpace(tbPassword.Text) || !string.IsNullOrWhiteSpace(tbLogin.Text))
+            {
+                HandlerService.Auth(tbLogin.Text, tbPassword.Text);
+            }
+            else if(cbUsers.SelectedItem != null)
+            {
+                HandlerService.Auth((Domain.User)cbUsers.SelectedItem);
+            }
+            else
+            {
+                MessageBox.Show("Вы не ввели достаточно данных, необходимых для авторизации");
+                return;
+            }
 
             NavigationService.Navigate(new MainPage());
         }
@@ -38,6 +52,12 @@ namespace CourseWorkMailClient
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void cbUsers_Selected(object sender, RoutedEventArgs e)
+        {
+            tbLogin.Text = "";
+            tbPassword.Text = "";
         }
     }
 }

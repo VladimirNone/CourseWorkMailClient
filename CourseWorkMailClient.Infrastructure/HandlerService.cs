@@ -83,23 +83,24 @@ namespace CourseWorkMailClient.Infrastructure
             KitSmtpHandler = new KitSmtpHandler(user.Login, user.Password);
 
             GetDataService.ActualMailServer = user.MailServer;
-
-            //KitImapHandler.LoadLastLetters();
         }
 
         public static void Auth(string login, string password)
         {
-            KitImapHandler = new KitImapHandler(login, password);
-            KitSmtpHandler = new KitSmtpHandler(login, password);
-            //сначало необходимо поискать в бд
-            var newUser = new User() { Login = login, Password = password };
+            var user = repo.GetUser(login);
 
-            repo.AddUser(newUser, login.Substring(login.IndexOf('@')+1));
-            repo.SaveChanged();
+            if (user == null)
+            {
+                user = new User() { Login = login, Password = password };
 
-            GetDataService.ActualMailServer = newUser.MailServer;
+                repo.AddUser(user, login[(login.IndexOf('@') + 1)..]);
+                repo.SaveChanged();
+            }
 
-            //KitImapHandler.LoadLastLetters();
+            KitImapHandler = new KitImapHandler(user.Login, user.Password);
+            KitSmtpHandler = new KitSmtpHandler(user.Login, user.Password);
+
+            GetDataService.ActualMailServer = user.MailServer;
         }
 
         public static void UnAuth()
