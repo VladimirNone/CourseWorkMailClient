@@ -31,13 +31,13 @@ namespace CourseWorkMailClient.Infrastructure
         {
             client = new ImapClient();
             client.Connect("imap.gmail.com", 993, SecureSocketOptions.SslOnConnect);
-
+            
             client.Authenticate(login, password);
         }
 
         public void LoadLastLetters()
         {
-            ParallelFunction.LoadLastLetter(HandlerService.mapper.Map<Folder>(client.GetFolder(SpecialFolder.All)), 50);
+            ParallelFunction.LoadLastLetter(HandlerService.mapper.Map<Folder>(client.GetFolder(SpecialFolder.All)));
         }
 
         public void OpenFolder(Folder folder)
@@ -103,6 +103,7 @@ namespace CourseWorkMailClient.Infrastructure
 /*            if (!newMessageFolder.IsOpen)
                 newMessageFolder.Open(FolderAccess.ReadWrite);*/
             newMessageFolder.Append(message);
+            //newMessageFolder.MoveTo()
         }
 
         /// <summary>

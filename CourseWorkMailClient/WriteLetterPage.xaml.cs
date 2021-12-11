@@ -63,7 +63,7 @@ namespace CourseWorkMailClient
         {
             curMessage.Subject = tbSubject.Text;
             curMessage.Receivers = tbReceivers.Text.Split(',').Select(h => HandlerService.repo.GetInterlocutor(h.Trim())).ToList();
-            curMessage.Content = JsonConvert.SerializeObject(rtbContent.Document.Blocks.Where(h => h is Paragraph).Select(h => HandlerService.mapper.Map<LightParagraph>(h)), Formatting.Indented);
+            curMessage.Content = PrepareData.ContentToHTML(rtbContent.Document.Blocks.Where(h => h is Paragraph).Select(h => HandlerService.mapper.Map<LightParagraph>(h)));
             curMessage.Attachments = new List<Attachment>();
             curMessage.Folder = HandlerService.repo.GetFolder(GetDataService.ActualMailServer, "Отправленные");
 

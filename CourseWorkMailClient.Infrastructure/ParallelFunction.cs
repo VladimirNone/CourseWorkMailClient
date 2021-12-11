@@ -14,19 +14,21 @@ namespace CourseWorkMailClient.Infrastructure
 {
     public static class ParallelFunction
     {
-
-        public static void LoadLastLetter(Folder folder, int count = 50)
+        public static void LoadLastLetter(Folder folder, int count = 10)
         {
+            folder.Source.Open(FolderAccess.ReadWrite);
+
             var uids = folder.Source.Search(SearchQuery.All).Take(count).ToList();
             var lastLetters = folder.Source.Fetch(uids, MessageSummaryItems.Headers);
             var letters = new List<Letter>();
-
-            foreach (var item in lastLetters)
+            
+            folder.Source.Close();
+/*            foreach (var item in lastLetters)
             {
                 var newLetter = HandlerService.mapper.Map<MimeMessage, Letter>(new MimeMessage(item.Headers));
                 newLetter.Folder = folder;
                 letters.Add(newLetter);
-            }
+            }*/
 
 
         }

@@ -49,30 +49,7 @@ namespace CourseWorkMailClient
             tbSubject.Text = Message.Subject;
             tbDate.Text += Message.Date;
 
-            if(Message.LocalMessage)
-            {
-                rtbContent.Visibility = Visibility.Visible;
-                wbContent.Visibility = Visibility.Hidden;
-
-                rtbContent.Document.Blocks.Clear();
-
-                var lightParagraphs = JsonConvert.DeserializeObject<LightParagraph[]>(Message.Content);
-
-                foreach (var lightParagraph in lightParagraphs)
-                {
-                    var paragraph = new Paragraph();
-                    paragraph.Inlines.AddRange(lightParagraph.Inlines.Select(h => HandlerService.mapper.Map<Run>(h)));
-
-                    rtbContent.Document.Blocks.Add(paragraph);
-                }
-            }
-            else
-            {
-                rtbContent.Visibility = Visibility.Hidden;
-                wbContent.Visibility = Visibility.Visible;
-
-                wbContent.NavigateToString(content);
-            }
+            wbContent.NavigateToString(content);
 
             lbAttachments.ItemsSource = Message.Attachments.Select(h=>h.Name);
         }

@@ -1,4 +1,5 @@
-﻿using CourseWorkMailClient.Infrastructure;
+﻿using CourseWorkMailClient.LoadLetters;
+using CourseWorkMailClient.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,10 +36,18 @@ namespace CourseWorkMailClient
             if(!string.IsNullOrWhiteSpace(tbPassword.Text) || !string.IsNullOrWhiteSpace(tbLogin.Text))
             {
                 HandlerService.Auth(tbLogin.Text, tbPassword.Text);
+
+                var authingWindow = new LoadingWindow();
+                authingWindow.Load();
+                authingWindow.ShowDialog();
             }
             else if(cbUsers.SelectedItem != null)
             {
                 HandlerService.Auth((Domain.User)cbUsers.SelectedItem);
+
+                var authingWindow = new LoadingWindow();
+                authingWindow.Load();
+                authingWindow.ShowDialog();
             }
             else
             {

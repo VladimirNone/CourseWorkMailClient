@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET5_0;NETCOREAPP
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\App.xaml
-10-1342389396
+11-1565018922
 
-15-588836563
+15547225819
 221-587567699
-AuthPage.xaml;CustomControls\ColorBackground.xaml;CustomControls\ColorForeground.xaml;FolderItems\CreateFolderWindow.xaml;FolderItems\NavigateMenu.xaml;FolderItems\RenameFolderWindow.xaml;MainPage.xaml;Pagination\Pagination.xaml;ReadLetterPage.xaml;WriteLetterPage.xaml;
+AuthPage.xaml;CustomControls\ColorBackground.xaml;CustomControls\ColorForeground.xaml;FolderItems\CreateFolderWindow.xaml;FolderItems\NavigateMenu.xaml;FolderItems\RenameFolderWindow.xaml;LoadLetters\LoadingWindow.xaml;MainPage.xaml;Pagination\Pagination.xaml;ReadLetterPage.xaml;WriteLetterPage.xaml;
 
 False
 

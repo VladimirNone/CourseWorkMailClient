@@ -7,6 +7,9 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="LoadLetters\LoadingWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="AuthPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -27,6 +30,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="LoadLetters\LoadingWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="AuthPage.xaml">
       <SubType>Designer</SubType>
     </Page>
