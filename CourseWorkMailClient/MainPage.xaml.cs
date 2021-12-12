@@ -1,5 +1,6 @@
 ﻿using CourseWorkMailClient.Domain;
 using CourseWorkMailClient.Infrastructure;
+using CourseWorkMailClient.LoadLetters;
 using MailKit;
 using MailKit.Net.Imap;
 using MailKit.Search;
@@ -31,13 +32,9 @@ namespace CourseWorkMailClient
     {
         public MainPage()
         {
-            GetDataService.mainPage = this;
-
             InitializeComponent();
 
             lbMesList.ItemsSource = GetDataService.Letters;
-
-
         }
         
         private void bbUpdateMesList_Click(object sender, RoutedEventArgs e)
@@ -66,9 +63,18 @@ namespace CourseWorkMailClient
             }
             else
             {
+                miMoveToOtherFolder.ItemsSource = GetDataService.GetMovableFolders();
                 miMoveToOtherFolder.IsEnabled = true;
                 miDelete.IsEnabled = true;
             }
+        }
+        
+        private void bSaveLettersFromPage_Click(object sender, RoutedEventArgs e)
+        {
+            var authingWindow = new LoadingWindow("Происходит загрузка писем");
+            authingWindow.Load((folder) => HandlerService.KitImapHandler.LoadLastLetters((Folder)folder), GetDataService.ActualFolder);
+            authingWindow.ShowDialog();
+            HandlerService.Repository.SaveChanged();
         }
 
         private void bExit_Click(object sender, RoutedEventArgs e)
@@ -79,12 +85,13 @@ namespace CourseWorkMailClient
 
         private void miDelete_Click(object sender, RoutedEventArgs e)
         {
-
+            _ = 5;
         }
 
         private void miMoveToOtherFolder_Click(object sender, RoutedEventArgs e)
         {
             var mes = (Letter)((ListBoxItem)sender).DataContext;
+
             //HandlerService.KitImapHandler.MoveMessage(mes, HandlerService.KitImapHandler.getf)
         }
         

@@ -16,9 +16,15 @@ D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\bin\D
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\bin\Debug\net5.0-windows\Microsoft.EntityFrameworkCore.SqlServer.dll
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\bin\Debug\net5.0-windows\Microsoft.Extensions.Caching.Abstractions.dll
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\bin\Debug\net5.0-windows\Microsoft.Extensions.Caching.Memory.dll
+D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\bin\Debug\net5.0-windows\Microsoft.Extensions.Configuration.dll
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\bin\Debug\net5.0-windows\Microsoft.Extensions.Configuration.Abstractions.dll
+D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\bin\Debug\net5.0-windows\Microsoft.Extensions.Configuration.FileExtensions.dll
+D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\bin\Debug\net5.0-windows\Microsoft.Extensions.Configuration.Json.dll
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\bin\Debug\net5.0-windows\Microsoft.Extensions.DependencyInjection.dll
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\bin\Debug\net5.0-windows\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\bin\Debug\net5.0-windows\Microsoft.Extensions.FileProviders.Abstractions.dll
+D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\bin\Debug\net5.0-windows\Microsoft.Extensions.FileProviders.Physical.dll
+D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\bin\Debug\net5.0-windows\Microsoft.Extensions.FileSystemGlobbing.dll
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\bin\Debug\net5.0-windows\Microsoft.Extensions.Logging.dll
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\bin\Debug\net5.0-windows\Microsoft.Extensions.Logging.Abstractions.dll
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\bin\Debug\net5.0-windows\Microsoft.Extensions.Options.dll
@@ -35,6 +41,7 @@ D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\bin\D
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\bin\Debug\net5.0-windows\System.Diagnostics.DiagnosticSource.dll
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\bin\Debug\net5.0-windows\System.IdentityModel.Tokens.Jwt.dll
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\bin\Debug\net5.0-windows\System.Runtime.Caching.dll
+D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\bin\Debug\net5.0-windows\System.Runtime.CompilerServices.Unsafe.dll
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\bin\Debug\net5.0-windows\runtimes\unix\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\bin\Debug\net5.0-windows\runtimes\win\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\bin\Debug\net5.0-windows\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.dll
@@ -59,6 +66,7 @@ D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\D
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\FolderItems\CreateFolderWindow.g.cs
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\FolderItems\NavigateMenu.g.cs
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\FolderItems\RenameFolderWindow.g.cs
+D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\LoadLetters\LoadingWindow.g.cs
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\MainPage.g.cs
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\Pagination\Pagination.g.cs
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\ReadLetterPage.g.cs
@@ -74,6 +82,7 @@ D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\D
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\FolderItems\CreateFolderWindow.baml
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\FolderItems\NavigateMenu.baml
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\FolderItems\RenameFolderWindow.baml
+D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\LoadLetters\LoadingWindow.baml
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\MainPage.baml
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\Pagination\Pagination.baml
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\ReadLetterPage.baml
@@ -87,6 +96,3 @@ D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\D
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\ref\CourseWorkMailClient.dll
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\CourseWorkMailClient.pdb
 D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\CourseWorkMailClient.genruntimeconfig.cache
-D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\LoadLetters\LoadingWindow.g.cs
-D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\LoadLetters\LoadingWindow.baml
-D:\University\Курсач 4.1.1\CourseWorkMailClient\CourseWorkMailClient\obj\Debug\net5.0-windows\CourseWorkMailClient.csproj.CopyComplete

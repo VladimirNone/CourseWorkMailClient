@@ -42,8 +42,10 @@ namespace CourseWorkMailClient
 
             Message = GetDataService.GetMessage(messageForRead, GetDataService.ActualFolder);
 
+
+
             //Костыль. Необходимо определить кодировку.
-            var content = @"<!DOCTYPE html ><html><meta http-equiv='Content-Type' content='text/html;charset=UTF-8'><head></head><body>" + Message.Content + "</body></html>";
+            var content = @"<!DOCTYPE html ><html><meta http-equiv='Content-Type' content='text/html;charset=UTF-8'><head></head><body>" + Message.Source.HtmlBody ?? Message.Source.TextBody + "</body></html>";
 
             tbReceivers.Text = string.Join(", ", Message.To);
             tbSubject.Text = Message.Subject;

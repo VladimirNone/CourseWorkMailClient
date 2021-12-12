@@ -23,21 +23,22 @@ namespace CourseWorkMailClient.Infrastructure
 
         public KitSmtpHandler(string login, string password)
         {
-            this.login = login;
             client = new SmtpClient();
-            client.Connect("smtp.gmail.com", 465, SecureSocketOptions.SslOnConnect);
+            client.Connect("smtp." + GetDataService.MailServers.First(h=>login.Contains(h.Key)).Value, 465, SecureSocketOptions.SslOnConnect);
             client.Authenticate(login, password);
+            this.login = login;
         }
 
-        public async Task SendMessage(Letter messageToSend, bool useCryptography)
+        public async Task SendMessage(Letter messageToSend)
         {
             var message = new MimeMessage();
-
-            message.Headers.Add(new Header(HeaderId.Summary, "localMessage"));
 
             message.From.Add(new MailboxAddress(login, login));
 
             messageToSend.Receivers.ForEach(h => message.To.Add(new MailboxAddress(h.Email, h.Email)));
+
+            messageToSend.Senders = new List<Interlocutor>();
+            messageToSend.Senders.Add(HandlerService.Repository.GetOrCreateInterlocutor(login));
 
             message.Subject = messageToSend.Subject;
 
@@ -49,13 +50,35 @@ namespace CourseWorkMailClient.Infrastructure
 
             message.Body = builder.ToMessageBody();
 
-            if (useCryptography)
+
+            var receiver = HandlerService.Repository.GetInterlocutor(messageToSend.Receivers.First().Email, true);
+            var sender = HandlerService.Repository.GetInterlocutor(messageToSend.Senders.First().Email, true);
+
+            //Создаем ключи для отправителя и записываем их, если ключи отсутствуют
+            if (sender.LastDESRsaKeyId == null || sender.LastMD5RsaKeyId == null)
+            {
+                var md5Sender = new CryptoMD5();
+                var desSender = new CryptoDES();
+
+                md5Sender.CreateNewRsaKey();
+                desSender.CreateNewRsaKey();
+
+                sender.LastMD5RsaKey = md5Sender.GetRsaKey();
+                sender.LastDESRsaKey = desSender.GetRsaKey();
+            }
+
+            if (receiver.LastDESRsaKeyId != null && receiver.LastMD5RsaKeyId != null && messageToSend.Receivers.Count == 1)
             {
                 var md5 = new CryptoMD5();
                 var des = new CryptoDES();
 
                 md5.CreateNewRsaKey();
                 des.CreateNewRsaKey();
+
+                //Ключ для создания подписи отправителя
+                md5.SetRsaKey(sender.LastMD5RsaKey.PrivateKey);
+                //Ключ для шифрования получателя
+                des.SetRsaKey(receiver.LastDESRsaKey.PublicKey);
 
                 for (int i = 0; i < message.BodyParts.Count(); i++)
                 {
@@ -67,23 +90,30 @@ namespace CourseWorkMailClient.Infrastructure
 
                         textItem.Text = Convert.ToBase64String(des.EncryptUsingDes(textInBytes));
                         textItem.ContentMd5 = Convert.ToBase64String(md5.GetHash(textInBytes));
+/*
+                        var check = md5.CheckHash(Convert.FromBase64String(textItem.ContentMd5), textInBytes);
+
+                        var md3Check = new CryptoMD5();
+                        md3Check.CreateNewRsaKey();
+                        md3Check.SetRsaKey(sender.LastMD5RsaKey.PublicKey);
+                        var checkHash = md3Check.CheckHash(Convert.FromBase64String(textItem.ContentMd5), textInBytes);*/
                     }
                 }
 
-                messageToSend.MD5RsaKey = md5.GetRsaKey();
-                messageToSend.DESRsaKey = des.GetRsaKey();
-
-                message.Headers.Add(HeaderId.Encrypted, messageToSend.DESRsaKey.PublicKey);
-                message.Headers.Add(HeaderId.ContentMd5, messageToSend.MD5RsaKey.PublicKey);
+                messageToSend.MD5RsaKey = sender.LastMD5RsaKey;
+                messageToSend.DESRsaKey = receiver.LastDESRsaKey;
             }
 
-            var fileMesPath = Path.Combine("Letters", message.MessageId.Substring(0, message.MessageId.IndexOf('@')) + ".mes");
+            message.Headers.Add(HeaderId.Encrypted, sender.LastDESRsaKey.PublicKey);
+            message.Headers.Add(HeaderId.Summary, sender.LastMD5RsaKey.PublicKey);
+
+            var fileMesPath = Path.Combine("Letters", Guid.NewGuid().ToString() + ".mes");
 
             message.WriteTo(fileMesPath);
             messageToSend.PathToFullMessageFile = fileMesPath;
 
-            HandlerService.repo.AddMessage(messageToSend);
-            HandlerService.repo.SaveChanged();
+            HandlerService.Repository.AddMessage(messageToSend);
+            HandlerService.Repository.SaveChanged();
 
             await client.SendAsync(message);
         }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CourseWorkMailClient.LoadLetters"
         mc:Ignorable="d"
-        Title="Загрузка" 
+        Title="Ожидайте" 
         SizeToContent="WidthAndHeight"
         WindowStartupLocation="CenterScreen">
     <Grid Margin="10">
@@ -15,7 +15,7 @@
             <RowDefinition Height="30" />
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" HorizontalAlignment="Center">Происходит загрузка писем</TextBlock>
+        <TextBlock Grid.Row="0" HorizontalAlignment="Center" x:Name="tbTitle"></TextBlock>
         <ProgressBar Grid.Row="1" IsIndeterminate="True"/>
 
         <TextBlock Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">Пожалуйста подождите</TextBlock>

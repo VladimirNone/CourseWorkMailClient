@@ -26,8 +26,6 @@ namespace CourseWorkMailClient.FolderItems
     {
         public NavigateMenu()
         {
-            GetDataService.navigatorControl = this;
-
             InitializeComponent();
 
             GetDataService.Folders = new CustomNotifyCollectionCollection<Folder>(GetDataService.GetFolders());

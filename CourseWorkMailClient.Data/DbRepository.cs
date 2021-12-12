@@ -10,18 +10,29 @@ using System.Threading.Tasks;
 
 namespace CourseWorkMailClient.Data
 {
-    public class Repository
+    public class DbRepository
     {
         private KeyDbContext db { get; set; }
 
-        public Repository()
+        public DbRepository(string connectionString)
         {
-            db = new KeyDbContext();
+            var optionsBuilder = new DbContextOptionsBuilder<KeyDbContext>();
+
+            var options = optionsBuilder
+                    .UseSqlServer(connectionString)
+                    .Options;
+
+            db = new KeyDbContext(options);
         }
 
-        public Interlocutor GetInterlocutor(string email)
+        public Interlocutor GetInterlocutor(string email, bool includeKeys = false)
         {
-            return db.Interlocutors.FirstOrDefault(h => h.Email == email);
+            var interlocators = db.Interlocutors.AsQueryable();
+            if (includeKeys)
+            {
+                interlocators = interlocators.Include(h => h.LastDESRsaKey).Include(h => h.LastMD5RsaKey);
+            }
+            return interlocators.FirstOrDefault(h => h.Email.ToLower() == email.ToLower());
         }
 
         public void AddMessage(Letter letter)
@@ -78,17 +89,25 @@ namespace CourseWorkMailClient.Data
 
             db.Letters.AddRange(lettNotInDb);
 
+            SaveChanged();
+
             return lettersInDb.Concat(lettNotInDb).ToList();
+        }
+
+        public Interlocutor GetOrCreateInterlocutor(string interlocutorEmail)
+        {
+            var old = GetInterlocutor(interlocutorEmail);
+            if(old == null)
+            {
+                db.Interlocutors.Add(new Interlocutor() {  Email = interlocutorEmail });
+                SaveChanged();
+            }
+            return GetInterlocutor(interlocutorEmail);
         }
 
         public List<int> GetUniqueIds(Folder folder)
         {
-            return db.Letters.Where(h => h.FolderId == folder.Id).OrderBy(h=>h.UniqueId).Select(h => h.UniqueId).ToList();
-        }
-
-        public Folder GetFolderWithLetters(MailServer mailServer, string folderName)
-        {
-            return db.Folders.FirstOrDefault(h => h.MailServerId == mailServer.Id && h.Title == folderName);
+            return db.Letters.Where(h => h.FolderId == folder.Id).OrderBy(h => h.UniqueId).Select(h => h.UniqueId).ToList();
         }
 
         public Folder GetFolder(MailServer mailServer, string folderName)
@@ -103,12 +122,7 @@ namespace CourseWorkMailClient.Data
 
         public User GetUser(string login)
         {
-            return db.Users.FirstOrDefault(h => h.Login == login);
-        }
-
-        public List<User> GetUsers()
-        {
-            return db.Users.Include(h => h.MailServer).Include(h => h.Interlocutor).ToList();
+            return db.Users.Include(h=>h.MailServer).FirstOrDefault(h => h.Login == login);
         }
 
         public Letter GetMessage(int uniqueId, bool lightVersion = true)
@@ -136,6 +150,11 @@ namespace CourseWorkMailClient.Data
         public void SaveChanged()
         {
             db.SaveChanges();
+        }
+
+        public void Dispose()
+        {
+            db.Dispose();
         }
     }
 }

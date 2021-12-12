@@ -14,6 +14,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace CourseWorkMailClient
 {
@@ -26,27 +28,23 @@ namespace CourseWorkMailClient
         {
             InitializeComponent();
 
-            var users = HandlerService.repo.GetUsers();
+            GetDataService.UserDb = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(GetDataService.PathToJsonFile));
 
-            cbUsers.ItemsSource = users;
+            cbUsers.ItemsSource = GetDataService.UserDb.Keys;
         }
 
         private void Accept_Click(object sender, RoutedEventArgs e)
         {
             if(!string.IsNullOrWhiteSpace(tbPassword.Text) || !string.IsNullOrWhiteSpace(tbLogin.Text))
             {
-                HandlerService.Auth(tbLogin.Text, tbPassword.Text);
-
-                var authingWindow = new LoadingWindow();
-                authingWindow.Load();
+                var authingWindow = new LoadingWindow("Происходит авторизация");
+                authingWindow.Load((login, password) => HandlerService.Auth(login, password), tbLogin.Text, tbPassword.Text);
                 authingWindow.ShowDialog();
             }
             else if(cbUsers.SelectedItem != null)
             {
-                HandlerService.Auth((Domain.User)cbUsers.SelectedItem);
-
-                var authingWindow = new LoadingWindow();
-                authingWindow.Load();
+                var authingWindow = new LoadingWindow("Происходит авторизация");
+                authingWindow.Load((login) => HandlerService.Auth((string)login), cbUsers.SelectedItem);
                 authingWindow.ShowDialog();
             }
             else

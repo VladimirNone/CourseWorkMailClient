@@ -62,17 +62,17 @@ namespace CourseWorkMailClient
         private async void ButtonSend_Click(object sender, RoutedEventArgs e)
         {
             curMessage.Subject = tbSubject.Text;
-            curMessage.Receivers = tbReceivers.Text.Split(',').Select(h => HandlerService.repo.GetInterlocutor(h.Trim())).ToList();
+            curMessage.Receivers = tbReceivers.Text.Split(',').Select(h => HandlerService.Repository.GetOrCreateInterlocutor(h.Trim())).ToList();
             curMessage.Content = PrepareData.ContentToHTML(rtbContent.Document.Blocks.Where(h => h is Paragraph).Select(h => HandlerService.mapper.Map<LightParagraph>(h)));
             curMessage.Attachments = new List<Attachment>();
-            curMessage.Folder = HandlerService.repo.GetFolder(GetDataService.ActualMailServer, "Отправленные");
+            curMessage.Folder = HandlerService.Repository.GetFolder(GetDataService.ActualMailServer, "Отправленные");//Sent Отправленные
 
             foreach (var item in lbAttachments.Items)
             {
                 curMessage.Attachments.Add(new Attachment() { Name = (string)((ListBoxItem)item).Content } );
             }
 
-            await HandlerService.KitSmtpHandler.SendMessage(curMessage, true);
+            await HandlerService.KitSmtpHandler.SendMessage(curMessage);
 
             NavigationService.Navigate(prevPage);
         }

@@ -1,0 +1,72 @@
+Received: from iva6-5e1f958462d7.qloud-c.yandex.net (iva6-5e1f958462d7.qloud-c.yandex.net [2a02:6b8:c0c:912f:0:640:5e1f:9584])
+	by iva3-b63b2b4df711.qloud-c.yandex.net with LMTP id aWICv8aKHs-rdwQTauO
+	for <korolevi4k@yandex.ru>; Sun, 12 Dec 2021 21:04:13 +0300
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [2a00:1450:4864:20::12f])
+	by iva6-5e1f958462d7.qloud-c.yandex.net (mxfront/Yandex) with ESMTPS id SZhUH92yIS-4Dc0k0v4;
+	Sun, 12 Dec 2021 21:04:13 +0300
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+	(Client certificate not present)
+Return-Path: coursework41@gmail.com
+X-Yandex-TimeMark: 1639332253.626
+X-Yandex-Fwd: 1
+Authentication-Results: iva6-5e1f958462d7.qloud-c.yandex.net; spf=pass (iva6-5e1f958462d7.qloud-c.yandex.net: domain of gmail.com designates 2a00:1450:4864:20::12f as permitted sender, rule=[ip6:2a00:1450:4000::/36]) smtp.mail=coursework41@gmail.com; dkim=pass header.i=@gmail.com
+X-Yandex-Spam: 1
+X-Yandex-Suid-Status: 1 1799119735
+Received: by mail-lf1-x12f.google.com with SMTP id m6so15208136lfu.1
+        for <korolevi4k@yandex.ru>; Sun, 12 Dec 2021 10:04:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:date:subject:message-id:to:encrypted:summary:mime-version;
+        bh=0KoQ2OeD+oNeUeZsWx7VU5tNz6bIBY718YTSp6DwIRs=;
+        b=FVHsOv04tRp5TSPD4UHMItd9gmDGIWzoWRKhWy914NWUpj6bH6Tou1ZC5U+do3H/+m
+         sO2B8xp+BnMqDUkDJdfjoMtQRJuU7Fqy4MrI+3snO5Yhdfhlq0vq200Bke9+Wf3FqcsP
+         UH8tCWUGSmM0jxKRgdPt4Im1h/rB7MDZvqpK2F2qqmZCVi3wbOoqbGNhx+AIQWPJ5nke
+         IWEh3dkWbAx//Cby7+orVCh0nC+IYy4XTM4DaNpZi1zMFJDAkG+hMeWHSRF1X23uQEQe
+         jUynP3IYYrqDrzGz3AXxNPg3067AzFIfckvYhy2y8d+898bjuRb2AtLFDCoIf5HKWXet
+         3atg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:date:subject:message-id:to:encrypted
+         :summary:mime-version;
+        bh=0KoQ2OeD+oNeUeZsWx7VU5tNz6bIBY718YTSp6DwIRs=;
+        b=hSaxwu8pnkT/oVQK3XuIvqD1haYgILkdSPreFLx776OZAgF225BmEmIjyjMDtpY0RU
+         Yiyo7fxmODlhRDb2xCtWZxuVhQdhF6EVMslIEZju6tRqEej75GcYBUEaNk5BByY7/DMk
+         vMdkHBKOv0je5sAaJwXsZjNHGS65NmEcoLitCC5LYNwImEZXgzJlveApFPbbOHq86pZP
+         Y8F5xFc+PB1DzdZJ6J37xN84yx9xRjKNyJnb73Ln8szh6ROk4qlNHvIrtr55OA+4J4LY
+         ZZiU6kNh+uHGCjHXKfFmiiwIcf5TltW25nTS5e5axu9TXhvxHSfUAxLP+w2S0KiVdXfu
+         vxwg==
+X-Gm-Message-State: AOAM530cD1e14X0Ul7yTLaGzAeq6t3DJI8hSsuYdZYsio5nVjQaUQHw0
+	RrrZwZEPyp+3HwRGMNkbifqujKKLGSA=
+X-Google-Smtp-Source: ABdhPJx4cjsdRwk4qDO8q6u+hp0ciK04WoWv6xrhOHdgcPmZerrb9h1kFdsP1huJ2mhXAiI6vVH9Jg==
+X-Received: by 2002:a05:6512:138f:: with SMTP id p15mr24151365lfa.648.1639332252980;
+        Sun, 12 Dec 2021 10:04:12 -0800 (PST)
+Received: from [192.168.0.106] ([95.46.172.61])
+        by smtp.gmail.com with ESMTPSA id o11sm1091515ljc.100.2021.12.12.10.04.12
+        for <korolevi4k@yandex.ru>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 12 Dec 2021 10:04:12 -0800 (PST)
+From: "CourseWork41@gmail.com" <coursework41@gmail.com>
+X-Google-Original-From: "CourseWork41@gmail.com" <CourseWork41@gmail.com>
+Date: Sun, 12 Dec 2021 21:04:11 +0300
+Subject: =?utf-8?b?0LnRhtGD?=
+Message-Id: <W0KIG2LAJFU4.VQYN0A0WWRUR@DESKTOP-GVAK6ER>
+To: "korolevi4k@yandex.ru" <korolevi4k@yandex.ru>
+Encrypted: =?utf-8?q?=3CRSAKeyValue=3E=3CModulus=3E1dT5rH+XSaS5H1XdxusK9=2FGlEzIMFMUsUHE7qqV?=
+ =?utf-8?q?xELRq19QapSzwWbQyf+8VvggNo2+8aW0wcbKLqrEhsc4428ZTqQZ4CUclLH83?=
+ =?utf-8?q?NdplDM8mzyGHwaF3585FO0qfwcy=2FnDBlIXqsswV80gvMiSDQPP8J3qh0HOztX?=
+ =?utf-8?q?db4BUTGsroOdyQoybFZzN5sBBpQw82ytvFPkj598=2FY07wvWyL4A2Uyyuj3jZb?=
+ =?utf-8?q?HT41s5jrqZ9cE8ZgSvQGl7Se6HyxO9z0RBxOKejz9WswymoUx8qlYhxt2a2Zg?=
+ =?utf-8?q?GcOyY4XBM=2FpwTveXqx+WPq5iil2LsGN3nVItHZuUgcTdO2Hcj=2F0YXYl0+2Q=3D=3D?=
+ =?utf-8?q?=3C=2FModulus=3E=3CExponent=3EAQAB=3C=2FExponent=3E=3C=2FRSAKeyValue=3E?=
+Summary: =?utf-8?q?=3CRSAKeyValue=3E=3CModulus=3E1dT5rH+XSaS5H1XdxusK9=2FGlEzIMFMUsUHE7qqV?=
+ =?utf-8?q?xELRq19QapSzwWbQyf+8VvggNo2+8aW0wcbKLqrEhsc4428ZTqQZ4CUclLH83?=
+ =?utf-8?q?NdplDM8mzyGHwaF3585FO0qfwcy=2FnDBlIXqsswV80gvMiSDQPP8J3qh0HOztX?=
+ =?utf-8?q?db4BUTGsroOdyQoybFZzN5sBBpQw82ytvFPkj598=2FY07wvWyL4A2Uyyuj3jZb?=
+ =?utf-8?q?HT41s5jrqZ9cE8ZgSvQGl7Se6HyxO9z0RBxOKejz9WswymoUx8qlYhxt2a2Zg?=
+ =?utf-8?q?GcOyY4XBM=2FpwTveXqx+WPq5iil2LsGN3nVItHZuUgcTdO2Hcj=2F0YXYl0+2Q=3D=3D?=
+ =?utf-8?q?=3C=2FModulus=3E=3CExponent=3EAQAB=3C=2FExponent=3E=3C=2FRSAKeyValue=3E?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+X-Yandex-Forward: 9e436b9327d797a9bcc2efd41ec1bfde
+
+<!DOCTYPE html ><html><meta http-equiv='Content-Type' content='text/html;charset=UTF-8'><head></head><body> <p><div style="color: #000000;font-size: 14;font-weight: Normal;font-style: Normal;">132</div></p> </body></html>

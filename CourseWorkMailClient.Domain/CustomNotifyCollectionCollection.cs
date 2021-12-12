@@ -11,7 +11,7 @@ namespace CourseWorkMailClient.Domain
 {
     public class CustomNotifyCollectionCollection<T> : INotifyCollectionChanged, IEnumerable<T>
     {
-        private Collection<T> collection = new Collection<T>();
+        private List<T> collection = new List<T>();
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
         public CustomNotifyCollectionCollection()

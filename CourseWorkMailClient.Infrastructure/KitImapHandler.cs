@@ -9,16 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-
-/*            var des = new CryptoDES();
-            var encryptedContent = des.EncryptUsingDes(Encoding.UTF8.GetBytes(Message.Content));
-            var base64EncrCont = Convert.ToBase64String(encryptedContent);
-
-            var decryptedContent = Encoding.UTF8.GetString(des.DecryptUsingDes(encryptedContent));
-            var dectyptContentFromBase64 = Encoding.UTF8.GetString(des.DecryptUsingDes(Convert.FromBase64String(base64EncrCont)));*/
+using System.Net;
 
 namespace CourseWorkMailClient.Infrastructure
 {
@@ -30,14 +21,27 @@ namespace CourseWorkMailClient.Infrastructure
         public KitImapHandler(string login, string password)
         {
             client = new ImapClient();
-            client.Connect("imap.gmail.com", 993, SecureSocketOptions.SslOnConnect);
-            
+            client.Connect("imap." + GetDataService.MailServers.First(h=>login.Contains(h.Key)).Value, 993, SecureSocketOptions.SslOnConnect);
             client.Authenticate(login, password);
+
         }
 
-        public void LoadLastLetters()
+        public void LoadLastLetters(Folder folder)
         {
-            ParallelFunction.LoadLastLetter(HandlerService.mapper.Map<Folder>(client.GetFolder(SpecialFolder.All)));
+            if (client.IsConnected)
+            {
+                var letters = HandlerService.Repository.GetMessages(folder.Id, GetDataService.uniqueIdsCurrentPage.Select(h => (int)h.Id).ToList());
+
+                for (int i = 0; i < letters.Count; i++)
+                {
+                    if (letters[i].PathToFullMessageFile == null)
+                    {
+                        letters[i] = GetFullMessage(letters[i], folder);
+                    }
+                }
+
+                HandlerService.Repository.SaveChanged();
+            }
         }
 
         public void OpenFolder(Folder folder)
@@ -100,8 +104,6 @@ namespace CourseWorkMailClient.Infrastructure
 
         public void MoveMessage(MimeMessage message, IMailFolder newMessageFolder)
         {
-/*            if (!newMessageFolder.IsOpen)
-                newMessageFolder.Open(FolderAccess.ReadWrite);*/
             newMessageFolder.Append(message);
             //newMessageFolder.MoveTo()
         }
@@ -137,6 +139,9 @@ namespace CourseWorkMailClient.Infrastructure
             {
                 var message = HandlerService.mapper.Map<MimeMessage, Letter>(new MimeMessage(item.Headers));
                 message.UniqueId = (int)item.UniqueId.Id;
+
+                message = PrepareData.ExtractKeysFromServerMes(message);
+
                 letters.Add(message);
             }
 
@@ -145,19 +150,7 @@ namespace CourseWorkMailClient.Infrastructure
 
         public MimeMessage GetMimeMessage(uint id, IMailFolder folder)
         {
-            var mes = folder.GetMessage(new UniqueId(id));
-
-            if (mes.Headers.Contains(HeaderId.Summary))
-            {
-                for (int i = 0; i < mes.BodyParts.Count(); i++)
-                {
-                    var item = mes.BodyParts.ElementAt(i);
-                    var textItem = (TextPart)item;
-                    //textItem.Text = Encoding.UTF8.GetString(CryptoDES.DecryptUsingDes(Convert.FromBase64String(textItem.Text), "One" + i));
-                }
-            }
-
-            return mes;
+            return folder.GetMessage(new UniqueId(id));
         }
 
         public MimeMessage GetMimeMessage(string path)

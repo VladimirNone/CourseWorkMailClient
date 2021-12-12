@@ -1,7 +1,11 @@
 ﻿using CourseWorkMailClient.Domain;
+using Lab6;
 using MailKit;
+using MimeKit;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,8 +16,15 @@ namespace CourseWorkMailClient.Infrastructure
 {
     public static class GetDataService
     {
-        public static FrameworkElement mainPage { get; set; }
-        public static FrameworkElement navigatorControl { get; set; }
+        public static Dictionary<string, string> MailServers { get; set; } = new Dictionary<string, string>()
+        {
+            { "yandex.ru", "yandex.ru" },
+            { "gmail.com", "gmail.com" },
+            
+        };
+
+        public static string PathToJsonFile { get => "users.json"; }
+        public static Dictionary<string, string> UserDb { get; set; }
 
         public static CustomNotifyCollectionCollection<Letter> Letters { get; set; } = new CustomNotifyCollectionCollection<Letter>();
 
@@ -54,6 +65,14 @@ namespace CourseWorkMailClient.Infrastructure
             };
         }
 
+        public static void AddRowToUserDbFile(string key, string value)
+        {
+            UserDb.Add(key, value);
+            var data = JsonConvert.SerializeObject(UserDb, Formatting.Indented);
+            using var writer = File.CreateText(PathToJsonFile);
+            writer.Write(data);
+        }
+
         public static void OpenFolder(Folder folder)
         {
             if(folder.Source != null)
@@ -62,11 +81,21 @@ namespace CourseWorkMailClient.Infrastructure
             }
             else
             {
-                folder.CountOfMessage = HandlerService.repo.GetCountOfMessages(folder.Id);
-                var uids = HandlerService.repo.GetUniqueIds(folder);
+                folder.CountOfMessage = HandlerService.Repository.GetCountOfMessages(folder.Id);
+                var uids = HandlerService.Repository.GetUniqueIds(folder);
                 uniqueIdsLastFolder = uids.Select(h => new UniqueId((uint)h)).ToList();
                 Pagination.MaxCountOfPage = (int)folder.CountOfMessage / Pagination.ItemsOnPage + ((int)folder.CountOfMessage % Pagination.ItemsOnPage == 0 ? 0 : 1);
             }
+        }
+
+        public static List<string> GetMovableFolders()
+        {
+            var unMovableFolders = new List<string>() { "" };
+            var folderNames = Folders.Select(h => h.Title).ToList();
+
+            folderNames.RemoveAll(h => unMovableFolders.Contains(h));
+
+            return folderNames;
         }
 
         public static List<Folder> GetFolders()
@@ -74,16 +103,16 @@ namespace CourseWorkMailClient.Infrastructure
             var folders = new List<Folder>();
             if (HandlerService.KitImapHandler == null || !HandlerService.KitImapHandler.IsConnected)
             {
-                folders = HandlerService.repo.GetFolders(ActualMailServer);
+                folders = HandlerService.Repository.GetFolders(ActualMailServer);
             }
             else
             {
                 folders = HandlerService.KitImapHandler.GetServerFolders();
 
-                HandlerService.repo.SelectAndAddNewFolders(folders, ActualMailServer);
-                HandlerService.repo.SaveChanged();
+                HandlerService.Repository.SelectAndAddNewFolders(folders, ActualMailServer);
+                HandlerService.Repository.SaveChanged();
 
-                var dbFolders = HandlerService.repo.GetFolders(ActualMailServer);
+                var dbFolders = HandlerService.Repository.GetFolders(ActualMailServer);
 
                 foreach (var item in dbFolders)
                 {
@@ -104,14 +133,14 @@ namespace CourseWorkMailClient.Infrastructure
         /// <returns></returns>
         public static Letter GetMessage(Letter Message, Folder folder)
         {
-            var mesFromDb = HandlerService.repo.GetMessage(Message.UniqueId, lightVersion: false);
+            var mesFromDb = HandlerService.Repository.GetMessage(Message.UniqueId, lightVersion: false);
 
             //в теории никогда не будет использоваться
             if(mesFromDb == null)
             {
                 mesFromDb = HandlerService.KitImapHandler.GetFullMessage(Message, folder);
-                HandlerService.repo.AddMessage(mesFromDb);
-                HandlerService.repo.SaveChanged();
+                HandlerService.Repository.AddMessage(mesFromDb);
+                HandlerService.Repository.SaveChanged();
             }
 
             if (mesFromDb.PathToFullMessageFile != null)
@@ -121,7 +150,30 @@ namespace CourseWorkMailClient.Infrastructure
             else
             {
                 mesFromDb = HandlerService.KitImapHandler.GetFullMessage(mesFromDb, folder);
-                HandlerService.repo.SaveChanged();
+                HandlerService.Repository.SaveChanged();
+            }
+
+            //Расшифровка
+            if(mesFromDb.MD5RsaKeyId != null && mesFromDb.DESRsaKeyId != null)
+            {
+                for (int i = 0; i < mesFromDb.Source.BodyParts.Count(); i++)
+                {
+                    var item = mesFromDb.Source.BodyParts.ElementAt(i);
+                    var textItem = (TextPart)item;
+
+                    var des = new CryptoDES();
+                    des.CreateNewRsaKey();
+                    des.SetRsaKey(mesFromDb.DESRsaKey.PrivateKey);
+
+                    textItem.Text = Encoding.UTF8.GetString(des.DecryptUsingDes(Convert.FromBase64String(textItem.Text)));
+
+                    var md5 = new CryptoMD5();
+                    md5.CreateNewRsaKey();
+                    md5.SetRsaKey(mesFromDb.MD5RsaKey.PublicKey);
+
+                    var valid = md5.CheckHash(Convert.FromBase64String(textItem.ContentMd5), Encoding.UTF8.GetBytes(textItem.Text));
+
+                }
             }
 
             return mesFromDb;
@@ -132,13 +184,12 @@ namespace CourseWorkMailClient.Infrastructure
             List<Letter> messages = null;
             if (folder.Source == null)
             {
-                messages = HandlerService.repo.GetMessages(folder.Id, uniqueIdsCurrentPage.Select(h => (int)h.Id).ToList());
+                messages = HandlerService.Repository.GetMessages(folder.Id, uniqueIdsCurrentPage.Select(h => (int)h.Id).ToList());
             }
             else
             {
                 messages = HandlerService.KitImapHandler.GetMessages(folder);
-                messages = HandlerService.repo.SelectAndAddNewLetters(messages, folder);
-                HandlerService.repo.SaveChanged();
+                messages = HandlerService.Repository.SelectAndAddNewLetters(messages, folder);
             }
 
             return messages;

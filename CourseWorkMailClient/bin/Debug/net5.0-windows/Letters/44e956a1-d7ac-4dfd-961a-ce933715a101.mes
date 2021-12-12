@@ -1,0 +1,70 @@
+Delivered-To: coursework41@gmail.com
+Received: by 2002:ab3:6614:0:0:0:0:0 with SMTP id t20csp7604573lte;
+        Mon, 22 Nov 2021 09:43:59 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxHZ42gBE4J+x7/S7r9za2xzCbZGb3nL34FkqV8b8ERTXpHvVoY5teCpx44YqcXc6IcQ8mQ
+X-Received: by 2002:a05:6512:12c8:: with SMTP id p8mr59924434lfg.69.1637603039224;
+        Mon, 22 Nov 2021 09:43:59 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1637603039; cv=none;
+        d=google.com; s=arc-20160816;
+        b=mAVz+PQsiQUbNzDI8AFuebWGRxl2TPhuipInsqv3hYXpJWjmGpdg18GZ2aTzKKM9uz
+         5pp9M7Fh1gIP3k8befFe2mIvLx+JxuVK9B1KPBXvvy1KIDQcU18EM5DokX3OcW3REMyP
+         966wq1Y/KLdEDifx/8EWgvuEFXp/sW9K9n97OZaO5hCL/TOcG6be/IWPpEJSPiV1bmTR
+         IyOY5RAaJIS24gNu+FHhAMKPLaaYuJWcFgNxbTRfH65xQs4V5UGuvU6M3M+AbQ4le9EZ
+         PpZcOJK2HyXf8XvjIpiWkCUT9o5ITQYcm+ptKHjP2VOqfDWosQ/cWmYZgL4d1THtvbU3
+         ZM3Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=content-transfer-encoding:message-id:date:mime-version:subject:to
+         :envelope-from:from:dkim-signature;
+        bh=RWbTm0QtFVJf7n/Sq/HAAVDK46IW3QuHy9y7j7pg12Q=;
+        b=D6oHdP6R0jQuRl8MxOS8X/jmqWH0Lgzf5DR0X9vMGRSykFOb+/RHJal8ayXU7xNOlL
+         Ng7LVoNCyW6RcF23qpt82FmoRpYUOzMQeTA71/dK0kSgY/xc/4FaWcHCkWgBnB2q6npv
+         K3jpqV9/d9mT8b8976INNlEjbAIxCoRrikq+VRg41XSOqpgh2qTHvTLi9akTwZQ5eSoQ
+         gerEdtpxCxTZpzgdzmlT2D6FfcOs/NAWVWDLxUTur59Q/BJmKSilgYi/TqdJ6252Wowr
+         rv7S9Y9Qg1rzIN1VS3u5hrzmyXghQ/xJyZv3oukEhJUKpgJn88gXg/1RAzupnA+Gm/Me
+         sczg==
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@yandex.ru header.s=mail header.b=wz1GIoJJ;
+       spf=pass (google.com: domain of jiltsov01@yandex.ru designates 77.88.28.100 as permitted sender) smtp.mailfrom=jiltsov01@yandex.ru;
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=yandex.ru
+Return-Path: <jiltsov01@yandex.ru>
+Received: from forward100p.mail.yandex.net (forward100p.mail.yandex.net. [77.88.28.100])
+        by mx.google.com with ESMTPS id f13si27338781ljj.503.2021.11.22.09.43.59
+        for <coursework41@gmail.com>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 22 Nov 2021 09:43:59 -0800 (PST)
+Received-SPF: pass (google.com: domain of jiltsov01@yandex.ru designates 77.88.28.100 as permitted sender) client-ip=77.88.28.100;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@yandex.ru header.s=mail header.b=wz1GIoJJ;
+       spf=pass (google.com: domain of jiltsov01@yandex.ru designates 77.88.28.100 as permitted sender) smtp.mailfrom=jiltsov01@yandex.ru;
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=yandex.ru
+Received: from forward102q.mail.yandex.net (forward102q.mail.yandex.net [IPv6:2a02:6b8:c0e:1ba:0:640:516:4e7d])
+	by forward100p.mail.yandex.net (Yandex) with ESMTP id F32874F07E41
+	for <coursework41@gmail.com>; Mon, 22 Nov 2021 20:43:58 +0300 (MSK)
+Received: from vla1-68d3ce55e22b.qloud-c.yandex.net (vla1-68d3ce55e22b.qloud-c.yandex.net [IPv6:2a02:6b8:c0d:3385:0:640:68d3:ce55])
+	by forward102q.mail.yandex.net (Yandex) with ESMTP id EE2E8BF00002
+	for <coursework41@gmail.com>; Mon, 22 Nov 2021 20:43:58 +0300 (MSK)
+Received: from 2a02:6b8:c15:350f:0:640:6a53:26ae (2a02:6b8:c15:350f:0:640:6a53:26ae [2a02:6b8:c15:350f:0:640:6a53:26ae])
+	by vla1-68d3ce55e22b.qloud-c.yandex.net (mxback/Yandex) with HTTP id whlMur0Cma61-hwCqLUHG;
+	Mon, 22 Nov 2021 20:43:58 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1637603038;
+	bh=RWbTm0QtFVJf7n/Sq/HAAVDK46IW3QuHy9y7j7pg12Q=;
+	h=Message-Id:Date:Subject:To:From;
+	b=wz1GIoJJn6zYoSCnSKshvKnhpFqtjVhAFBjGfBUT3AUVrSi46aynzY9kxyc4Z8M1f
+	 jlCsXi+kJdLxw+omk+ZtSUe1WS//hPZdwkXpDqNo5riRuEdx0s10WBivEVOsBKGM9n
+	 xma4+pqsZ1pGKXvF1mM0BXLEfjGJR4QEFLa+2fMo=
+Authentication-Results: vla1-68d3ce55e22b.qloud-c.yandex.net; dkim=pass header.i=@yandex.ru
+Received: by vla3-6a5326aeb4ee.qloud-c.yandex.net with HTTP;
+	Mon, 22 Nov 2021 20:43:58 +0300
+From: =?utf-8?B?0JLQu9Cw0LTQuNC80LjRgCDQltC40LvRjNGG0L7Qsg==?= <jiltsov01@yandex.ru>
+Envelope-From: jiltsov01@yandex.ru
+To: "coursework41@gmail.com" <coursework41@gmail.com>
+Subject: =?utf-8?B?0YLQsNC60LDRjyDQstC+0YIg0YLQtdC80LA=?=
+MIME-Version: 1.0
+X-Mailer: Yamail [ http://yandex.ru ] 5.0
+Date: Mon, 22 Nov 2021 19:43:58 +0200
+Message-Id: <1870341637602994@mail.yandex.ru>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/html; charset=utf-8
+
+<div>напишу что-нибудь.</div><div>&lt;b&gt; asdf&lt;b&gt;</div><div><strong>gjlkапвап</strong></div>

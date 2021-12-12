@@ -1,0 +1,83 @@
+Delivered-To: coursework41@gmail.com
+Received: by 2002:a4f:710:0:0:0:0:0 with SMTP id 16csp4587483ivh;
+        Sun, 12 Dec 2021 11:35:15 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwmiGdAknRZYZXSM+VPM4wlP24L0fHjKF8cl34u60RwPWr6tJfUV5CnS7Vh5suYXc35+/Av
+X-Received: by 2002:a2e:bf12:: with SMTP id c18mr26268905ljr.462.1639337715523;
+        Sun, 12 Dec 2021 11:35:15 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1639337715; cv=none;
+        d=google.com; s=arc-20160816;
+        b=Y0iKqGbERswHg7/V6ZVs5IzDEeMDS/bDQs9UpKo7TFpFxuiNj41V1Pq/GPoPhf0Dlq
+         9Uh4Mgu20o+b+YzA5TavP7NM+4sG5uOVwNXJLOdpaWBDDjgD7nbZvAx8Qn61SnOOT/xu
+         Q7OGPKazWHxGdA3NWzfruQ50wFWQqwieZ+OG5/SGPIdbVtLTVPVgCNrgnS+hAlwUxOKR
+         x80MEwFSL3R1sZSizx0hnLnFuEQRbkc8N/6LedEZxmo2I/dPbPeLZz2H5ULp5sp+o2eM
+         5Ly4Tb+ld01EjVpQbSXlp8MgfGN6FH91/Z3l/QeFWlT8wHgktgbuFmBsKb4J0j70Gvr2
+         s+cQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=mime-version:summary:encrypted:to:message-id:subject:date:from
+         :dkim-signature;
+        bh=qt74KJTHZMFx89MbujN9BVbTaM6ztfEBEj/YSiv2IXo=;
+        b=YyUKhaskqnH7yhYDvPUTg5dNq2F5KqVKyrV/na2YeUd08MGAAxeGvBRqZhryz2YMLn
+         Z60HGrrgVIhpeSRNxE0u0a+yfsyC4Nsr7ZcOFlmAJTrFnfaxH4ElPHnit3Gq6DldqAua
+         TIFxU+GICDKymcN12r/ToAZuBAgi42a0H2JH0aGvJyEkjlIR3UQZUZoUn95S87OP5cAf
+         Oj8yZJWr8SGiV65uc8UlxQWoJ4AL2eVUQMH/hYOrGIeHYyFH8mBQFZTkFffqmUuilJGQ
+         8DtLXh+vUqlHlRKTMXu9IlBSxK6CL3ureR8UKvEAsxEIfCiqXgOIJPhF+gzMBvro7Jwz
+         Oovw==
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@yandex.ru header.s=mail header.b=rd2RwJ64;
+       spf=pass (google.com: domain of korolevi4k@yandex.ru designates 2a02:6b8:0:1472:2741:0:8b7:102 as permitted sender) smtp.mailfrom=korolevi4k@yandex.ru;
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=yandex.ru
+Return-Path: <korolevi4k@yandex.ru>
+Received: from forward102p.mail.yandex.net (forward102p.mail.yandex.net. [2a02:6b8:0:1472:2741:0:8b7:102])
+        by mx.google.com with ESMTPS id v22si17217465ljh.146.2021.12.12.11.35.14
+        for <CourseWork41@gmail.com>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 12 Dec 2021 11:35:15 -0800 (PST)
+Received-SPF: pass (google.com: domain of korolevi4k@yandex.ru designates 2a02:6b8:0:1472:2741:0:8b7:102 as permitted sender) client-ip=2a02:6b8:0:1472:2741:0:8b7:102;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@yandex.ru header.s=mail header.b=rd2RwJ64;
+       spf=pass (google.com: domain of korolevi4k@yandex.ru designates 2a02:6b8:0:1472:2741:0:8b7:102 as permitted sender) smtp.mailfrom=korolevi4k@yandex.ru;
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=yandex.ru
+Received: from forward100q.mail.yandex.net (forward100q.mail.yandex.net [IPv6:2a02:6b8:c0e:4b:0:640:4012:bb97])
+	by forward102p.mail.yandex.net (Yandex) with ESMTP id 92929393CDAD
+	for <CourseWork41@gmail.com>; Sun, 12 Dec 2021 22:35:14 +0300 (MSK)
+Received: from vla5-2be56c22b014.qloud-c.yandex.net (vla5-2be56c22b014.qloud-c.yandex.net [IPv6:2a02:6b8:c18:3511:0:640:2be5:6c22])
+	by forward100q.mail.yandex.net (Yandex) with ESMTP id 8E1726F40007
+	for <CourseWork41@gmail.com>; Sun, 12 Dec 2021 22:35:14 +0300 (MSK)
+Received: from vla3-23c3b031fed5.qloud-c.yandex.net (vla3-23c3b031fed5.qloud-c.yandex.net [2a02:6b8:c15:2582:0:640:23c3:b031])
+	by vla5-2be56c22b014.qloud-c.yandex.net (mxback/Yandex) with ESMTP id P0Lg7DeVKt-ZEfaBm22;
+	Sun, 12 Dec 2021 22:35:14 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1639337714;
+	bh=qt74KJTHZMFx89MbujN9BVbTaM6ztfEBEj/YSiv2IXo=;
+	h=To:Subject:Date:From:Message-Id;
+	b=rd2RwJ64+Btgr54z2O0eBZRhbJ3n8JSnbQvv6JNMD4RlsSwooLIABLnTREjxLf6wY
+	 j1lKmOnwwa91cm3BZbuIND6hbzcldknFwMo67AfdvrjYpRazXMqsv+zk+hssRYCl3A
+	 rA4N4HeuXXyKjdDHSai67N1ZLnsobqr/eVEDvNo0=
+Authentication-Results: vla5-2be56c22b014.qloud-c.yandex.net; dkim=pass header.i=@yandex.ru
+Received: by vla3-23c3b031fed5.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id pLJlrV91Ft-ZEQ8KpKG;
+	Sun, 12 Dec 2021 22:35:14 +0300
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(Client certificate not present)
+X-Yandex-Fwd: 2
+From: "korolevi4k@yandex.ru" <korolevi4k@yandex.ru>
+Date: Sun, 12 Dec 2021 22:35:13 +0300
+Subject: 1
+Message-Id: <ZK3FV5ABJFU4.9Y97QQ7XUEO62@DESKTOP-GVAK6ER>
+To: "CourseWork41@gmail.com" <CourseWork41@gmail.com>
+Encrypted: =?utf-8?q?=3CRSAKeyValue=3E=3CModulus=3EuJDl2NfOKn2z6voXPwFs9mcRFh8FLMEkgNfMBoA?=
+ =?utf-8?q?AXZmz5U6KNBh5fFe+n6=2Fm3e8zscXw8YTfJt2KdC5q3jHsy1OCzz0qUBWoTNli?=
+ =?utf-8?q?I2StVwrfRebaenGB7l96LF3tgnwFIS=2FPLnethIdKGNuJ0AyyDTR2EMK7kaXNc?=
+ =?utf-8?q?uSliIlt4i7S5iihtkn6q+CCKVjGs9wz=2F6Rp=2FrXH2UY91EEL4eg1peRVId2Rxh?=
+ =?utf-8?q?OpLmJv5y0suNF29Dl6=2FXgxjidRLRWZ6UVWYXVbUG3rD50HLUtb=2FPY9XkH71nA?=
+ =?utf-8?q?8GBMJrnd5NqjD81l+tJSsYtV6Y4HXXnXYRMCRIV7hsBaxh+0Z9LV2srgi1Q=3D=3D?=
+ =?utf-8?q?=3C=2FModulus=3E=3CExponent=3EAQAB=3C=2FExponent=3E=3C=2FRSAKeyValue=3E?=
+Summary: =?utf-8?q?=3CRSAKeyValue=3E=3CModulus=3EuJDl2NfOKn2z6voXPwFs9mcRFh8FLMEkgNfMBoA?=
+ =?utf-8?q?AXZmz5U6KNBh5fFe+n6=2Fm3e8zscXw8YTfJt2KdC5q3jHsy1OCzz0qUBWoTNli?=
+ =?utf-8?q?I2StVwrfRebaenGB7l96LF3tgnwFIS=2FPLnethIdKGNuJ0AyyDTR2EMK7kaXNc?=
+ =?utf-8?q?uSliIlt4i7S5iihtkn6q+CCKVjGs9wz=2F6Rp=2FrXH2UY91EEL4eg1peRVId2Rxh?=
+ =?utf-8?q?OpLmJv5y0suNF29Dl6=2FXgxjidRLRWZ6UVWYXVbUG3rD50HLUtb=2FPY9XkH71nA?=
+ =?utf-8?q?8GBMJrnd5NqjD81l+tJSsYtV6Y4HXXnXYRMCRIV7hsBaxh+0Z9LV2srgi1Q=3D=3D?=
+ =?utf-8?q?=3C=2FModulus=3E=3CExponent=3EAQAB=3C=2FExponent=3E=3C=2FRSAKeyValue=3E?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+
+<!DOCTYPE html ><html><meta http-equiv='Content-Type' content='text/html;charset=UTF-8'><head></head><body> <p><div style="color: #000000;font-size: 14;font-weight: Normal;font-style: Normal;">123</div></p> </body></html>

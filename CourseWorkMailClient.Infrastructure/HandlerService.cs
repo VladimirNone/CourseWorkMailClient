@@ -19,7 +19,7 @@ namespace CourseWorkMailClient.Infrastructure
     {
         public static IMapper mapper { get; set; }
 
-        public static Repository repo { get; set; }
+        public static DbRepository Repository { get; set; }
         public static KitImapHandler KitImapHandler { get; set; }
         public static KitSmtpHandler KitSmtpHandler { get; set; }
 
@@ -49,8 +49,8 @@ namespace CourseWorkMailClient.Infrastructure
                     .ForMember(dest => dest.Subject, act => act.MapFrom(src => src.Subject))
                     .ForMember(dest => dest.From, act => act.MapFrom(src => string.Join(", ", src.From.Mailboxes.Select(h => string.IsNullOrEmpty(h.Name) ? h.Address : h.Name))))
                     .ForMember(dest => dest.To, act => act.MapFrom(src => string.Join(", ", src.To.Mailboxes.Select(h => string.IsNullOrEmpty(h.Name) ? h.Address : h.Name))))
-                    .ForMember(dest => dest.Senders, act => act.MapFrom(src => src.From.Select(h => mapper.Map<Interlocutor>(h)).ToList()))
-                    .ForMember(dest => dest.Receivers, act => act.MapFrom(src => src.To.Select(h => mapper.Map<Interlocutor>(h)).ToList()))
+                    .ForMember(dest => dest.Senders, act => act.MapFrom(src => src.From.Select(h => Repository.GetOrCreateInterlocutor(((MailboxAddress)h).Address)).ToList()))
+                    .ForMember(dest => dest.Receivers, act => act.MapFrom(src => src.To.Select(h => Repository.GetOrCreateInterlocutor(((MailboxAddress)h).Address)).ToList()))
                     .ForMember(dest => dest.Content, act => act.MapFrom(src => src.HtmlBody ?? src.TextBody))
                     .ForMember(dest => dest.LocalMessage, act => act.MapFrom(src => src.Headers.Contains(HeaderId.Summary)))
                     .ForMember(dest => dest.Attachments, act => act.MapFrom(src => src.Attachments.Select(h => mapper.Map<Attachment>(h)).ToList()))
@@ -65,10 +65,9 @@ namespace CourseWorkMailClient.Infrastructure
             });
 
             mapper = new Mapper(config);
-            repo = new Repository();
         }
 
-        public static void Auth(User user)
+        public static void Auth(string login)
         {
             //vladimir56545@gmail.com
             //RDk-YDZ-NJb-ucF
@@ -79,26 +78,47 @@ namespace CourseWorkMailClient.Infrastructure
             //korolevi4k@yandex.ru
             //XcB-b53-irU-AxV
 
-            KitImapHandler = new KitImapHandler(user.Login, user.Password);
-            KitSmtpHandler = new KitSmtpHandler(user.Login, user.Password);
+            //thirdmailforcoursework@yahoo.com
+            //vZF-Tkw-r5y-G5p
+
+            Repository = new DbRepository(GetDataService.UserDb[login]);
+
+            var user = Repository.GetUser(login);
 
             GetDataService.ActualMailServer = user.MailServer;
+
+            KitImapHandler = new KitImapHandler(user.Login, user.Password);
+            KitSmtpHandler = new KitSmtpHandler(user.Login, user.Password);
         }
 
         public static void Auth(string login, string password)
         {
-            var user = repo.GetUser(login);
+            //если вход успешен, то создаем
+            KitImapHandler = new KitImapHandler(login, password);
+            KitSmtpHandler = new KitSmtpHandler(login, password);
+
+            var connectionStringTemplete = "Server=localhost;Database={0};Trusted_Connection=True;";
+            var connectionString = string.Format(connectionStringTemplete, login);
+
+            if (GetDataService.UserDb.Keys.Contains(login))
+            {
+                Auth(login);
+                return;
+            }
+
+            GetDataService.AddRowToUserDbFile(login, connectionString);
+
+            Repository = new DbRepository(connectionString);
+
+            var user = Repository.GetUser(login);
 
             if (user == null)
             {
                 user = new User() { Login = login, Password = password };
 
-                repo.AddUser(user, login[(login.IndexOf('@') + 1)..]);
-                repo.SaveChanged();
+                Repository.AddUser(user, login[(login.IndexOf('@') + 1)..]);
+                Repository.SaveChanged();
             }
-
-            KitImapHandler = new KitImapHandler(user.Login, user.Password);
-            KitSmtpHandler = new KitSmtpHandler(user.Login, user.Password);
 
             GetDataService.ActualMailServer = user.MailServer;
         }
@@ -107,6 +127,7 @@ namespace CourseWorkMailClient.Infrastructure
         {
             KitImapHandler.Logout();
             KitSmtpHandler.Logout();
+            Repository.Dispose();
         }
     }
 }

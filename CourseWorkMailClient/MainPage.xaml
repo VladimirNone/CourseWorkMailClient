@@ -27,6 +27,7 @@
         <ListBox Margin="215,47,10,49" x:Name="lbMesList" ContextMenuOpening="ContextMenu_ContextMenuOpening">
             <ListBox.ContextMenu>
                 <ContextMenu>
+
                     <MenuItem x:Name="miMoveToOtherFolder" Header="Переместить" Click="miMoveToOtherFolder_Click"></MenuItem>
                     <MenuItem x:Name="miDelete" Header="Удалить" Click="miDelete_Click"></MenuItem>
                 </ContextMenu>
@@ -54,16 +55,20 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <pagination:Pagination Margin="318,608,655,10"/>
+        <pagination:Pagination Margin="329,608,644,10"/>
         <Button
                 Margin="1052,608,10,10" 
                 Content="Написать"
                 x:Name="bWriteMes"
                 Click="bWriteMes_Click"/>
         <Button
-            Margin="795,608,267,10" 
+            Margin="909,608,153,10" 
             Content="Обновить"
             x:Name="bUpdateMesList"
             Click="bbUpdateMesList_Click"/>
+        <Button 
+            Margin="774,10,153,608"
+            Content="Сохранить сообщения со страницы"
+            Click="bSaveLettersFromPage_Click"/>
     </Grid>
 </Page>

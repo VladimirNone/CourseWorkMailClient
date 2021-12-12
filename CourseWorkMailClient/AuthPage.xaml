@@ -39,11 +39,6 @@
 
             <TextBlock Grid.Row="5" VerticalAlignment="Bottom">Или используйте авторизированного пользователя</TextBlock>
             <ComboBox x:Name="cbUsers" SelectionChanged="cbUsers_Selected" Grid.Row="6">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Path=Login}"/>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
             </ComboBox>
 
             <WrapPanel Grid.Row="7" HorizontalAlignment="Right" Margin="0,15,0,0">
