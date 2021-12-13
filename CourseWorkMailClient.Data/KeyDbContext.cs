@@ -15,6 +15,7 @@ namespace CourseWorkMailClient.Data
         public DbSet<MailServer> MailServers { get; set; }
         public DbSet<Attachment> Attachments { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<FolderType> FolderTypes { get; set; }
 
         public KeyDbContext(DbContextOptions<KeyDbContext> options)
             : base(options)

@@ -90,13 +90,6 @@ namespace CourseWorkMailClient.Infrastructure
 
                         textItem.Text = Convert.ToBase64String(des.EncryptUsingDes(textInBytes));
                         textItem.ContentMd5 = Convert.ToBase64String(md5.GetHash(textInBytes));
-/*
-                        var check = md5.CheckHash(Convert.FromBase64String(textItem.ContentMd5), textInBytes);
-
-                        var md3Check = new CryptoMD5();
-                        md3Check.CreateNewRsaKey();
-                        md3Check.SetRsaKey(sender.LastMD5RsaKey.PublicKey);
-                        var checkHash = md3Check.CheckHash(Convert.FromBase64String(textItem.ContentMd5), textInBytes);*/
                     }
                 }
 
@@ -115,7 +108,7 @@ namespace CourseWorkMailClient.Infrastructure
             HandlerService.Repository.AddMessage(messageToSend);
             HandlerService.Repository.SaveChanged();
 
-            await client.SendAsync(message);
+            var answer = await client.SendAsync(message);
         }
 
         public void Logout()

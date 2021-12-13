@@ -52,7 +52,7 @@ namespace CourseWorkMailClient.Infrastructure
                     .ForMember(dest => dest.Senders, act => act.MapFrom(src => src.From.Select(h => Repository.GetOrCreateInterlocutor(((MailboxAddress)h).Address)).ToList()))
                     .ForMember(dest => dest.Receivers, act => act.MapFrom(src => src.To.Select(h => Repository.GetOrCreateInterlocutor(((MailboxAddress)h).Address)).ToList()))
                     .ForMember(dest => dest.Content, act => act.MapFrom(src => src.HtmlBody ?? src.TextBody))
-                    .ForMember(dest => dest.LocalMessage, act => act.MapFrom(src => src.Headers.Contains(HeaderId.Summary)))
+                    //.ForMember(dest => dest.LocalMessage, act => act.MapFrom(src => src.Headers.Contains(HeaderId.Summary)))
                     .ForMember(dest => dest.Attachments, act => act.MapFrom(src => src.Attachments.Select(h => mapper.Map<Attachment>(h)).ToList()))
                     .ForMember(dest => dest.Source, act => act.MapFrom(src => src))
                     .ForMember(dest => dest.Date, act => act.MapFrom(src => src.Date.DateTime));

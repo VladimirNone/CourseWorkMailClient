@@ -121,7 +121,7 @@ namespace CourseWorkMailClient.Infrastructure
 
                 folders = dbFolders;
             }
-
+            
             return folders;
         }
 
@@ -134,7 +134,7 @@ namespace CourseWorkMailClient.Infrastructure
         public static Letter GetMessage(Letter Message, Folder folder)
         {
             var mesFromDb = HandlerService.Repository.GetMessage(Message.UniqueId, lightVersion: false);
-
+            
             //в теории никогда не будет использоваться
             if(mesFromDb == null)
             {
@@ -175,6 +175,8 @@ namespace CourseWorkMailClient.Infrastructure
 
                 }
             }
+
+            HandlerService.mapper.Map(mesFromDb.Source, mesFromDb);
 
             return mesFromDb;
         }

@@ -17,6 +17,12 @@ namespace CourseWorkMailClient.Domain
         public int? LastDESRsaKeyId { get; set; }
         public DESRsaKey LastDESRsaKey { get; set; }
 
+        public int? UserLastMD5RsaKeyId { get; set; }
+        public MD5RsaKey UserLastMD5RsaKey { get; set; }
+
+        public int? UserLastDESRsaKeyId { get; set; }
+        public DESRsaKey UserLastDESRsaKey { get; set; }
+
         public List<Letter> SendedLetters { get; set; }
         public List<Letter> ReceivedLetters { get; set; }
     }

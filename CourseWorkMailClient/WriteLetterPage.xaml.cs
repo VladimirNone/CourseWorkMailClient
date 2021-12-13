@@ -65,7 +65,7 @@ namespace CourseWorkMailClient
             curMessage.Receivers = tbReceivers.Text.Split(',').Select(h => HandlerService.Repository.GetOrCreateInterlocutor(h.Trim())).ToList();
             curMessage.Content = PrepareData.ContentToHTML(rtbContent.Document.Blocks.Where(h => h is Paragraph).Select(h => HandlerService.mapper.Map<LightParagraph>(h)));
             curMessage.Attachments = new List<Attachment>();
-            curMessage.Folder = HandlerService.Repository.GetFolder(GetDataService.ActualMailServer, "Отправленные");//Sent Отправленные
+            curMessage.Folder = HandlerService.Repository.GetFolder(GetDataService.ActualMailServer, "Sent");//Sent Отправленные
 
             foreach (var item in lbAttachments.Items)
             {
