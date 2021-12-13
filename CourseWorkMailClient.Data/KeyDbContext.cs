@@ -23,6 +23,11 @@ namespace CourseWorkMailClient.Data
             Database.EnsureCreated();
         }
 
+/*        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer(@"Server=localhost;Database=KeysContainer;Trusted_Connection=True;");
+        }*/
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Letter>()

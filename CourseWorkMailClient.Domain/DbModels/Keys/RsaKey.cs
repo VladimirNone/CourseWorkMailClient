@@ -12,7 +12,5 @@ namespace CourseWorkMailClient.Domain.Keys
         public string PublicKey { get; set; }
         public string PrivateKey { get; set; }
         public DateTime DeathTime { get; set; }
-
-        public List<Interlocutor> Interlocutors { get; set; }
     }
 }
