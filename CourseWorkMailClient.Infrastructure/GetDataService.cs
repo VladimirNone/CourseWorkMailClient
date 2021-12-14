@@ -84,7 +84,7 @@ namespace CourseWorkMailClient.Infrastructure
                 var uids = HandlerService.Repository.GetUniqueIds(folder);
                 var uniqueIdsLastFolderFromDb = uids.Select(h => new UniqueId((uint)h)).Reverse().ToList();
                 var removedUids = uniqueIdsLastFolderFromDb.Except(uniqueIdsLastFolder).Select(h=>(int)h.Id).ToList();
-                HandlerService.Repository.RemoveMessages(removedUids);
+                HandlerService.Repository.RemoveMessages(removedUids, folder);
                 HandlerService.Repository.SaveChanged();
             }
             else
@@ -115,7 +115,7 @@ namespace CourseWorkMailClient.Infrastructure
             }
             else
             {
-                folders = HandlerService.KitImapHandler.GetServerFolders();
+               folders = HandlerService.KitImapHandler.GetServerFolders();
 
                 HandlerService.Repository.SelectAndAddNewFolders(folders, ActualMailServer);
                 HandlerService.Repository.SaveChanged();
@@ -124,7 +124,7 @@ namespace CourseWorkMailClient.Infrastructure
 
                 foreach (var item in dbFolders)
                 {
-                    item.Source = folders.First(h => h.Title == item.Title).Source;
+                    item.Source = folders.FirstOrDefault(h => h.Title == item.Title)?.Source;
                 }
 
                 folders = dbFolders;
@@ -143,7 +143,7 @@ namespace CourseWorkMailClient.Infrastructure
         {
             var mesFromDb = HandlerService.Repository.GetMessage(Message.UniqueId, folder, lightVersion: false);
 
-            //в теории никогда не будет использоваться
+            //в теории никогда не будет использоваться, но используется((
             if (mesFromDb == null)
             {
                 mesFromDb = HandlerService.KitImapHandler.GetFullMessage(Message, folder);
@@ -180,7 +180,10 @@ namespace CourseWorkMailClient.Infrastructure
                     md5.SetRsaKey(mesFromDb.MD5RsaKey.PublicKey);
 
                     var valid = md5.CheckHash(Convert.FromBase64String(textItem.ContentMd5), Encoding.UTF8.GetBytes(textItem.Text));
-
+                    if (!valid)
+                    {
+                        _ = 5;
+                    }
                 }
             }
 

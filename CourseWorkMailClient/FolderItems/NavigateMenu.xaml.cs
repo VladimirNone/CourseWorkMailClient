@@ -31,6 +31,15 @@ namespace CourseWorkMailClient.FolderItems
             GetDataService.Folders = new CustomNotifyCollectionCollection<Folder>(GetDataService.GetFolders());
 
             lbNavMenu.ItemsSource = GetDataService.Folders;
+
+            if (GetDataService.ActualFolder == null)
+            {
+                var folder = HandlerService.Repository.GetFolder(GetDataService.ActualMailServer, HandlerService.Repository.GetFolderTypeId("Входящие"));
+
+                GetDataService.OpenFolder(folder);
+
+                GetDataService.ActualFolder = folder;
+            }
         }
 
         public void OpenFolder(object sender, RoutedEventArgs e)

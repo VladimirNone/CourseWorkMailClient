@@ -13,9 +13,19 @@ namespace CourseWorkMailClient.Infrastructure
 {
     public static class PrepareData
     {
+        private static Dictionary<string, string> TranslateFolders = new Dictionary<string, string>()
+        {
+            {"INBOX", "Входящие" },
+            {"Drafts", "Черновики" },
+            {"Spam", "Спам" },
+            {"template", "Шаблоны" },
+            {"Sent", "Отправленные" },
+            {"Trash", "Корзина" },
+        };
+
         public static string GetParsedFolderName(string folderName)
         {
-            return folderName == "INBOX" ? "Входящие" : folderName;
+            return TranslateFolders.ContainsKey(folderName) ? TranslateFolders[folderName] : folderName;
         }
 
         public static int? GetFolderTypeId(FolderAttributes attributes)

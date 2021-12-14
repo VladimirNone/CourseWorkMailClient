@@ -74,10 +74,12 @@ namespace CourseWorkMailClient.Infrastructure
             message.WriteTo(fileMesPath);
             messageToSend.PathToFullMessageFile = fileMesPath;
 
+
+
             HandlerService.Repository.AddMessage(messageToSend);
             HandlerService.Repository.SaveChanged();
 
-               
+
             await client.SendAsync(message);
         }
 

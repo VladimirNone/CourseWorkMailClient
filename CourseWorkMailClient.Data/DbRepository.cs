@@ -56,9 +56,9 @@ namespace CourseWorkMailClient.Data
             db.Users.Add(user);
         }
 
-        public void RemoveMessages(List<int> uids)
+        public void RemoveMessages(List<int> uids, Folder folder)
         {
-            db.Letters.RemoveRange(db.Letters.Where(h => uids.Contains(h.UniqueId)));
+            db.Letters.RemoveRange(db.Letters.Where(h => uids.Contains(h.UniqueId) && h.FolderId == folder.Id));
         }
 
         public void SelectAndAddNewFolders(List<Folder> folderFromServer, MailServer mailServer)

@@ -74,5 +74,17 @@
             Margin="774,10,153,608"
             Content="Сохранить сообщения со страницы"
             Click="bSaveLettersFromPage_Click"/>
+        <Button 
+            x:Name="bDeleteAll"
+            Margin="215,10,847,608"
+            Content="Удалить все"
+            Click="bDeleteAll_Click"
+            Visibility="Hidden"/>
+        <Button 
+            x:Name="bDelete"
+            Margin="358,10,704,608"
+            Content="Удалить"
+            Click="bDelete_Click"
+            Visibility="Hidden"/>
     </Grid>
 </Page>

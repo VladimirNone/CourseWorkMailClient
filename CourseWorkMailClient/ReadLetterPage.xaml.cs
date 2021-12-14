@@ -45,7 +45,8 @@ namespace CourseWorkMailClient
             //Костыль. Необходимо определить кодировку.
             var content = @"<!DOCTYPE html ><html><meta http-equiv='Content-Type' content='text/html;charset=UTF-8'><head></head><body>" + Message.Content + "</body></html>";
 
-            tbReceivers.Text = string.Join(", ", Message.To);
+            tbReceivers.Text = Message.To;
+            tbSenders.Text = Message.From;
             tbSubject.Text = Message.Subject;
             tbDate.Text += Message.Date;
 

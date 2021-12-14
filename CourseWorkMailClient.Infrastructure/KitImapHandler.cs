@@ -94,9 +94,19 @@ namespace CourseWorkMailClient.Infrastructure
         {
             var folders = client.GetFolders(client.PersonalNamespaces[0]).ToList();
 
-            var gmailFolder = folders.FirstOrDefault(h => h.Name == "[Gmail]");
-            if (gmailFolder != null)
-                folders.Remove(gmailFolder);
+            if (GetDataService.ActualMailServer.ServerName == GetDataService.MailServers["gmail.com"])
+            {
+                var gmailFolder = folders.FirstOrDefault(h => h.Name == "[Gmail]");
+                if (gmailFolder != null)
+                    folders.Remove(gmailFolder);
+            }
+            else if (GetDataService.ActualMailServer.ServerName == GetDataService.MailServers["yandex.ru"])
+            {
+                var yandexFolder = folders.FirstOrDefault(h => h.Name == "Outbox");
+                if (yandexFolder != null)
+                    folders.Remove(yandexFolder);
+            }
+
 
             var customFolders = new List<Folder>(folders.Select(h => GetCustedFolder(h)));
             
@@ -110,7 +120,13 @@ namespace CourseWorkMailClient.Infrastructure
 
         public void MoveMessage(int uid, IMailFolder oldMessageFolder, IMailFolder newMessageFolder)
         {
-            oldMessageFolder.MoveTo(uid, newMessageFolder);
+            oldMessageFolder.MoveTo(new UniqueId((uint)uid), newMessageFolder);
+        }
+
+        public void DeleteMessages(List<int> uids, IMailFolder folder)
+        {
+            folder.AddFlags(uids, MessageFlags.Deleted, false);
+            folder.Expunge();
         }
 
         public void MessageWasSeen(int uid, Folder folder)
