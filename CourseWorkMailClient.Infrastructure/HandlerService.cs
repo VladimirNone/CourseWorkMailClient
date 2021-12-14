@@ -42,8 +42,9 @@ namespace CourseWorkMailClient.Infrastructure
 
                 ctg.CreateMap<MailFolder, Folder>()
                     .ForMember(dest => dest.Source, act => act.MapFrom(src => src))
+                    .ForMember(dest => dest.FolderTypeId, act => act.MapFrom(src => PrepareData.GetFolderTypeId(src.Attributes)))
                     .ForMember(dest => dest.MailServerId, act => act.MapFrom(src => GetDataService.ActualMailServer.Id))
-                    .ForMember(dest => dest.Title, act => act.MapFrom(src => PrepareData.GetParsedName(src.Name)));
+                    .ForMember(dest => dest.Title, act => act.MapFrom(src => PrepareData.GetParsedFolderName(src.Name)));
 
                 ctg.CreateMap<MimeMessage, Letter>()
                     .ForMember(dest => dest.Subject, act => act.MapFrom(src => src.Subject))
@@ -52,7 +53,6 @@ namespace CourseWorkMailClient.Infrastructure
                     .ForMember(dest => dest.Senders, act => act.MapFrom(src => src.From.Select(h => Repository.GetOrCreateInterlocutor(((MailboxAddress)h).Address)).ToList()))
                     .ForMember(dest => dest.Receivers, act => act.MapFrom(src => src.To.Select(h => Repository.GetOrCreateInterlocutor(((MailboxAddress)h).Address)).ToList()))
                     .ForMember(dest => dest.Content, act => act.MapFrom(src => src.HtmlBody ?? src.TextBody))
-                    //.ForMember(dest => dest.LocalMessage, act => act.MapFrom(src => src.Headers.Contains(HeaderId.Summary)))
                     .ForMember(dest => dest.Attachments, act => act.MapFrom(src => src.Attachments.Select(h => mapper.Map<Attachment>(h)).ToList()))
                     .ForMember(dest => dest.Source, act => act.MapFrom(src => src))
                     .ForMember(dest => dest.Date, act => act.MapFrom(src => src.Date.DateTime));
@@ -83,12 +83,12 @@ namespace CourseWorkMailClient.Infrastructure
 
             Repository = new DbRepository(GetDataService.UserDb[login]);
 
-            var user = Repository.GetUser(login);
+            GetDataService.ActualUser = Repository.GetUser(login);
 
-            GetDataService.ActualMailServer = user.MailServer;
+            GetDataService.ActualMailServer = GetDataService.ActualUser.MailServer;
 
-            KitImapHandler = new KitImapHandler(user.Login, user.Password);
-            KitSmtpHandler = new KitSmtpHandler(user.Login, user.Password);
+            KitImapHandler = new KitImapHandler(GetDataService.ActualUser.Login, GetDataService.ActualUser.Password);
+            KitSmtpHandler = new KitSmtpHandler(GetDataService.ActualUser.Login, GetDataService.ActualUser.Password);
         }
 
         public static void Auth(string login, string password)
@@ -110,23 +110,25 @@ namespace CourseWorkMailClient.Infrastructure
 
             Repository = new DbRepository(connectionString);
 
-            var user = Repository.GetUser(login);
+            GetDataService.ActualUser = Repository.GetUser(login);
 
-            if (user == null)
+            if (GetDataService.ActualUser == null)
             {
-                user = new User() { Login = login, Password = password };
+                GetDataService.ActualUser = new User() { Login = login, Password = password };
 
-                Repository.AddUser(user, login[(login.IndexOf('@') + 1)..]);
+                Repository.AddUser(GetDataService.ActualUser, login[(login.IndexOf('@') + 1)..]);
                 Repository.SaveChanged();
             }
 
-            GetDataService.ActualMailServer = user.MailServer;
+            GetDataService.ActualMailServer = GetDataService.ActualUser.MailServer;
         }
 
         public static void UnAuth()
         {
-            KitImapHandler.Logout();
-            KitSmtpHandler.Logout();
+            if (KitImapHandler != null)
+                KitImapHandler.Logout();
+            if(KitSmtpHandler != null)
+                KitSmtpHandler.Logout();
             Repository.Dispose();
         }
     }

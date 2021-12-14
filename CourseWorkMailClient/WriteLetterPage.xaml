@@ -47,5 +47,6 @@
         <cc:ColorForeground x:Name="colorOfForegroundText" VerticalAlignment="Top" Margin="366,81,769,0" Height="25"></cc:ColorForeground>
         <cc:ColorBackground x:Name="colorOfBackgroundText" VerticalAlignment="Top" Margin="436,81,699,0" Height="25"></cc:ColorBackground>
         <TextBox x:Name="tbSize" Margin="506,81,629,544" Height="25" Text="14" TextAlignment="Right" VerticalContentAlignment="Center" Padding="0,0,3,0" LostFocus="tbSize_LostFocus"/>
+        <Button Margin="1052,534,10,84" Content="В черновики" Click="bToDrafts_Click"/>
     </Grid>
 </Page>

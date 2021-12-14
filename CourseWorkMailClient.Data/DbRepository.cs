@@ -30,7 +30,7 @@ namespace CourseWorkMailClient.Data
             var interlocators = db.Interlocutors.AsQueryable();
             if (includeKeys)
             {
-                interlocators = interlocators.Include(h => h.LastDESRsaKey).Include(h => h.LastMD5RsaKey);
+                interlocators = interlocators.Include(h => h.LastDESRsaKey).Include(h => h.LastMD5RsaKey).Include(h => h.UserLastDESRsaKey).Include(h => h.UserLastMD5RsaKey);
             }
             return interlocators.FirstOrDefault(h => h.Email.ToLower() == email.ToLower());
         }
@@ -56,9 +56,9 @@ namespace CourseWorkMailClient.Data
             db.Users.Add(user);
         }
 
-        public void RemoveMessage(int letterId)
+        public void RemoveMessages(List<int> uids)
         {
-            db.Letters.Remove(db.Letters.Find(letterId));
+            db.Letters.RemoveRange(db.Letters.Where(h => uids.Contains(h.UniqueId)));
         }
 
         public void SelectAndAddNewFolders(List<Folder> folderFromServer, MailServer mailServer)
@@ -81,6 +81,13 @@ namespace CourseWorkMailClient.Data
 
             var lettersInDb = lettersFromServer.Where(h => lettFromDbUids.Contains(h.UniqueId)).ToList();
             var lettNotInDb = lettersFromServer.Where(h => !lettFromDbUids.Contains(h.UniqueId)).ToList();
+
+            for (int i = 0; i < lettersInDb.Count; i++)
+            {
+                var mes = GetMessage(lettersInDb[i].UniqueId, folder);
+                mes.MD5RsaKey = lettersInDb[i].MD5RsaKey;
+                mes.DESRsaKey = lettersInDb[i].DESRsaKey;
+            }
 
             foreach (var item in lettersFromServer)
             {
@@ -115,9 +122,20 @@ namespace CourseWorkMailClient.Data
             return db.Folders.FirstOrDefault(h => h.MailServerId == mailServer.Id && h.Title == folderName);
         }
 
+        public Folder GetFolder(MailServer mailServer, int folderTypeId)
+        {
+            return db.Folders.FirstOrDefault(h => h.MailServerId == mailServer.Id && h.FolderTypeId == folderTypeId);
+        }
+
         public List<Folder> GetFolders(MailServer mailServer)
         {
             return db.Folders.Where(h => h.MailServerId == mailServer.Id).ToList();
+        }
+
+        public int GetFolderTypeId(string folderName)
+        {
+            var folder = db.FolderTypes.FirstOrDefault(h => h.TypeName == folderName);
+            return folder == null ? -1 : folder.Id;
         }
 
         public User GetUser(string login)
@@ -125,7 +143,7 @@ namespace CourseWorkMailClient.Data
             return db.Users.Include(h=>h.MailServer).FirstOrDefault(h => h.Login == login);
         }
 
-        public Letter GetMessage(int uniqueId, bool lightVersion = true)
+        public Letter GetMessage(int uniqueId, Folder folder, bool lightVersion = true)
         {
             var query = db.Letters.AsQueryable();
 
@@ -134,7 +152,7 @@ namespace CourseWorkMailClient.Data
                 query = query.Include(h => h.MD5RsaKey).Include(h => h.DESRsaKey).Include(h => h.Senders).Include(h => h.Receivers).Include(h => h.Attachments);
             }
 
-            return query.FirstOrDefault(h => h.UniqueId == uniqueId);
+            return query.FirstOrDefault(h => h.UniqueId == uniqueId && h.FolderId == folder.Id);
         }
 
         public List<Letter> GetMessages(int folderId, List<int> uids)

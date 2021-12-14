@@ -19,53 +19,22 @@ namespace CourseWorkMailClient.Infrastructure
     public class KitSmtpHandler
     {
         private SmtpClient client;
-        private string login;
 
         public KitSmtpHandler(string login, string password)
         {
             client = new SmtpClient();
             client.Connect("smtp." + GetDataService.MailServers.First(h=>login.Contains(h.Key)).Value, 465, SecureSocketOptions.SslOnConnect);
             client.Authenticate(login, password);
-            this.login = login;
         }
 
         public async Task SendMessage(Letter messageToSend)
         {
-            var message = new MimeMessage();
-
-            message.From.Add(new MailboxAddress(login, login));
-
-            messageToSend.Receivers.ForEach(h => message.To.Add(new MailboxAddress(h.Email, h.Email)));
-
-            messageToSend.Senders = new List<Interlocutor>();
-            messageToSend.Senders.Add(HandlerService.Repository.GetOrCreateInterlocutor(login));
-
-            message.Subject = messageToSend.Subject;
-
-            var builder = new BodyBuilder();
-
-            builder.TextBody = messageToSend.Content;
-
-            messageToSend.Attachments?.ForEach(h => builder.Attachments.Add(h.Name));
-
-            message.Body = builder.ToMessageBody();
-
+            var message = PrepareData.PrepareLetterForSent(messageToSend);
 
             var receiver = HandlerService.Repository.GetInterlocutor(messageToSend.Receivers.First().Email, true);
-            var sender = HandlerService.Repository.GetInterlocutor(messageToSend.Senders.First().Email, true);
 
             //Создаем ключи для отправителя и записываем их, если ключи отсутствуют
-            if (sender.LastDESRsaKeyId == null || sender.LastMD5RsaKeyId == null)
-            {
-                var md5Sender = new CryptoMD5();
-                var desSender = new CryptoDES();
-
-                md5Sender.CreateNewRsaKey();
-                desSender.CreateNewRsaKey();
-
-                sender.LastMD5RsaKey = md5Sender.GetRsaKey();
-                sender.LastDESRsaKey = desSender.GetRsaKey();
-            }
+            PrepareData.CreateUsersKeys(receiver);
 
             if (receiver.LastDESRsaKeyId != null && receiver.LastMD5RsaKeyId != null && messageToSend.Receivers.Count == 1)
             {
@@ -76,7 +45,7 @@ namespace CourseWorkMailClient.Infrastructure
                 des.CreateNewRsaKey();
 
                 //Ключ для создания подписи отправителя
-                md5.SetRsaKey(sender.LastMD5RsaKey.PrivateKey);
+                md5.SetRsaKey(receiver.UserLastMD5RsaKey.PrivateKey);
                 //Ключ для шифрования получателя
                 des.SetRsaKey(receiver.LastDESRsaKey.PublicKey);
 
@@ -93,12 +62,12 @@ namespace CourseWorkMailClient.Infrastructure
                     }
                 }
 
-                messageToSend.MD5RsaKey = sender.LastMD5RsaKey;
+                messageToSend.MD5RsaKey = receiver.UserLastMD5RsaKey;
                 messageToSend.DESRsaKey = receiver.LastDESRsaKey;
             }
 
-            message.Headers.Add(HeaderId.Encrypted, sender.LastDESRsaKey.PublicKey);
-            message.Headers.Add(HeaderId.Summary, sender.LastMD5RsaKey.PublicKey);
+            message.Headers.Add(HeaderId.Encrypted, receiver.UserLastDESRsaKey.PublicKey);
+            message.Headers.Add(HeaderId.Summary, receiver.UserLastMD5RsaKey.PublicKey);
 
             var fileMesPath = Path.Combine("Letters", Guid.NewGuid().ToString() + ".mes");
 
@@ -108,7 +77,8 @@ namespace CourseWorkMailClient.Infrastructure
             HandlerService.Repository.AddMessage(messageToSend);
             HandlerService.Repository.SaveChanged();
 
-            var answer = await client.SendAsync(message);
+               
+            await client.SendAsync(message);
         }
 
         public void Logout()

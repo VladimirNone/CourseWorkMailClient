@@ -48,10 +48,11 @@ namespace CourseWorkMailClient.Infrastructure
         {
             if (folder.Source != null)
             {
-                folder.Source.Open(FolderAccess.ReadWrite);
+                if(!folder.Source.IsOpen)
+                    folder.Source.Open(FolderAccess.ReadWrite);
                 folder.CountOfMessage = folder.Source.Count;
 
-                GetDataService.uniqueIdsLastFolder = folder.Source.Search(SearchQuery.All).ToList();
+                GetDataService.uniqueIdsLastFolder = folder.Source.Search(SearchQuery.All).Reverse().ToList();
                 GetDataService.Pagination.MaxCountOfPage = (int)folder.CountOfMessage / GetDataService.Pagination.ItemsOnPage + ((int)folder.CountOfMessage % GetDataService.Pagination.ItemsOnPage == 0 ? 0 : 1);
             }
         }
@@ -98,14 +99,26 @@ namespace CourseWorkMailClient.Infrastructure
                 folders.Remove(gmailFolder);
 
             var customFolders = new List<Folder>(folders.Select(h => GetCustedFolder(h)));
-
+            
             return customFolders;
         }
 
-        public void MoveMessage(MimeMessage message, IMailFolder newMessageFolder)
+        public void AppendMessage(MimeMessage message, IMailFolder newMessageFolder)
         {
             newMessageFolder.Append(message);
-            //newMessageFolder.MoveTo()
+        }
+
+        public void MoveMessage(int uid, IMailFolder oldMessageFolder, IMailFolder newMessageFolder)
+        {
+            oldMessageFolder.MoveTo(uid, newMessageFolder);
+        }
+
+        public void MessageWasSeen(int uid, Folder folder)
+        {
+            if (folder.Source != null)
+            {
+                folder.Source.AddFlags(new UniqueId((uint)uid), MessageFlags.Seen, false);
+            }
         }
 
         /// <summary>
@@ -131,7 +144,7 @@ namespace CourseWorkMailClient.Infrastructure
 
         public List<Letter> GetMessages(Folder folder)
         {
-            var messages = folder.Source.Fetch(GetDataService.uniqueIdsCurrentPage, MessageSummaryItems.Headers);
+            var messages = folder.Source.Fetch(GetDataService.uniqueIdsCurrentPage, MessageSummaryItems.Headers | MessageSummaryItems.Flags);
 
             var letters = new List<Letter>();
 
@@ -139,6 +152,8 @@ namespace CourseWorkMailClient.Infrastructure
             {
                 var message = HandlerService.mapper.Map<MimeMessage, Letter>(new MimeMessage(item.Headers));
                 message.UniqueId = (int)item.UniqueId.Id;
+                if (item.Flags.HasValue)
+                    message.Seen = item.Flags.Value.HasFlag(MessageFlags.Seen);
 
                 message = PrepareData.ExtractKeysFromServerMes(message);
 

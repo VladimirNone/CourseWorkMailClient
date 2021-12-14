@@ -43,6 +43,12 @@ namespace CourseWorkMailClient.Data
             modelBuilder.Entity<MailServer>().HasData(
                 new MailServer { Id = 1, ServerName = "gmail.com" },
                 new MailServer { Id = 2, ServerName = "yandex.ru" });
+
+            modelBuilder.Entity<FolderType>().HasData(
+                new FolderType { Id = 1, TypeName = "Входящие" },
+                new FolderType { Id = 2, TypeName = "Отправленные" },
+                new FolderType { Id = 3, TypeName = "Корзина" },
+                new FolderType { Id = 4, TypeName = "Черновики" });
         }
     }
 }

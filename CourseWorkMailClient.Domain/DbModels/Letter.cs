@@ -2,16 +2,30 @@
 using MimeKit;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.CompilerServices;
 
 namespace CourseWorkMailClient.Domain
 {
-    public class Letter : Entity
+    public class Letter : Entity, INotifyPropertyChanged
     {
         public int UniqueId { get; set; }
         public DateTime Date { get; set; }
         public string Subject { get; set; }
-        public bool Seen { get; set; }
+        [NotMapped]
+        private bool seen;
+        public bool Seen
+        {
+            get => seen;
+            set
+            {
+                seen = value;
+                OnPropertyChanged();
+            }
+        }
+
+
         [NotMapped]
         public string Content { get; set; }
 
@@ -35,5 +49,13 @@ namespace CourseWorkMailClient.Domain
 
         public int FolderId { get; set; }
         public Folder Folder { get; set; }
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName] string prop = "")
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(prop));
+        }
     }
 }

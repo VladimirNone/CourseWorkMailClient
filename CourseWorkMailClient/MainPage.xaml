@@ -27,7 +27,6 @@
         <ListBox Margin="215,47,10,49" x:Name="lbMesList" ContextMenuOpening="ContextMenu_ContextMenuOpening">
             <ListBox.ContextMenu>
                 <ContextMenu>
-
                     <MenuItem x:Name="miMoveToOtherFolder" Header="Переместить" Click="miMoveToOtherFolder_Click"></MenuItem>
                     <MenuItem x:Name="miDelete" Header="Удалить" Click="miDelete_Click"></MenuItem>
                 </ContextMenu>
@@ -42,16 +41,21 @@
             </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                        <Grid HorizontalAlignment="Stretch">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="{Binding Path=From}" Margin="5"/>
-                            <TextBlock Text="{Binding Path=Subject}" Margin="5" Grid.Column="1"/>
-                            <TextBlock Text="{Binding Path=Date}" Margin="5" Grid.Column="2" HorizontalAlignment="Right" />
-                        </Grid>
+                    <Grid x:Name="MessageItem" HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding Path=From}" Margin="5"/>
+                        <TextBlock Text="{Binding Path=Subject}" Margin="5" Grid.Column="1"/>
+                        <TextBlock Text="{Binding Path=Date}" Margin="5" Grid.Column="2" HorizontalAlignment="Right" />
+                    </Grid>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding Seen}" Value="false">
+                            <Setter TargetName="MessageItem" Property="Grid.Background" Value="Red"/>
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

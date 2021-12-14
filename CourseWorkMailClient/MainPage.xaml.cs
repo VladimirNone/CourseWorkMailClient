@@ -39,7 +39,9 @@ namespace CourseWorkMailClient
         
         private void bbUpdateMesList_Click(object sender, RoutedEventArgs e)
         {
+            GetDataService.OpenFolder(GetDataService.ActualFolder);
 
+            GetDataService.ActualFolder = GetDataService.ActualFolder;
         }
 
         private void bWriteMes_Click(object sender, RoutedEventArgs e)

@@ -27,7 +27,6 @@ namespace CourseWorkMailClient
     public partial class WriteLetterPage : Page
     {
         private Page prevPage;
-        private Letter curMessage { get; set; } = new Letter();
         private Action ChangeCaretPosition;
 
         public WriteLetterPage(Page previousPage)
@@ -50,8 +49,19 @@ namespace CourseWorkMailClient
             {
                 FormatText(TextElement.ForegroundProperty, newColor, new Run() { Foreground = newColor }, false, true);
             };
+        }
+        
+        private void bToDrafts_Click(object sender, RoutedEventArgs e)
+        {
+            var curMessage = GetLetterFromPage();
 
-            
+            var folderDrafts = HandlerService.Repository.GetFolder(GetDataService.ActualMailServer, HandlerService.Repository.GetFolderTypeId("Черновики"));
+
+            var message = PrepareData.PrepareLetterForSent(curMessage);
+
+            HandlerService.KitImapHandler.AppendMessage(message, folderDrafts.Source);
+
+            NavigationService.Navigate(prevPage);
         }
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
@@ -61,16 +71,7 @@ namespace CourseWorkMailClient
 
         private async void ButtonSend_Click(object sender, RoutedEventArgs e)
         {
-            curMessage.Subject = tbSubject.Text;
-            curMessage.Receivers = tbReceivers.Text.Split(',').Select(h => HandlerService.Repository.GetOrCreateInterlocutor(h.Trim())).ToList();
-            curMessage.Content = PrepareData.ContentToHTML(rtbContent.Document.Blocks.Where(h => h is Paragraph).Select(h => HandlerService.mapper.Map<LightParagraph>(h)));
-            curMessage.Attachments = new List<Attachment>();
-            curMessage.Folder = HandlerService.Repository.GetFolder(GetDataService.ActualMailServer, "Sent");//Sent Отправленные
-
-            foreach (var item in lbAttachments.Items)
-            {
-                curMessage.Attachments.Add(new Attachment() { Name = (string)((ListBoxItem)item).Content } );
-            }
+            var curMessage = GetLetterFromPage();
 
             await HandlerService.KitSmtpHandler.SendMessage(curMessage);
 
@@ -121,6 +122,24 @@ namespace CourseWorkMailClient
             }
         }
 
+
+        private Letter GetLetterFromPage()
+        {
+            var curMessage = new Letter();
+
+            curMessage.Subject = tbSubject.Text;
+            curMessage.Receivers = tbReceivers.Text.Split(',').Select(h => HandlerService.Repository.GetOrCreateInterlocutor(h.Trim())).ToList();
+            curMessage.Content = PrepareData.ContentToHTML(rtbContent.Document.Blocks.Where(h => h is Paragraph).Select(h => HandlerService.mapper.Map<LightParagraph>(h)));
+            curMessage.Attachments = new List<Attachment>();
+            curMessage.Folder = HandlerService.Repository.GetFolder(GetDataService.ActualMailServer, HandlerService.Repository.GetFolderTypeId("Отправленные"));
+
+            foreach (var item in lbAttachments.Items)
+            {
+                curMessage.Attachments.Add(new Attachment() { Name = (string)((ListBoxItem)item).Content });
+            }
+
+            return curMessage;
+        }
 
         private void FormatText(DependencyProperty property, object value, Run newRun, bool isBColor = false, bool isFColor = false, bool isButton = false)
         {

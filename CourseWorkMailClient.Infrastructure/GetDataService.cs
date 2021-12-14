@@ -49,6 +49,7 @@ namespace CourseWorkMailClient.Infrastructure
         public static Action ChangeActualFolder;
 
         public static MailServer ActualMailServer { get; set; }
+        public static User ActualUser { get; set; }
 
         public static PaginationService Pagination { get; set; } = new PaginationService();
 
@@ -78,12 +79,19 @@ namespace CourseWorkMailClient.Infrastructure
             if(folder.Source != null)
             {
                 HandlerService.KitImapHandler.OpenFolder(folder);
+
+                //удаляем письма, к-е были удалены или перемещены из этой папки
+                var uids = HandlerService.Repository.GetUniqueIds(folder);
+                var uniqueIdsLastFolderFromDb = uids.Select(h => new UniqueId((uint)h)).Reverse().ToList();
+                var removedUids = uniqueIdsLastFolderFromDb.Except(uniqueIdsLastFolder).Select(h=>(int)h.Id).ToList();
+                HandlerService.Repository.RemoveMessages(removedUids);
+                HandlerService.Repository.SaveChanged();
             }
             else
             {
                 folder.CountOfMessage = HandlerService.Repository.GetCountOfMessages(folder.Id);
                 var uids = HandlerService.Repository.GetUniqueIds(folder);
-                uniqueIdsLastFolder = uids.Select(h => new UniqueId((uint)h)).ToList();
+                uniqueIdsLastFolder = uids.Select(h => new UniqueId((uint)h)).Reverse().ToList();
                 Pagination.MaxCountOfPage = (int)folder.CountOfMessage / Pagination.ItemsOnPage + ((int)folder.CountOfMessage % Pagination.ItemsOnPage == 0 ? 0 : 1);
             }
         }
@@ -133,10 +141,10 @@ namespace CourseWorkMailClient.Infrastructure
         /// <returns></returns>
         public static Letter GetMessage(Letter Message, Folder folder)
         {
-            var mesFromDb = HandlerService.Repository.GetMessage(Message.UniqueId, lightVersion: false);
-            
+            var mesFromDb = HandlerService.Repository.GetMessage(Message.UniqueId, folder, lightVersion: false);
+
             //в теории никогда не будет использоваться
-            if(mesFromDb == null)
+            if (mesFromDb == null)
             {
                 mesFromDb = HandlerService.KitImapHandler.GetFullMessage(Message, folder);
                 HandlerService.Repository.AddMessage(mesFromDb);
@@ -178,6 +186,12 @@ namespace CourseWorkMailClient.Infrastructure
 
             HandlerService.mapper.Map(mesFromDb.Source, mesFromDb);
 
+            //Отмечаем, что письмо было прочитано
+            HandlerService.KitImapHandler.MessageWasSeen(Message.UniqueId, folder);
+            Message.Seen = true;
+            HandlerService.Repository.SaveChanged();
+            
+
             return mesFromDb;
         }
 
@@ -194,7 +208,7 @@ namespace CourseWorkMailClient.Infrastructure
                 messages = HandlerService.Repository.SelectAndAddNewLetters(messages, folder);
             }
 
-            return messages;
+            return messages.OrderByDescending(h=>h.UniqueId).ToList();
         }
     }
 }
