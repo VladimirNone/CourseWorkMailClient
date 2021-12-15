@@ -12,6 +12,7 @@ namespace CourseWorkMailClient.Domain
     {
         public int UniqueId { get; set; }
         public DateTime Date { get; set; }
+        public string DateString { get => Date.ToString(); }
         public string Subject { get; set; }
         [NotMapped]
         private bool seen;

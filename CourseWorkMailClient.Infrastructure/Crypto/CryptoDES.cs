@@ -56,9 +56,9 @@ namespace Lab6
             RsaService.FromXmlString(key);
         }
 
-        public byte[] EncryptUsingDes(byte[] encryptedData)
+        public byte[] EncryptUsingDes(byte[] content)
         {
-            using MemoryStream memoryStream = new(encryptedData);
+            using var fileStream = new MemoryStream(content);
 
             using DES des = DES.Create();
 
@@ -70,7 +70,7 @@ namespace Lab6
             var encryptedSymKey = EncryptUsingRsa(des.Key);
             var encryptedSymKeyLength = BitConverter.GetBytes(encryptedSymKey.Length);
 
-            using CryptoStream cryptoStream = new(memoryStream, des.CreateEncryptor(), CryptoStreamMode.Read);
+            using CryptoStream cryptoStream = new(fileStream, des.CreateEncryptor(), CryptoStreamMode.Read);
             using var memoryStream2 = new MemoryStream();
             cryptoStream.CopyTo(memoryStream2);
 

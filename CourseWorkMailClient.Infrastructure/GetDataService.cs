@@ -2,6 +2,7 @@
 using Lab6;
 using MailKit;
 using MimeKit;
+using MimeKit.IO;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace CourseWorkMailClient.Infrastructure
         {
             { "yandex.ru", "yandex.ru" },
             { "gmail.com", "gmail.com" },
-            
+            { "mail.ru", "mail.ru" },
         };
 
         public static string PathToJsonFile { get => "users.json"; }
@@ -167,22 +168,55 @@ namespace CourseWorkMailClient.Infrastructure
                 for (int i = 0; i < mesFromDb.Source.BodyParts.Count(); i++)
                 {
                     var item = mesFromDb.Source.BodyParts.ElementAt(i);
-                    var textItem = (TextPart)item;
-
-                    var des = new CryptoDES();
-                    des.CreateNewRsaKey();
-                    des.SetRsaKey(mesFromDb.DESRsaKey.PrivateKey);
-
-                    textItem.Text = Encoding.UTF8.GetString(des.DecryptUsingDes(Convert.FromBase64String(textItem.Text)));
-
-                    var md5 = new CryptoMD5();
-                    md5.CreateNewRsaKey();
-                    md5.SetRsaKey(mesFromDb.MD5RsaKey.PublicKey);
-
-                    var valid = md5.CheckHash(Convert.FromBase64String(textItem.ContentMd5), Encoding.UTF8.GetBytes(textItem.Text));
-                    if (!valid)
+                    if (item is TextPart)
                     {
-                        _ = 5;
+                        var textItem = (TextPart)item;
+
+                        var des = new CryptoDES();
+                        des.CreateNewRsaKey();
+                        des.SetRsaKey(mesFromDb.DESRsaKey.PrivateKey);
+
+                        textItem.Text = Encoding.UTF8.GetString(des.DecryptUsingDes(Convert.FromBase64String(textItem.Text)));
+
+                        var md5 = new CryptoMD5();
+                        md5.CreateNewRsaKey();
+                        md5.SetRsaKey(mesFromDb.MD5RsaKey.PublicKey);
+
+/*                        var valid = md5.CheckHash(Convert.FromBase64String(textItem.ContentMd5), Encoding.UTF8.GetBytes(textItem.Text));
+                        if (!valid)
+                        {
+                            MessageBox.Show("Проверка подписью прошла неудачно");
+                        }*/
+                    }
+                    else if(item is MimePart)
+                    {
+                        var mimePart = (MimePart)item;
+
+                        var des = new CryptoDES();
+                        des.CreateNewRsaKey();
+                        des.SetRsaKey(mesFromDb.DESRsaKey.PrivateKey);
+
+                        using var ms = new MemoryStream();
+                        mimePart.Content.DecodeTo(ms);
+
+                        var decryptedBytes = des.DecryptUsingDes(ms.ToArray());
+
+                        //using var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
+
+                        var resMS = new MemoryStream(decryptedBytes);
+                        mimePart.Content = new MimeContent(resMS);
+
+                        
+
+                        var md5 = new CryptoMD5();
+                        md5.CreateNewRsaKey();
+                        md5.SetRsaKey(mesFromDb.MD5RsaKey.PublicKey);
+
+/*                        var valid = md5.CheckHash(Convert.FromBase64String(mimePart.ContentMd5), decryptedBytes);
+                        if (!valid)
+                        {
+                            MessageBox.Show("Проверка подписью прошла неудачно");
+                        }*/
                     }
                 }
             }

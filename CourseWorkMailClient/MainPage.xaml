@@ -49,11 +49,11 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="{Binding Path=From}" Margin="5"/>
                         <TextBlock Text="{Binding Path=Subject}" Margin="5" Grid.Column="1"/>
-                        <TextBlock Text="{Binding Path=Date}" Margin="5" Grid.Column="2" HorizontalAlignment="Right" />
+                        <TextBlock Text="{Binding Path=DateString}" Margin="5" Grid.Column="2" HorizontalAlignment="Right" />
                     </Grid>
                     <DataTemplate.Triggers>
                         <DataTrigger Binding="{Binding Seen}" Value="false">
-                            <Setter TargetName="MessageItem" Property="Grid.Background" Value="Red"/>
+                            <Setter TargetName="MessageItem" Property="Grid.Background" Value="AliceBlue"/>
                         </DataTrigger>
                     </DataTemplate.Triggers>
                 </DataTemplate>

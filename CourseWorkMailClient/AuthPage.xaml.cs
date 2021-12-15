@@ -28,7 +28,10 @@ namespace CourseWorkMailClient
         {
             InitializeComponent();
 
-            GetDataService.UserDb = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(GetDataService.PathToJsonFile));
+            if (File.Exists(GetDataService.PathToJsonFile))
+                GetDataService.UserDb = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(GetDataService.PathToJsonFile));
+            else
+                GetDataService.UserDb = new Dictionary<string, string>();
 
             cbUsers.ItemsSource = GetDataService.UserDb.Keys;
         }

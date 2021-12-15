@@ -21,6 +21,10 @@ namespace CourseWorkMailClient.Infrastructure
             {"template", "Шаблоны" },
             {"Sent", "Отправленные" },
             {"Trash", "Корзина" },
+            {"Social", "Социальные сети" },
+            {"Newsletters", "Рассылки" },
+            {"ToMyself", "Самому себе" },
+            {"News", "Новости" },
         };
 
         public static string GetParsedFolderName(string folderName)

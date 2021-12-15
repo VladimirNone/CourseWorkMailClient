@@ -42,13 +42,18 @@ namespace CourseWorkMailClient
 
             Message = GetDataService.GetMessage(messageForRead, GetDataService.ActualFolder);
 
+            if (Message.PathToFullMessageFile == null)
+            {
+                NavigationService.Navigate(previousPage);
+            }
+
             //Костыль. Необходимо определить кодировку.
             var content = @"<!DOCTYPE html ><html><meta http-equiv='Content-Type' content='text/html;charset=UTF-8'><head></head><body>" + Message.Content + "</body></html>";
 
             tbReceivers.Text = Message.To;
             tbSenders.Text = Message.From;
             tbSubject.Text = Message.Subject;
-            tbDate.Text += Message.Date;
+            tbDate.Text += Message.DateString;
 
             wbContent.NavigateToString(content);
 
@@ -62,7 +67,7 @@ namespace CourseWorkMailClient
 
         private void ButtonDownloadAll_Click(object sender, RoutedEventArgs e)
         {
-            HandlerService.KitImapHandler.DownloadAttachments((List<string>)lbAttachments.ItemsSource, "", Message.Source);
+            HandlerService.KitImapHandler.DownloadAttachments((IEnumerable<string>)lbAttachments.ItemsSource, "", Message.Source);
         }
 
         private void ButtonDownloadOne_Click(object sender, RoutedEventArgs e)

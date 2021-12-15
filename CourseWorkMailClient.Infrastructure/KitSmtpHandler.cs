@@ -29,7 +29,21 @@ namespace CourseWorkMailClient.Infrastructure
 
         public async Task SendMessage(Letter messageToSend)
         {
-            var message = PrepareData.PrepareLetterForSent(messageToSend);
+            var message = new MimeMessage();
+
+            var user = GetDataService.ActualUser;
+
+            message.From.Add(new MailboxAddress(user.Login, user.Login));
+
+            messageToSend.Receivers.ForEach(h => message.To.Add(new MailboxAddress(h.Email, h.Email)));
+
+            messageToSend.Senders = new List<Interlocutor>();
+            messageToSend.Senders.Add(HandlerService.Repository.GetOrCreateInterlocutor(user.Login));
+
+            message.Subject = messageToSend.Subject;
+
+            var builder = new BodyBuilder();
+
 
             var receiver = HandlerService.Repository.GetInterlocutor(messageToSend.Receivers.First().Email, true);
 
@@ -49,22 +63,31 @@ namespace CourseWorkMailClient.Infrastructure
                 //Ключ для шифрования получателя
                 des.SetRsaKey(receiver.LastDESRsaKey.PublicKey);
 
-                for (int i = 0; i < message.BodyParts.Count(); i++)
-                {
-                    var item = message.BodyParts.ElementAt(i);
-                    if (item is TextPart)
-                    {
-                        var textItem = (TextPart)item;
-                        var textInBytes = Encoding.UTF8.GetBytes(textItem.Text);
 
-                        textItem.Text = Convert.ToBase64String(des.EncryptUsingDes(textInBytes));
-                        textItem.ContentMd5 = Convert.ToBase64String(md5.GetHash(textInBytes));
-                    }
-                }
+                var textInBytes = Encoding.UTF8.GetBytes(messageToSend.Content);
+
+                builder.HtmlBody = Convert.ToBase64String(des.EncryptUsingDes(textInBytes));
+                //textItem.ContentMd5 = Convert.ToBase64String(md5.GetHash(textInBytes));
+
+                messageToSend.Attachments?.ForEach(h => {
+                    using var memoryStream = new MemoryStream(File.ReadAllBytes(h.Name));
+                    builder.Attachments.Add(h.Name, des.EncryptUsingDes(memoryStream.ToArray()));
+                });
+
 
                 messageToSend.MD5RsaKey = receiver.UserLastMD5RsaKey;
                 messageToSend.DESRsaKey = receiver.LastDESRsaKey;
             }
+            else
+            {
+                builder.HtmlBody = messageToSend.Content;
+
+                messageToSend.Attachments?.ForEach(h => builder.Attachments.Add(h.Name));
+            }
+
+
+
+            message.Body = builder.ToMessageBody();
 
             message.Headers.Add(HeaderId.Encrypted, receiver.UserLastDESRsaKey.PublicKey);
             message.Headers.Add(HeaderId.Summary, receiver.UserLastMD5RsaKey.PublicKey);

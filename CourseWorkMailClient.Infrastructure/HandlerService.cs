@@ -78,8 +78,9 @@ namespace CourseWorkMailClient.Infrastructure
             //korolevi4k@yandex.ru
             //XcB-b53-irU-AxV
 
-            //thirdmailforcoursework@yahoo.com
-            //vZF-Tkw-r5y-G5p
+            //korolevichnak@mail.ru
+            //EEid63hsQjmfUemf8Q0N
+            //qGq-Pj4-L2E-sLy
 
             Repository = new DbRepository(GetDataService.UserDb[login]);
 

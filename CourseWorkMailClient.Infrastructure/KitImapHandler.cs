@@ -203,12 +203,12 @@ namespace CourseWorkMailClient.Infrastructure
             if (item is MimePart)
             {
                 var part = (MimePart)item;
-
+                
                 part.Content.DecodeTo(fileStream);
             }
         }
 
-        public void DownloadAttachments(List<string> names, string path, MimeMessage src)
+        public void DownloadAttachments(IEnumerable<string> names, string path, MimeMessage src)
         {
             foreach (var item in names)
                 DownloadAttachment(item, path, src);
