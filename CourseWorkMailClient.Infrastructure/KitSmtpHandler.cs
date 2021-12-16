@@ -99,10 +99,14 @@ namespace CourseWorkMailClient.Infrastructure
 
             HandlerService.KitImapHandler.AppendMessage(message, GetDataService.Folders.First(h=>h.FolderTypeId == 2).Source);
 
-            HandlerService.Repository.AddMessage(messageToSend);
-            HandlerService.Repository.SaveChanged();
+/*            HandlerService.Repository.AddMessage(messageToSend);
+            HandlerService.Repository.SaveChanged();*/
 
-
+            if (!client.IsConnected)
+            {
+                client.Connect("smtp." + GetDataService.MailServers.First(h => GetDataService.ActualUser.Login.Contains(h.Key)).Value, 465, SecureSocketOptions.SslOnConnect);
+                client.Authenticate(GetDataService.ActualUser.Login, GetDataService.ActualUser.Login);
+            }
             await client.SendAsync(message);
         }
 

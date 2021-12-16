@@ -71,6 +71,7 @@
             x:Name="bUpdateMesList"
             Click="bbUpdateMesList_Click"/>
         <Button 
+            x:Name="bLoadListMes"
             Margin="774,10,153,608"
             Content="Сохранить сообщения со страницы"
             Click="bSaveLettersFromPage_Click"/>

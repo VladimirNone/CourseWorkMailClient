@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Documents;
 
 namespace CourseWorkMailClient.Infrastructure
@@ -87,25 +88,38 @@ namespace CourseWorkMailClient.Infrastructure
             GetDataService.ActualUser = Repository.GetUser(login);
 
             GetDataService.ActualMailServer = GetDataService.ActualUser.MailServer;
-
-            KitImapHandler = new KitImapHandler(GetDataService.ActualUser.Login, GetDataService.ActualUser.Password);
-            KitSmtpHandler = new KitSmtpHandler(GetDataService.ActualUser.Login, GetDataService.ActualUser.Password);
+            try
+            {
+                KitImapHandler = new KitImapHandler(GetDataService.ActualUser.Login, GetDataService.ActualUser.Password);
+                KitSmtpHandler = new KitSmtpHandler(GetDataService.ActualUser.Login, GetDataService.ActualUser.Password);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Интернет соединение отсутствует. Будет использован офлайн режим.");
+            }
         }
 
         public static void Auth(string login, string password)
         {
-            //если вход успешен, то создаем
-            KitImapHandler = new KitImapHandler(login, password);
-            KitSmtpHandler = new KitSmtpHandler(login, password);
-
-            var connectionStringTemplete = "Server=localhost;Database={0};Trusted_Connection=True;";
-            var connectionString = string.Format(connectionStringTemplete, login);
-
             if (GetDataService.UserDb.Keys.Contains(login))
             {
                 Auth(login);
                 return;
             }
+
+            try
+            {
+                //если вход успешен, то создаем
+                KitImapHandler = new KitImapHandler(login, password);
+                KitSmtpHandler = new KitSmtpHandler(login, password);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Интернет соединение отсутствует. Невозможно авторизировать пользователя.");
+            }
+
+            var connectionStringTemplete = "Server=localhost;Database={0};Trusted_Connection=True;";
+            var connectionString = string.Format(connectionStringTemplete, login);
 
             GetDataService.AddRowToUserDbFile(login, connectionString);
 

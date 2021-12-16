@@ -36,12 +36,19 @@ namespace CourseWorkMailClient
                                 
             lbMesList.ItemsSource = GetDataService.Letters;
 
+            if(HandlerService.KitImapHandler == null)
+            {
+                bUpdateMesList.Visibility = Visibility.Hidden;
+                bWriteMes.Visibility = Visibility.Hidden;
+                bLoadListMes.Visibility = Visibility.Hidden;
+            }
+
             GetDataService.ChangeActualFolder += () => {
 
                 bDelete.Visibility = Visibility.Hidden;
                 bDeleteAll.Visibility = Visibility.Hidden;
 
-                if (GetDataService.ActualFolder.FolderTypeId == HandlerService.Repository.GetFolderTypeId("Корзина"))
+                if (GetDataService.ActualFolder.FolderTypeId == HandlerService.Repository.GetFolderTypeId("Корзина") || HandlerService.KitImapHandler == null)
                 {
                     bDelete.Visibility = Visibility.Visible;
                     bDeleteAll.Visibility = Visibility.Visible;
@@ -51,7 +58,7 @@ namespace CourseWorkMailClient
         
         private void bbUpdateMesList_Click(object sender, RoutedEventArgs e)
         {
-            if(GetDataService.OpenFolder(GetDataService.ActualFolder))
+            GetDataService.OpenFolder(GetDataService.ActualFolder);
 
             GetDataService.ActualFolder = GetDataService.ActualFolder;
         }
@@ -64,6 +71,14 @@ namespace CourseWorkMailClient
         private void bReadMes_Click(object sender, MouseButtonEventArgs e)
         {
             var mes = (Letter)((ListBoxItem)sender).DataContext;
+
+            mes = GetDataService.GetMessage(mes, GetDataService.ActualFolder);
+
+            if (mes.PathToFullMessageFile == null)
+            {
+                MessageBox.Show("Незагруженное сообщение в офлайн режиме читать нельзя");
+                return;
+            }
 
             NavigationService.Navigate(new ReadLetterPage(this, mes));
         }

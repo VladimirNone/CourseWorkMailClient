@@ -36,7 +36,7 @@ namespace CourseWorkMailClient.FolderItems
             {
                 var folder = HandlerService.Repository.GetFolder(GetDataService.ActualMailServer, HandlerService.Repository.GetFolderTypeId("Входящие"));
 
-                if (GetDataService.OpenFolder(folder))
+                GetDataService.OpenFolder(folder);
 
                 GetDataService.ActualFolder = folder;
             }
@@ -46,7 +46,7 @@ namespace CourseWorkMailClient.FolderItems
         {
             var folder = (Folder)((ListBoxItem)sender).DataContext;
 
-            if (GetDataService.OpenFolder(folder))
+            GetDataService.OpenFolder(folder);
 
             GetDataService.ActualFolder = folder;
         }

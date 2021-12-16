@@ -184,7 +184,7 @@ namespace CourseWorkMailClient.Infrastructure
             return folder.GetMessage(new UniqueId(id));
         }
 
-        public MimeMessage GetMimeMessage(string path)
+        public static MimeMessage GetMimeMessage(string path)
         {
             return MimeMessage.Load(File.Open(path, FileMode.Open));
         }

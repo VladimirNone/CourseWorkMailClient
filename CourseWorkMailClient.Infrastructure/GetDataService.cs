@@ -75,13 +75,10 @@ namespace CourseWorkMailClient.Infrastructure
             writer.Write(data);
         }
 
-        public static bool OpenFolder(Folder folder)
+        public static void OpenFolder(Folder folder)
         {
-            if(folder.FolderTypeId == HandlerService.Repository.GetFolderTypeId("Отправленные"))
-            {
-                MessageBox.Show("В данный момент, чтение отправленных не поддерживается");
-                return false;
-            }
+            if (folder == null)
+                return;
 
             if(folder.Source != null)
             {
@@ -102,7 +99,6 @@ namespace CourseWorkMailClient.Infrastructure
                 Pagination.MaxCountOfPage = (int)folder.CountOfMessage / Pagination.ItemsOnPage + ((int)folder.CountOfMessage % Pagination.ItemsOnPage == 0 ? 0 : 1);
             }
 
-            return true;
         }
 
         public static List<string> GetMovableFolders()
@@ -162,9 +158,9 @@ namespace CourseWorkMailClient.Infrastructure
 
             if (mesFromDb.PathToFullMessageFile != null)
             {
-                mesFromDb.Source = HandlerService.KitImapHandler.GetMimeMessage(mesFromDb.PathToFullMessageFile);
+                mesFromDb.Source = KitImapHandler.GetMimeMessage(mesFromDb.PathToFullMessageFile);
             }
-            else
+            else if(HandlerService.KitImapHandler != null)
             {
                 mesFromDb = HandlerService.KitImapHandler.GetFullMessage(mesFromDb, folder);
                 HandlerService.Repository.SaveChanged();
@@ -183,9 +179,14 @@ namespace CourseWorkMailClient.Infrastructure
                         var des = new CryptoDES();
                         des.CreateNewRsaKey();
                         des.SetRsaKey(mesFromDb.DESRsaKey.PrivateKey);
-
-                        textItem.Text = Encoding.UTF8.GetString(des.DecryptUsingDes(Convert.FromBase64String(textItem.Text)));
-
+                        try
+                        {
+                            textItem.Text = Encoding.UTF8.GetString(des.DecryptUsingDes(Convert.FromBase64String(textItem.Text)));
+                        }
+                        catch
+                        {
+                            break;
+                        }
                         var md5 = new CryptoMD5();
                         md5.CreateNewRsaKey();
                         md5.SetRsaKey(mesFromDb.MD5RsaKey.PublicKey);
@@ -229,13 +230,18 @@ namespace CourseWorkMailClient.Infrastructure
                 }
             }
 
-            HandlerService.mapper.Map(mesFromDb.Source, mesFromDb);
+            if (mesFromDb.Source != null)
+            {
+                HandlerService.mapper.Map(mesFromDb.Source, mesFromDb);
+            }
 
             //Отмечаем, что письмо было прочитано
-            HandlerService.KitImapHandler.MessageWasSeen(Message.UniqueId, folder);
-            Message.Seen = true;
-            HandlerService.Repository.SaveChanged();
-            
+            if (HandlerService.KitImapHandler != null)
+            {
+                HandlerService.KitImapHandler.MessageWasSeen(Message.UniqueId, folder);
+                Message.Seen = true;
+                HandlerService.Repository.SaveChanged();
+            }
 
             return mesFromDb;
         }

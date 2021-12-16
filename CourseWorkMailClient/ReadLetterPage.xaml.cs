@@ -40,12 +40,7 @@ namespace CourseWorkMailClient
 
             InitializeComponent();
 
-            Message = GetDataService.GetMessage(messageForRead, GetDataService.ActualFolder);
-
-            if (Message.PathToFullMessageFile == null)
-            {
-                NavigationService.Navigate(previousPage);
-            }
+            Message = messageForRead;
 
             //Костыль. Необходимо определить кодировку.
             var content = @"<!DOCTYPE html ><html><meta http-equiv='Content-Type' content='text/html;charset=UTF-8'><head></head><body>" + Message.Content + "</body></html>";
