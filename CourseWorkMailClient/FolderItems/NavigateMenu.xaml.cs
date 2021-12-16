@@ -32,11 +32,11 @@ namespace CourseWorkMailClient.FolderItems
 
             lbNavMenu.ItemsSource = GetDataService.Folders;
 
-            if (GetDataService.ActualFolder == null)
+            if (GetDataService.ActualFolder == null || GetDataService.Letters == null || GetDataService.Letters.Count() == 0)
             {
                 var folder = HandlerService.Repository.GetFolder(GetDataService.ActualMailServer, HandlerService.Repository.GetFolderTypeId("Входящие"));
 
-                GetDataService.OpenFolder(folder);
+                if (GetDataService.OpenFolder(folder))
 
                 GetDataService.ActualFolder = folder;
             }
@@ -46,7 +46,7 @@ namespace CourseWorkMailClient.FolderItems
         {
             var folder = (Folder)((ListBoxItem)sender).DataContext;
 
-            GetDataService.OpenFolder(folder);
+            if (GetDataService.OpenFolder(folder))
 
             GetDataService.ActualFolder = folder;
         }

@@ -51,7 +51,7 @@ namespace CourseWorkMailClient
         
         private void bbUpdateMesList_Click(object sender, RoutedEventArgs e)
         {
-            GetDataService.OpenFolder(GetDataService.ActualFolder);
+            if(GetDataService.OpenFolder(GetDataService.ActualFolder))
 
             GetDataService.ActualFolder = GetDataService.ActualFolder;
         }

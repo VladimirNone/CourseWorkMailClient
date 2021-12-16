@@ -131,6 +131,8 @@ namespace CourseWorkMailClient.Infrastructure
             if(KitSmtpHandler != null)
                 KitSmtpHandler.Logout();
             Repository.Dispose();
+            if (GetDataService.Letters != null)
+                GetDataService.Letters.Reset(new List<Letter>());
         }
     }
 }

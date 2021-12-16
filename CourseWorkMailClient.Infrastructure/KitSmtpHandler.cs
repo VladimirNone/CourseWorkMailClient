@@ -97,7 +97,7 @@ namespace CourseWorkMailClient.Infrastructure
             message.WriteTo(fileMesPath);
             messageToSend.PathToFullMessageFile = fileMesPath;
 
-
+            HandlerService.KitImapHandler.AppendMessage(message, GetDataService.Folders.First(h=>h.FolderTypeId == 2).Source);
 
             HandlerService.Repository.AddMessage(messageToSend);
             HandlerService.Repository.SaveChanged();

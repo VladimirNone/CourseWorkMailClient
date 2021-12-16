@@ -75,8 +75,14 @@ namespace CourseWorkMailClient.Infrastructure
             writer.Write(data);
         }
 
-        public static void OpenFolder(Folder folder)
+        public static bool OpenFolder(Folder folder)
         {
+            if(folder.FolderTypeId == HandlerService.Repository.GetFolderTypeId("Отправленные"))
+            {
+                MessageBox.Show("В данный момент, чтение отправленных не поддерживается");
+                return false;
+            }
+
             if(folder.Source != null)
             {
                 HandlerService.KitImapHandler.OpenFolder(folder);
@@ -95,6 +101,8 @@ namespace CourseWorkMailClient.Infrastructure
                 uniqueIdsLastFolder = uids.Select(h => new UniqueId((uint)h)).Reverse().ToList();
                 Pagination.MaxCountOfPage = (int)folder.CountOfMessage / Pagination.ItemsOnPage + ((int)folder.CountOfMessage % Pagination.ItemsOnPage == 0 ? 0 : 1);
             }
+
+            return true;
         }
 
         public static List<string> GetMovableFolders()
