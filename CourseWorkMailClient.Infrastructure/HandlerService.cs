@@ -118,7 +118,7 @@ namespace CourseWorkMailClient.Infrastructure
                 MessageBox.Show("Интернет соединение отсутствует. Невозможно авторизировать пользователя.");
             }
 
-            var connectionStringTemplete = "Server=localhost;Database={0};Trusted_Connection=True;";
+            var connectionStringTemplete = "Server=WIN-1HS8HH259UB\\SQLEXPRESS;Database={0};Trusted_Connection=True;";
             var connectionString = string.Format(connectionStringTemplete, login);
 
             GetDataService.AddRowToUserDbFile(login, connectionString);

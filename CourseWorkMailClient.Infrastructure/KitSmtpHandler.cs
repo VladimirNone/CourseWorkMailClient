@@ -71,7 +71,8 @@ namespace CourseWorkMailClient.Infrastructure
 
                 messageToSend.Attachments?.ForEach(h => {
                     using var memoryStream = new MemoryStream(File.ReadAllBytes(h.Name));
-                    builder.Attachments.Add(h.Name, des.EncryptUsingDes(memoryStream.ToArray()));
+                    var contentBytes = memoryStream.ToArray();
+                    builder.Attachments.Add(h.Name, des.EncryptUsingDes(contentBytes).Concat(md5.GetHash(contentBytes)).ToArray());
                 });
 
 

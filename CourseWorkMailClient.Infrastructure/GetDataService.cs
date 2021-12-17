@@ -179,9 +179,14 @@ namespace CourseWorkMailClient.Infrastructure
                         var des = new CryptoDES();
                         des.CreateNewRsaKey();
                         des.SetRsaKey(mesFromDb.DESRsaKey.PrivateKey);
+
+                        var content = Convert.FromBase64String(textItem.Text);
+                        var contentText = content[..^256];
+                        var sign = content[^256..];
+
                         try
                         {
-                            textItem.Text = Encoding.UTF8.GetString(des.DecryptUsingDes(Convert.FromBase64String(textItem.Text)));
+                            textItem.Text = Encoding.UTF8.GetString(des.DecryptUsingDes(contentText));
                         }
                         catch
                         {
@@ -191,15 +196,16 @@ namespace CourseWorkMailClient.Infrastructure
                         md5.CreateNewRsaKey();
                         md5.SetRsaKey(mesFromDb.MD5RsaKey.PublicKey);
 
-/*                        var valid = md5.CheckHash(Convert.FromBase64String(textItem.ContentMd5), Encoding.UTF8.GetBytes(textItem.Text));
+                        var valid = md5.CheckHash(sign, contentText);
                         if (!valid)
                         {
                             MessageBox.Show("Проверка подписью прошла неудачно");
-                        }*/
+                        }
                     }
                     else if(item is MimePart)
                     {
                         var mimePart = (MimePart)item;
+
 
                         var des = new CryptoDES();
                         des.CreateNewRsaKey();
@@ -208,7 +214,11 @@ namespace CourseWorkMailClient.Infrastructure
                         using var ms = new MemoryStream();
                         mimePart.Content.DecodeTo(ms);
 
-                        var decryptedBytes = des.DecryptUsingDes(ms.ToArray());
+                        var content = ms.ToArray();
+                        var contentText = content[..^256];
+                        var sign = content[^256..];
+
+                        var decryptedBytes = des.DecryptUsingDes(contentText);
 
                         //using var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
 
@@ -221,11 +231,11 @@ namespace CourseWorkMailClient.Infrastructure
                         md5.CreateNewRsaKey();
                         md5.SetRsaKey(mesFromDb.MD5RsaKey.PublicKey);
 
-/*                        var valid = md5.CheckHash(Convert.FromBase64String(mimePart.ContentMd5), decryptedBytes);
+                        var valid = md5.CheckHash(sign, decryptedBytes);
                         if (!valid)
                         {
                             MessageBox.Show("Проверка подписью прошла неудачно");
-                        }*/
+                        }
                     }
                 }
             }
