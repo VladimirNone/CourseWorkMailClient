@@ -58,7 +58,13 @@ namespace CourseWorkMailClient.Data
 
         public void RemoveMessages(List<int> uids, Folder folder)
         {
-            db.Letters.RemoveRange(db.Letters.Where(h => uids.Contains(h.UniqueId) && h.FolderId == folder.Id));
+            var lettersForRemove = db.Letters.Where(h => uids.Contains(h.UniqueId) && h.FolderId == folder.Id);
+            var attachments = lettersForRemove.Select(h => h.Attachments).ToList();
+            foreach (var item in attachments)
+            {
+                db.Attachments.RemoveRange(item);
+            }
+            db.Letters.RemoveRange();
         }
 
         public void SelectAndAddNewFolders(List<Folder> folderFromServer, MailServer mailServer)

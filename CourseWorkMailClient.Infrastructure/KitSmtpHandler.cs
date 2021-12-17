@@ -66,7 +66,7 @@ namespace CourseWorkMailClient.Infrastructure
 
                 var textInBytes = Encoding.UTF8.GetBytes(messageToSend.Content);
 
-                builder.HtmlBody = Convert.ToBase64String(des.EncryptUsingDes(textInBytes));
+                builder.HtmlBody = Convert.ToBase64String(des.EncryptUsingDes(textInBytes).Concat(md5.GetHash(textInBytes)).ToArray());
                 //textItem.ContentMd5 = Convert.ToBase64String(md5.GetHash(textInBytes));
 
                 messageToSend.Attachments?.ForEach(h => {

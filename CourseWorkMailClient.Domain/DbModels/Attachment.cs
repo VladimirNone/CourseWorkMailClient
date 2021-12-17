@@ -9,5 +9,8 @@ namespace CourseWorkMailClient.Domain
     public class Attachment : Entity
     {
         public string Name { get; set; }
+
+        public int LetterId { get; set; }
+        public Letter Letter { get; set; }
     }
 }

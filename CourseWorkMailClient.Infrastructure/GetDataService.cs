@@ -186,9 +186,10 @@ namespace CourseWorkMailClient.Infrastructure
 
                         try
                         {
-                            textItem.Text = Encoding.UTF8.GetString(des.DecryptUsingDes(contentText));
+                            contentText = des.DecryptUsingDes(contentText);
+                            textItem.Text = Encoding.UTF8.GetString(contentText);
                         }
-                        catch
+                        catch(Exception ex)
                         {
                             break;
                         }
